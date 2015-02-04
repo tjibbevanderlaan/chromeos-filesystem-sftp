@@ -552,15 +552,41 @@ int SftpThread::WaitSocket(int socket_fd, LIBSSH2_SESSION *session)
 void SftpThread::CloseSession(LIBSSH2_SESSION *session)
 {
   if (session) {
-    libssh2_session_disconnect(session, "Client disconnecting normally");
-    libssh2_session_free(session);
+    int rc = -1;
+    do {
+      rc = libssh2_session_disconnect(session, "Client disconnecting normally");
+      if (rc == LIBSSH2_ERROR_EAGAIN) {
+        WaitSocket(server_sock_, session);
+      }
+    } while (rc == LIBSSH2_ERROR_EAGAIN);
+    if (rc < 0) {
+      THROW_COMMUNICATION_EXCEPTION("Disconnecting SSH2 session failed", rc);
+    }
+    do {
+      rc = libssh2_session_free(session);
+      if (rc == LIBSSH2_ERROR_EAGAIN) {
+        WaitSocket(server_sock_, session);
+      }
+    } while (rc == LIBSSH2_ERROR_EAGAIN);
+    if (rc < 0) {
+      THROW_COMMUNICATION_EXCEPTION("Free SSH2 session failed", rc);
+    }
   }
 }
 
 void SftpThread::CloseSftpSession(LIBSSH2_SFTP *sftp_session)
 {
   if (sftp_session) {
-    libssh2_sftp_shutdown(sftp_session);
+    int rc = -1;
+    do {
+      rc = libssh2_sftp_shutdown(sftp_session);
+      if (rc == LIBSSH2_ERROR_EAGAIN) {
+        WaitSocket(server_sock_, session_);
+      }
+    } while (rc == LIBSSH2_ERROR_EAGAIN);
+    if (rc < 0) {
+      THROW_COMMUNICATION_EXCEPTION("Closing SFTP session failed", rc);
+    }
   }
 }
 
@@ -573,9 +599,9 @@ void* SftpThread::StartClose(void *arg)
 
 void SftpThread::CloseImpl()
 {
-  close(server_sock_);
   CloseSftpSession(sftp_session_);
   CloseSession(session_);
+  close(server_sock_);
   server_sock_ = -1;
   session_ = NULL;
   thread_ = NULL;
