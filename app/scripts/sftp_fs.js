@@ -5,6 +5,7 @@
   var SftpFS = function() {
     this.mountedSftpClientMap_ = {};
     this.taskQueue_ = [];
+    this.opened_files_ = {};
     assignEventHandlers.call(this);
   };
 
@@ -157,36 +158,46 @@
   SftpFS.prototype.onOpenFileRequested = function(options, successCallback, errorCallback) {
     console.log("onOpenFileRequested");
     console.log(options);
-    /*
-    this.dropbox_client_.openFile(options.filePath, options.requestId, options.mode, function() {
-      this.opened_files_[options.requestId] = options.filePath;
-      successCallback();
-    }.bind(this), errorCallback);
-    */
+    var openedFiles = getOpenedFiles.call(this, options.fileSystemId);
+    openedFiles[options.requestId] = options.filePath;
+    successCallback();
   };
 
   SftpFS.prototype.onReadFileRequested = function(options, successCallback, errorCallback) {
     console.log("onReadFileRequested - start");
     console.log(options);
-    /*
-    var filePath = this.opened_files_[options.openRequestId];
-    this.dropbox_client_.readFile(
-      filePath, options.offset, options.length, function(data, hasMore) {
-        successCallback(data, hasMore);
-        console.log("onReadFileRequested - end");
-      }.bind(this), errorCallback);
-    */
+    var filePath = getOpenedFiles.call(this, options.fileSystemId)[options.openRequestId];
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    prepare.call(this, sftpClient, options.requestId, function(closeCallback) {
+      sftpClient.readFile({
+        requestId: options.requestId,
+        path: filePath,
+        offset: options.offset,
+        length: options.length,
+        onSuccess: function(result) {
+          console.log(result);
+          successCallback(result.data, result.hasMore);
+          if (!result.hasMore) {
+            closeCallback();
+          }
+        }.bind(this),
+        onError: function(reason) {
+          console.log(reason);
+          errorCallback("FAILED");
+          closeCallback();
+        }
+      });
+    }.bind(this), function(reason) {
+      console.log(reason);
+      errorCallback("FAILED");
+    }.bind(this));
   };
 
   SftpFS.prototype.onCloseFileRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onCloseFileRequested");
-    var filePath = this.opened_files_[options.openRequestId];
-    this.dropbox_client_.closeFile(filePath, options.openRequestId, function() {
-      delete this.opened_files_[options.openRequestId];
-      successCallback();
-    }.bind(this));
-    */
+    var openedFiles = getOpenedFiles.call(this, options.fileSystemId);
+    delete openedFiles[options.openRequestId];
+    successCallback();
   };
 
   SftpFS.prototype.onCreateDirectoryRequested = function(options, successCallback, errorCallback) {
@@ -330,7 +341,6 @@
           this.onOpenFileRequested(options, successCallback, errorCallback);
         }.bind(this));
       }.bind(this));
-    /*
     chrome.fileSystemProvider.onReadFileRequested.addListener(
       function(options, successCallback, errorCallback) {
         this.onReadFileRequested(options, successCallback, errorCallback);
@@ -339,6 +349,7 @@
       function(options, successCallback, errorCallback) {
         this.onCloseFileRequested(options, successCallback, errorCallback);
       }.bind(this));
+    /*
     chrome.fileSystemProvider.onCreateDirectoryRequested.addListener(
       function(options, successCallback, errorCallback) {
         this.onCreateDirectoryRequested(options, successCallback, errorCallback);
@@ -429,6 +440,15 @@
   var shiftAndConsumeQueue = function() {
     // this.taskQueue_.shift();
     consumeQueue.call(this);
+  };
+
+  var getOpenedFiles = function(fileSystemId) {
+    var openedFiles = this.opened_files_[fileSystemId];
+    if (!openedFiles) {
+      openedFiles = {};
+      this.opened_files_[fileSystemId] = openedFiles;
+    }
+    return openedFiles;
   };
 
   // Export
