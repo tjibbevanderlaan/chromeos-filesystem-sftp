@@ -8,6 +8,9 @@
     <script type="text/javascript" src="bower_components/cryptojslib/components/enc-base64-min.js"></script>
     <script type="text/javascript" src="bower_components/cryptojslib/components/lib-typedarrays-min.js"></script>
 
+    <script type="text/javascript" src="scripts/sftp_client.js"></script>
+    <script type="text/javascript" src="scripts/sftp_fs.js"></script>
+
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <!-- endbower -->
@@ -29,7 +32,12 @@
     SSH2 Port: <input id="ssh2_port" type="text" value="22" /><br />
     SSH2 username: <input id="ssh2_username" type="text" value="yoichiro" /><br />
     SSH2 password: <input id="ssh2_password" type="password" value="" /><br />
-    SSH2 Method: <select id="ssh2_method"><option value="keyboard-interactive">keyboard-interactive</option><option value="password">password</option></select><br />
+    SSH2 Private key: <textarea id="ssh2_privatekey"></textarea><br />
+    SSH2 Method: <select id="ssh2_method">
+      <option value="keyboard-interactive">keyboard-interactive</option>
+      <option value="password">password</option>
+      <option value="publickey" selected>publickey</option>
+    </select><br />
     Request ID: <input id="request_id" type="text" value="1" /><br />
     <button id="handshake">handshake</button>
     <button id="authenticate">authenticate</button><br />
@@ -48,7 +56,12 @@
     <button id="truncate">truncate</button><br />
     Target: <input id="target" type="text" value="/Users/yoichiro/test2.txt" />
     <button id="rename">rename</button><br />
-    <button id="close">close</button>
+    <button id="close">close</button><br /><br />
+
+    <button id="sftp_client_1">SftpCleint Test 1</button><br />
+    <button id="sftp_fs_1">SftpFS Test 1</button>
+    <button id="sftp_fs_2">SftpFS Test 2</button><br />
+
     <div id="output"></div>
 
     <!-- build:js scripts/vendor.js -->

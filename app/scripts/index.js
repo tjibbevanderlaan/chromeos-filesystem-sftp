@@ -42,7 +42,7 @@
                     document.querySelector("#ssh2_method").value,
                     document.querySelector("#ssh2_username").value,
                     document.querySelector("#ssh2_password").value,
-                    ""
+                    document.querySelector("#ssh2_privatekey").value
                 ]
             };
             sftpModule.postMessage(JSON.stringify(obj));
@@ -197,6 +197,65 @@
             sftpModule.postMessage(JSON.stringify(obj));
             console.log("sent");
         });
+
+        var sftpClientTest1 = document.querySelector("#sftp_client_1");
+        sftpClientTest1.addEventListener("click", function(evt) {
+          // var sftpClient = new SftpClient("ics.eisbahn.jp", 22, "password", "yoichiro", "maki3!", "");
+          var sftpClient = new SftpClient(
+            document.querySelector("#ssh2_server").value,
+            Number(document.querySelector("#ssh2_port").value),
+            document.querySelector("#ssh2_method").value,
+            document.querySelector("#ssh2_username").value,
+            document.querySelector("#ssh2_password").value,
+            document.querySelector("#ssh2_privatekey").value);
+          sftpClient.setup();
+          var onError = function(reason) {
+            console.log(reason);
+          };
+          sftpClient.connect({
+            onSuccess: function(result) {
+              output.textContent = result.algorithm + ":" + result.fingerprint;
+              sftpClient.authenticate({
+                requestId: result.requestId,
+                onSuccess: function(result) {
+                  console.log(result);
+                },
+                onError: onError
+              });
+            },
+            onError: onError
+          });
+        });
+
+        var sftpFSTest1 = document.querySelector("#sftp_fs_1");
+        sftpFSTest1.addEventListener("click", function(evt) {
+          var sftpFS = new SftpFS();
+          sftpFS.mount({
+            serverName: document.querySelector("#ssh2_server").value,
+            serverPort: Number(document.querySelector("#ssh2_port").value),
+            authType: document.querySelector("#ssh2_method").value,
+            username: document.querySelector("#ssh2_username").value,
+            password: document.querySelector("#ssh2_password").value,
+            privateKey: document.querySelector("#ssh2_privatekey").value,
+            onHandshake: function(algorithm, fingerprint, successCallback, errorCallback) {
+              successCallback();
+            }.bind(this),
+            onSuccess: function() {
+              console.log("success");
+              console.log(sftpFS);
+            },
+            onError: function(reason) {
+              console.log(reason);
+            }
+          })
+        });
+
+        var sftpFSTest2 = document.querySelector("#sftp_fs_2");
+        sftpFSTest2.addEventListener("click", function(evt) {
+          var sftpFS = new SftpFS();
+          sftpFS.resume();
+        });
+
         var listener = document.querySelector("#listener");
         listener.addEventListener("message", function(evt) {
             console.log(evt);
