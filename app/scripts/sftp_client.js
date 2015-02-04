@@ -108,6 +108,24 @@
     postMessageToNaClModule.call(this, "dir", options.requestId, [options.path]);
   };
 
+  SftpClient.prototype.readFile = function(options) {
+    addNaClEventListener.call(this, options.requestId, function(event) {
+      if (checkEventMessage.call(this, event, "readFile", options.onError)) {
+        var base64 = event.value.b64Data;
+        var length = event.value.length;
+        var hasMore = event.value.hasMore;
+        var decodedWordArray = CryptoJS.enc.Base64.parse(base64);
+        console.log(decodedWordArray);
+        var decodedTypedArray = wordArrayToUint8Array.call(this, decodedWordArray);
+        options.onSuccess({
+          data: decodedTypedArray.buffer,
+          hasMore: hasMore
+        });
+      }
+    }.bind(this));
+    postMessageToNaClModule.call(this, "read", options.requestId, [options.path, options.offset, options.length]);
+  };
+
   // Private functions
 
   var loadNaClModule = function() {
@@ -150,6 +168,17 @@
     var names = path.split("/");
     var name = names[names.length - 1];
     return name;
+  };
+
+  var wordArrayToUint8Array = function(wordArray) {
+    var words = wordArray.words;
+    var sigBytes = wordArray.sigBytes;
+    var arrayBuffer = new ArrayBuffer(sigBytes);
+    var uint8View = new Uint8Array(arrayBuffer);
+    for (var i = 0; i < sigBytes; i++) {
+      uint8View[i] = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+    }
+    return uint8View;
   };
 
   // Export
