@@ -384,8 +384,6 @@
           requestId: result.requestId,
           onSuccess: function(result) {
             var closeCallback = function() {
-              // TODO Should close
-              /*
               sftpClient.close({
                 requestId: result.requestId,
                 onSuccess: function() {
@@ -393,8 +391,6 @@
                 }.bind(this),
                 onError: onError
               });
-              */
-              shiftAndConsumeQueue.call(this);
             }.bind(this);
             onSuccess(closeCallback);
           }.bind(this),
@@ -406,36 +402,33 @@
   };
 
   var addTaskQueue = function(task) {
-    /*
     console.log("addTaskQueue: length=" + this.taskQueue_.length);
     this.taskQueue_.push(task);
-    if (this.taskQueue_.length == 1) {
-      consumeQueue.call(this);
+    if (this.taskQueue_.length <= 5) {
+      setTimeout(function() {
+        consumeQueue.call(this);
+      }.bind(this), 10);
     }
-    */
-    task();
+    // task();
   };
 
   var consumeQueue = function() {
-    /*
     console.log("consumeQueue: length=" + this.taskQueue_.length);
     if (this.taskQueue_.length > 0) {
-      var task = this.taskQueue_[0];
+      // var task = this.taskQueue_[0];
+      var task = this.taskQueue_.shift();
       if (task) {
         task();
       } else {
-        this.taskQueue_.shift();
+        // this.taskQueue_.shift();
         consumeQueue.call(this);
       }
     }
-    */
   };
 
   var shiftAndConsumeQueue = function() {
-    /*
-    this.taskQueue_.shift();
+    // this.taskQueue_.shift();
     consumeQueue.call(this);
-    */
   };
 
   // Export
