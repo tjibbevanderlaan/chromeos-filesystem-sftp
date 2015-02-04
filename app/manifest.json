@@ -5,12 +5,14 @@
     "manifest_version": 2,
     "default_locale": "en",
     "permissions": [
-        {
-            "socket": [
-                "resolve-host",
-                "tcp-connect:*:*"
-            ]
-        }
+      "fileSystemProvider",
+      "storage",
+      {
+        "socket": [
+          "resolve-host",
+          "tcp-connect:*:*"
+        ]
+      }
     ],
     "icons": {
         "16": "images/icon-16.png",
