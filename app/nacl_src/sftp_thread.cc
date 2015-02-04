@@ -264,8 +264,8 @@ void* SftpThread::StartConnectAndHandshakeThread(void *arg)
 void SftpThread::ConnectAndHandshakeImpl()
 {
   if (session_) {
-    close(server_sock_);
     CloseSession(session_);
+    close(server_sock_);
     server_sock_ = -1;
     session_ = NULL;
   }
@@ -282,17 +282,18 @@ void SftpThread::ConnectAndHandshakeImpl()
     hostkey_method = GetHostKeyMethod(session);
     server_sock_ = sock;
     session_ = session;
+    thread_ = NULL;
     listener_->OnHandshakeFinished(request_id_, fingerprint, hostkey_method);
   } catch (CommunicationException &e) {
     std::string msg;
     msg = e.toString();
-    close(sock);
     CloseSession(session);
+    close(sock);
     server_sock_ = -1;
     session_ = NULL;
+    thread_ = NULL;
     listener_->OnErrorOccurred(request_id_, msg);
   }
-  thread_ = NULL;
 }
 
 void SftpThread::InitializeLibssh2() throw(CommunicationException)
@@ -382,13 +383,14 @@ void SftpThread::AuthenticateImpl()
     AuthenticateUser();
     SetNonBlocking(session_);
     sftp_session_ = OpenSftpSession(session_);
+    thread_ = NULL;
     listener_->OnAuthenticationFinished(request_id_);
   } catch(CommunicationException e) {
     std::string msg;
     msg = e.toString();
+    thread_ = NULL;
     listener_->OnErrorOccurred(request_id_, msg);
   }
-  thread_ = NULL;
 }
 
 void SftpThread::AuthenticateUser() throw(CommunicationException)
