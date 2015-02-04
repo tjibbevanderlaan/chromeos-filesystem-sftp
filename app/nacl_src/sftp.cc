@@ -93,8 +93,6 @@ void SftpInstance::HandleMessage(const pp::Var &var_message)
         sftp_thread->TruncateFile(path, length);
       } else if (command == "close") {
         sftp_thread->Close();
-        sftp_thread_map_.erase(request_id);
-        delete sftp_thread;
       }
     }
   }
@@ -131,6 +129,11 @@ void SftpInstance::OnAuthenticationFinished(const int request_id)
 void SftpInstance::OnShutdown(const int request_id)
 {
   SendResponse(request_id, std::string("shutdown"), std::vector<std::string>{});
+  if (sftp_thread_map_.find(request_id) != sftp_thread_map_.end()) {
+    SftpThread *sftp_thread = sftp_thread_map_[request_id];
+    sftp_thread_map_.erase(request_id);
+    delete sftp_thread;
+  }
 }
 
 void SftpInstance::OnErrorOccurred(const int request_id, const std::string &message)
