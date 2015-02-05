@@ -70,7 +70,7 @@
 
   SftpClient.prototype.getMetadata = function(options) {
     addNaClEventListener.call(this, options.requestId, function(event) {
-      if (checkEventMessage.call(this, event, "metadataList", options.onError)) {
+      if (checkEventMessage.call(this, event, "metadataList")) {
         var data = event.values[0];
         var metadata = {
           isDirectory: data.isDirectory,
@@ -153,6 +153,55 @@
       }
     }.bind(this));
     postMessageToNaClModule.call(this, "rename", options.requestId, [options.sourcePath, options.targetPath]);
+  };
+
+  SftpClient.prototype.createFile = function(options) {
+    addNaClEventListener.call(this, options.requestId, function(event) {
+      if (checkEventMessage.call(this, event, "createSuccessful", options.onError)) {
+        options.onSuccess();
+      }
+    }.bind(this));
+    postMessageToNaClModule.call(this, "create", options.requestId, [options.path]);
+  };
+
+  SftpClient.prototype.truncate = function(options) {
+    addNaClEventListener.call(this, options.requestId, function(event) {
+      if (checkEventMessage.call(this, event, "truncateSuccessful", options.onError)) {
+        options.onSuccess();
+      }
+    }.bind(this));
+    postMessageToNaClModule.call(this, "truncate", options.requestId, [options.path, options.length]);
+  };
+
+  SftpClient.prototype.writeFile = function(options) {
+    var data = options.data;
+    var offset = options.offset;
+    var length = data.byteLength;
+    var path = options.path;
+    var start = 0;
+    var doWriteFileData = function() {
+      var available = Math.min(32 * 1024, length - start);
+      var view = new Uint8Array(data, start, available);
+      var buffer = new ArrayBuffer(available);
+      var bufferView = new Uint8Array(buffer);
+      bufferView.set(view);
+      var wordArray = CryptoJS.lib.WordArray.create(buffer);
+      var b64Data = CryptoJS.enc.Base64.stringify(wordArray);
+      postMessageToNaClModule.call(
+        this, "write", options.requestId,
+        [path, offset + start, available, b64Data]);
+      start += available;
+    }.bind(this);
+    addNaClEventListener.call(this, options.requestId, function(event) {
+      if (checkEventMessage.call(this, event, "writeSuccessful", options.onError)) {
+        if (length <= start) {
+          options.onSuccess();
+        } else {
+          doWriteFileData();
+        }
+      }
+    }.bind(this));
+    doWriteFileData();
   };
 
   // Private functions
