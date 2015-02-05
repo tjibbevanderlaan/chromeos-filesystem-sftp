@@ -1,0 +1,5 @@
+# Updated by fix_deps.py
+../newlib/Debug/communication_exception_arm.o: communication_exception.cc \
+ communication_exception.h
+communication_exception.cc:
+communication_exception.h:

@@ -342,7 +342,7 @@ module.exports = function (grunt) {
             make: {
                 command: [
                     'cd <%= config.app %>/nacl_src',
-                    'make',
+                    'make CONFIG=Debug',
                     'cd ../..'
                 ].join(';')
             }
