@@ -81,6 +81,8 @@
         options.onSuccess({
           metadata: metadata
         });
+      } else {
+        options.onError("NOT_FOUND");
       }
     }.bind(this));
     postMessageToNaClModule.call(this, "file", options.requestId, [options.path]);
@@ -126,6 +128,33 @@
     postMessageToNaClModule.call(this, "read", options.requestId, [options.path, options.offset, options.length]);
   };
 
+  SftpClient.prototype.createDirectory = function(options) {
+    addNaClEventListener.call(this, options.requestId, function(event) {
+      if (checkEventMessage.call(this, event, "mkdirSuccessful", options.onError)) {
+        options.onSuccess();
+      }
+    }.bind(this));
+    postMessageToNaClModule.call(this, "mkdir", options.requestId, [options.path]);
+  };
+
+  SftpClient.prototype.deleteEntry = function(options) {
+    addNaClEventListener.call(this, options.requestId, function(event) {
+      if (checkEventMessage.call(this, event, "deleteSuccessful", options.onError)) {
+        options.onSuccess();
+      }
+    }.bind(this));
+    postMessageToNaClModule.call(this, "delete", options.requestId, [options.path]);
+  };
+
+  SftpClient.prototype.moveEntry = function(options) {
+    addNaClEventListener.call(this, options.requestId, function(event) {
+      if (checkEventMessage.call(this, event, "renameSuccessful", options.onError)) {
+        options.onSuccess();
+      }
+    }.bind(this));
+    postMessageToNaClModule.call(this, "rename", options.requestId, [options.sourcePath, options.targetPath]);
+  };
+
   // Private functions
 
   var loadNaClModule = function() {
@@ -159,7 +188,9 @@
     if (event.message === message) {
       return true;
     } else {
-      onError("Unexpected message received(expect:" + message + " actual:" + event.message + ")");
+      if (onError) {
+        onError("Unexpected message received(expect:" + message + " actual:" + event.message + ")");
+      }
       return false;
     }
   };

@@ -145,7 +145,11 @@
         }.bind(this),
         onError: function(reason) {
           console.log(reason);
-          errorCallback("FAILED");
+          if (reason === "NOT_FOUND") {
+            errorCallback("NOT_FOUND");
+          } else {
+            errorCallback("FAILED");
+          }
           closeCallback();
         }
       });
@@ -201,33 +205,76 @@
   };
 
   SftpFS.prototype.onCreateDirectoryRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onCreateDirectoryRequested");
     console.log(options);
-    this.dropbox_client_.createDirectory(options.directoryPath, function() {
-      successCallback();
-    }.bind(this), errorCallback);
-    */
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    prepare.call(this, sftpClient, options.requestId, function(closeCallback) {
+      sftpClient.createDirectory({
+        requestId: options.requestId,
+        path: options.directoryPath,
+        onSuccess: function() {
+          successCallback();
+          closeCallback();
+        }.bind(this),
+        onError: function(reason) {
+          console.log(reason);
+          errorCallback("FAILED");
+          closeCallback();
+        }
+      });
+    }.bind(this), function(reason) {
+      console.log(reason);
+      errorCallback("FAILED");
+    }.bind(this));
   };
 
   SftpFS.prototype.onDeleteEntryRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onDeleteEntryRequested");
     console.log(options);
-    this.dropbox_client_.deleteEntry(options.entryPath, function() {
-      successCallback();
-    }.bind(this), errorCallback);
-    */
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    prepare.call(this, sftpClient, options.requestId, function(closeCallback) {
+      sftpClient.deleteEntry({
+        requestId: options.requestId,
+        path: options.entryPath,
+        onSuccess: function() {
+          successCallback();
+          closeCallback();
+        }.bind(this),
+        onError: function(reason) {
+          console.log(reason);
+          errorCallback("FAILED");
+          closeCallback();
+        }
+      });
+    }.bind(this), function(reason) {
+      console.log(reason);
+      errorCallback("FAILED");
+    }.bind(this));
   };
 
   SftpFS.prototype.onMoveEntryRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onMoveEntryRequested");
     console.log(options);
-    this.dropbox_client_.moveEntry(options.sourcePath, options.targetPath, function() {
-      successCallback();
-    }.bind(this), errorCallback);
-    */
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    prepare.call(this, sftpClient, options.requestId, function(closeCallback) {
+      sftpClient.moveEntry({
+        requestId: options.requestId,
+        sourcePath: options.sourcePath,
+        targetPath: options.targetPath,
+        onSuccess: function() {
+          successCallback();
+          closeCallback();
+        }.bind(this),
+        onError: function(reason) {
+          console.log(reason);
+          errorCallback("FAILED");
+          closeCallback();
+        }
+      });
+    }.bind(this), function(reason) {
+      console.log(reason);
+      errorCallback("FAILED");
+    }.bind(this));
   };
 
   SftpFS.prototype.onCopyEntryRequested = function(options, successCallback, errorCallback) {
@@ -349,7 +396,6 @@
       function(options, successCallback, errorCallback) {
         this.onCloseFileRequested(options, successCallback, errorCallback);
       }.bind(this));
-    /*
     chrome.fileSystemProvider.onCreateDirectoryRequested.addListener(
       function(options, successCallback, errorCallback) {
         this.onCreateDirectoryRequested(options, successCallback, errorCallback);
@@ -362,6 +408,7 @@
       function(options, successCallback, errorCallback) {
         this.onMoveEntryRequested(options, successCallback, errorCallback);
       }.bind(this));
+    /*
     chrome.fileSystemProvider.onCopyEntryRequested.addListener(
       function(options, successCallback, errorCallback) {
         this.onCopyEntryRequested(options, successCallback, errorCallback);
