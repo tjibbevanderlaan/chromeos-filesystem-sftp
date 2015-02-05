@@ -151,7 +151,7 @@
             errorCallback("FAILED");
           }
           closeCallback();
-        }
+        }.bind(this)
       });
     }.bind(this), function(reason) {
       console.log(reason);
@@ -278,46 +278,86 @@
   };
 
   SftpFS.prototype.onCopyEntryRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onCopyEntryRequested");
     console.log(options);
-    this.dropbox_client_.copyEntry(options.sourcePath, options.targetPath, function() {
-      successCallback();
-    }.bind(this), errorCallback);
-    */
+    // TODO Implement copy operation.
+    errorCallback("INVALID_OPERATION");
   };
 
   SftpFS.prototype.onWriteFileRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onWriteFileRequested");
     console.log(options);
-    var filePath = this.opened_files_[options.openRequestId];
-    this.dropbox_client_.writeFile(filePath, options.data, options.offset, options.openRequestId, function() {
-      successCallback();
-    }.bind(this), errorCallback);
-    */
+    var filePath = getOpenedFiles.call(this, options.fileSystemId)[options.openRequestId];
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    prepare.call(this, sftpClient, options.requestId, function(closeCallback) {
+      sftpClient.writeFile({
+        requestId: options.requestId,
+        path: filePath,
+        offset: options.offset,
+        data: options.data,
+        onSuccess: function() {
+          successCallback();
+          closeCallback();
+        }.bind(this),
+        onError: function(reason) {
+          console.log(reason);
+          errorCallback("FAILED");
+          closeCallback();
+        }
+      });
+    }.bind(this), function(reason) {
+      console.log(reason);
+      errorCallback("FAILED");
+    }.bind(this));
   };
 
   SftpFS.prototype.onTruncateRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onTruncateRequested");
     console.log(options);
-    this.dropbox_client_.truncate(options.filePath, options.length, function() {
-      console.log("onTruncateRequested - done");
-      console.log(successCallback);
-      successCallback(false);
-    }.bind(this), errorCallback);
-    */
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    prepare.call(this, sftpClient, options.requestId, function(closeCallback) {
+      sftpClient.truncate({
+        requestId: options.requestId,
+        path: options.filePath,
+        length: options.length,
+        onSuccess: function() {
+          successCallback(false);
+          closeCallback();
+        }.bind(this),
+        onError: function(reason) {
+          console.log(reason);
+          errorCallback("FAILED");
+          closeCallback();
+        }
+      });
+    }.bind(this), function(reason) {
+      console.log(reason);
+      errorCallback("FAILED");
+    }.bind(this));
   };
 
   SftpFS.prototype.onCreateFileRequested = function(options, successCallback, errorCallback) {
-    /*
     console.log("onCreateFileRequested");
     console.log(options);
-    this.dropbox_client_.createFile(options.filePath, function() {
-      successCallback();
-    }.bind(this), errorCallback);
-    */
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    prepare.call(this, sftpClient, options.requestId, function(closeCallback) {
+      sftpClient.createFile({
+        requestId: options.requestId,
+        path: options.filePath,
+        onSuccess: function() {
+          successCallback();
+          closeCallback();
+        }.bind(this),
+        onError: function(reason) {
+          console.log(reason);
+          errorCallback("FAILED");
+          closeCallback();
+        }
+      });
+    }.bind(this), function(reason) {
+      console.log(reason);
+      errorCallback("FAILED");
+    }.bind(this));
   };
 
   // Private functions
@@ -408,7 +448,6 @@
       function(options, successCallback, errorCallback) {
         this.onMoveEntryRequested(options, successCallback, errorCallback);
       }.bind(this));
-    /*
     chrome.fileSystemProvider.onCopyEntryRequested.addListener(
       function(options, successCallback, errorCallback) {
         this.onCopyEntryRequested(options, successCallback, errorCallback);
@@ -425,7 +464,6 @@
       function(options, successCallback, errorCallback) {
         this.onCreateFileRequested(options, successCallback, errorCallback);
       }.bind(this));
-    */
   };
 
   var getSftpClient = function(fileSystemID) {
