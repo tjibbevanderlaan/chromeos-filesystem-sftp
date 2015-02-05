@@ -256,6 +256,13 @@
           sftpFS.resume();
         });
 
+        var sftpFSTest3 = document.querySelector("#sftp_fs_3");
+        sftpFSTest3.addEventListener("click", function(evt) {
+          chrome.storage.local.remove("mountedCredentials", function() {
+            console.log("Deleted");
+          });
+        });
+
         var listener = document.querySelector("#listener");
         listener.addEventListener("message", function(evt) {
             console.log(evt);
