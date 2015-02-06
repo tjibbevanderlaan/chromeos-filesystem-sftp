@@ -24,7 +24,7 @@
    *   onError: The callback called when an error occurs.
    */
   SftpFS.prototype.mount = function(options) {
-    var sftpClient = new SftpClient(
+    var sftpClient = new SftpClient(this,
       options.serverName, options.serverPort,
       options.authType, options.username, options.password, options.privateKey);
     sftpClient.setup();
@@ -96,18 +96,26 @@
   SftpFS.prototype.onUnmountRequested = function(options, successCallback, errorCallback) {
     console.log("onUnmountRequested");
     console.log(options);
-    // Remove credential
-    // Delete NaCl module
-    // Call Callback function
     var sftpClient = getSftpClient.call(this, options.fileSystemId);
-    sftpClient.destroy(function() {
-      unregisterMountedCredential.call(
-        this, sftpClient.getServerName(), sftpClient.getServerPort(), sftpClient.getUsername(),
-        function() {
-          delete this.mountedSftpClientMap_[options.fileSystemId];
+    var serverName = sftpClient.getServerName();
+    var serverPort = sftpClient.getServerPort();
+    var username = sftpClient.getUsername();
+    unregisterMountedCredential.call(
+      this, serverName, serverPort, username,
+      function() {
+        var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+        chrome.fileSystemProvider.unmount({
+          fileSystemId: fileSystemId
+        }, function() {
+          delete this.mountedSftpClientMap_[fileSystemId];
           successCallback();
+          sftpClient.destroy(options.requestId);
         }.bind(this));
-    }.bind(this));
+      }.bind(this));
+  };
+
+  SftpFS.prototype.onNaClModuleCrashed = function(sftpClient, exitStatus) {
+    console.log("onNaClModuleCrashed");
   };
 
   SftpFS.prototype.onReadDirectoryRequested = function(options, successCallback, errorCallback) {
