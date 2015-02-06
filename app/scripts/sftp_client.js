@@ -18,6 +18,18 @@
 
   // Public functions
 
+  SftpClient.prototype.getServerName = function() {
+    return this.serverName_;
+  };
+
+  SftpClient.prototype.getServerPort = function() {
+    return this.serverPort_;
+  };
+
+  SftpClient.prototype.getUsername = function() {
+    return this.username_;
+  };
+
   SftpClient.prototype.setup = function() {
     var elements = loadNaClModule.call(this);
     this.naclListener_ = elements.listener;
@@ -204,6 +216,12 @@
     doWriteFileData();
   };
 
+  SftpClient.prototype.destroy = function(callback) {
+    unLoadNaClModule.call(this, function() {
+      callback();
+    }.bind(this));
+  };
+
   // Private functions
 
   var loadNaClModule = function() {
@@ -219,6 +237,14 @@
       listener: listener,
       embed: embed
     };
+  };
+
+  var unLoadNaClModule = function(callback) {
+    var parent = this.naclListener_.parentNode;
+    parent.removeChild(this.naclListener_);
+    this.naclEmbed_ = null;
+    this.naclListener_ = null;
+    callback();
   };
 
   var addNaClEventListener = function(requestId, listener) {

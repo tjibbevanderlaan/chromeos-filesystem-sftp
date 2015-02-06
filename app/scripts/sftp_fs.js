@@ -96,14 +96,18 @@
   SftpFS.prototype.onUnmountRequested = function(options, successCallback, errorCallback) {
     console.log("onUnmountRequested");
     console.log(options);
-    /*
-    this.dropbox_client_.unauthorize(function() {
-      doUnmount.call(this, successCallback);
-    }.bind(this), function(reason) {
-      console.log(reason);
-      doUnmount.call(this, successCallback);
+    // Remove credential
+    // Delete NaCl module
+    // Call Callback function
+    var sftpClient = getSftpClient.call(this, options.fileSystemId);
+    sftpClient.destroy(function() {
+      unregisterMountedCredential.call(
+        this, sftpClient.getServerName(), sftpClient.getServerPort(), sftpClient.getUsername(),
+        function() {
+          delete this.mountedSftpClientMap_[options.fileSystemId];
+          successCallback();
+        }.bind(this));
     }.bind(this));
-    */
   };
 
   SftpFS.prototype.onReadDirectoryRequested = function(options, successCallback, errorCallback) {
@@ -390,6 +394,19 @@
         password: password,
         privateKey: privateKey
       };
+      chrome.storage.local.set({
+        mountedCredentials: mountedCredentials
+      }, function() {
+        callback();
+      }.bind(this));
+    }.bind(this));
+  };
+
+  var unregisterMountedCredential = function(serverName, serverPort, username, callback) {
+    var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+    chrome.storage.local.get("mountedCredentials", function(items) {
+      var mountedCredentials = items.mountedCredentials || {};
+      delete mountedCredentials[fileSystemId];
       chrome.storage.local.set({
         mountedCredentials: mountedCredentials
       }, function() {
