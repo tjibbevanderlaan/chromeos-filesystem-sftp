@@ -197,6 +197,25 @@
             sftpModule.postMessage(JSON.stringify(obj));
             console.log("sent");
         });
+        var destroy = document.querySelector("#destroy");
+        destroy.addEventListener("click", function(evt) {
+            var sftpModule = document.querySelector("#sftp");
+            var obj = {
+                command: "destroy",
+                request: document.querySelector("#request_id").value,
+                args: []
+            };
+            sftpModule.postMessage(JSON.stringify(obj));
+            console.log("sent");
+            /*
+            sftpModule.removeAttribute("id");
+            sftpModule.removeAttribute("width");
+            sftpModule.removeAttribute("height");
+            sftpModule.removeAttribute("src");
+            sftpModule.removeAttribute("type");
+            sftpModule.parentNode.removeChild(sftpModule);
+            */
+        });
 
         var sftpClientTest1 = document.querySelector("#sftp_client_1");
         sftpClientTest1.addEventListener("click", function(evt) {
@@ -247,7 +266,7 @@
             onError: function(reason) {
               console.log(reason);
             }
-          })
+          });
         });
 
         var sftpFSTest2 = document.querySelector("#sftp_fs_2");
@@ -276,6 +295,11 @@
                 var typedArray = wordArrayToUnit8Array(wordArray);
                 console.log(typedArray);
             }
+        }, true);
+        listener.addEventListener("crash", function(evt) {
+            console.log(evt);
+            var sftpModule = document.querySelector("#sftp");
+            console.log(sftpModule.exitStatus);
         }, true);
     });
 })();
