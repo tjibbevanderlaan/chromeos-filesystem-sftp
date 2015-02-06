@@ -93,6 +93,9 @@ void SftpInstance::HandleMessage(const pp::Var &var_message)
         sftp_thread->TruncateFile(path, length);
       } else if (command == "close") {
         sftp_thread->Close();
+      } else if (command == "destroy") {
+        // Terminate immediately
+        exit(0);
       }
     }
   }
