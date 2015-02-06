@@ -2,13 +2,15 @@
 
   // Constructor
 
-  var SftpClient = function(serverName, serverPort, authType, username, password, privateKey) {
+  var SftpClient = function(sftpFS, serverName, serverPort, authType, username, password, privateKey) {
     this.serverName_ = serverName;
     this.serverPort_ = serverPort;
     this.authType_ = authType;
     this.username_ = username;
     this.password_ = password;
     this.privateKey_ = privateKey;
+
+    this.sftpFS_ = sftpFS;
 
     this.naclListener_ = null;
     this.naclEmbed_ = null;
@@ -42,6 +44,10 @@
       if (listener) {
         listener(event);
       }
+    }.bind(this), true);
+    this.naclListener_.addEventListener("crash", function(e) {
+      console.log(this.naclEmbed_.exitStatus);
+      this.sftpFS_.onNaClModuleCrashed(this, this.naclEmbed_.exitStatus);
     }.bind(this), true);
   };
 
@@ -216,10 +222,8 @@
     doWriteFileData();
   };
 
-  SftpClient.prototype.destroy = function(callback) {
-    unLoadNaClModule.call(this, function() {
-      callback();
-    }.bind(this));
+  SftpClient.prototype.destroy = function(requestId) {
+    postMessageToNaClModule.call(this, "destroy", requestId, []);
   };
 
   // Private functions
@@ -237,14 +241,6 @@
       listener: listener,
       embed: embed
     };
-  };
-
-  var unLoadNaClModule = function(callback) {
-    var parent = this.naclListener_.parentNode;
-    parent.removeChild(this.naclListener_);
-    this.naclEmbed_ = null;
-    this.naclListener_ = null;
-    callback();
   };
 
   var addNaClEventListener = function(requestId, listener) {
