@@ -3,7 +3,7 @@
   // Constructor
 
   var SftpFS = function() {
-    this.mountedSftpClientMap_ = {};
+    this.sftpClientMap_ = {};
     this.taskQueue_ = [];
     this.opened_files_ = {};
     assignEventHandlers.call(this);
@@ -20,48 +20,60 @@
    *   password: Your password.
    *   privateKey: Your key.
    *   onHandshake: The callback function to confirm that the algorithm and fingerprint are valid.
-   *   onSuccess: The callback called when the connecting and handshaking are successfully.
    *   onError: The callback called when an error occurs.
    */
   SftpFS.prototype.mount = function(options) {
     var sftpClient = new SftpClient(this,
       options.serverName, options.serverPort,
       options.authType, options.username, options.password, options.privateKey);
+    var fileSystemId = createFileSystemID.call(
+      this, options.serverName, options.serverPort, options.username);
+    this.sftpClientMap_[fileSystemId] = sftpClient;
     sftpClient.setup();
+    var requestId = new Date().getTime() % 2147483647;
     sftpClient.connect({
-      requestId: 0,
+      requestId: requestId,
       onSuccess: function(result) {
-        var successCallback = function() {
-          sftpClient.authenticate({
-            requestId: result.requestId,
-            onSuccess: function(result) {
-              sftpClient.close({
-                requestId: result.requestId,
-                onSuccess: function() {
-                  var fileSystemId = createFileSystemID.call(
-                    this, options.serverName, options.serverPort, options.username);
-                  this.mountedSftpClientMap_[fileSystemId] = sftpClient;
-                  doMount.call(this,
-                      options.serverName, options.serverPort,
-                      options.authType, options.username, options.password, options.privateKey,
-                      function(fileSystemId) {
-                        options.onSuccess();
-                      }.bind(this));
-                }.bind(this),
-                onError: options.onError
-              });
-            }.bind(this),
-            onError: options.onError
-          });
-        }.bind(this);
-        var errorCallback = function() {
-          // TODO Destroy SftpClient instance
-          console.log("TODO Destroy SftpClient instance");
-        }.bind(this);
-        options.onHandshake(result.algorithm, result.filgerprint, successCallback, errorCallback);
+        console.log(result);
+        options.onHandshake(result.algorithm, result.fingerprint, requestId, fileSystemId);
       }.bind(this),
       onError: options.onError
     });
+  };
+
+  SftpFS.prototype.allowToConnect = function(requestId, fileSystemId, onSuccess, onError) {
+    console.log("allowToConnect");
+    var sftpClient = this.sftpClientMap_[fileSystemId];
+    sftpClient.authenticate({
+      requestId: requestId,
+      onSuccess: function(result) {
+        sftpClient.close({
+          requestId: requestId,
+          onSuccess: function() {
+            doMount.call(this,
+              sftpClient.getServerName(), sftpClient.getServerPort(),
+              sftpClient.getAuthType(),
+              sftpClient.getUsername(), sftpClient.getPassword(), sftpClient.getPrivateKey(),
+              function() {
+                onSuccess();
+              }.bind(this));
+          }.bind(this),
+          onError: function(reason) {
+            onError(reason);
+          }.bind(this)
+        });
+      }.bind(this),
+      onError: function(reason) {
+        onError(reason);
+      }.bind(this)
+    });
+  };
+
+  SftpFS.prototype.denyToConnect = function(requestId, fileSystemId, onSuccess) {
+    var sftpClient = this.sftpClientMap_[fileSystemId];
+    sftpClient.destroy();
+    delete this.sftpClientMap_[fileSystemId];
+    onSuccess();
   };
 
   SftpFS.prototype.resume = function() {
@@ -77,12 +89,17 @@
           username: credential.username,
           password: credential.password,
           privateKey: credential.privateKey,
-          onHandshake: function(algorithm, fingerprint, successCallback, errorCallback) {
+          onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
             // TODO Check the fingerprint.
-            successCallback();
-          }.bind(this),
-          onSuccess: function() {
-            console.log("Resumed");
+            this.allowToConnect(
+              requestId,
+              fileSystemId,
+              function() {
+                console.log("Resumed file system: " + fileSystemId);
+              }.bind(this),
+              function(reason) {
+                console.log(reason);
+              }.bind(this))
           }.bind(this),
           onError: function(reason) {
             // TODO Implement error process.
@@ -107,7 +124,7 @@
         chrome.fileSystemProvider.unmount({
           fileSystemId: fileSystemId
         }, function() {
-          delete this.mountedSftpClientMap_[fileSystemId];
+          delete this.sftpClientMap_[fileSystemId];
           successCallback();
           sftpClient.destroy(options.requestId);
         }.bind(this));
@@ -385,7 +402,7 @@
       registerMountedCredential(
         serverName, serverPort, authType, username, password, privateKey,
         function() {
-          callback(fileSystemId);
+          callback();
         }.bind(this));
     }.bind(this));
   };
@@ -492,7 +509,7 @@
   };
 
   var getSftpClient = function(fileSystemID) {
-    var sftpClient = this.mountedSftpClientMap_[fileSystemID];
+    var sftpClient = this.sftpClientMap_[fileSystemID];
     return sftpClient;
   };
 

@@ -21,7 +21,12 @@
     "app": {
         "background": {
             "scripts": [
-                "scripts/main.js",
+                "bower_components/cryptojslib/components/core-min.js",
+                "bower_components/cryptojslib/components/enc-base64-min.js",
+                "bower_components/cryptojslib/components/lib-typedarrays-min.js",
+                "scripts/sftp_fs.js",
+                "scripts/sftp_client.js",
+                "scripts/background.js",
                 "scripts/chromereload.js"
             ]
         }
