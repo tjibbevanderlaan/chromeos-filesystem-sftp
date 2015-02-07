@@ -32,6 +32,18 @@
     return this.username_;
   };
 
+  SftpClient.prototype.getAuthType = function() {
+    return this.authType_;
+  };
+
+  SftpClient.prototype.getPassword = function() {
+    return this.password_;
+  };
+
+  SftpClient.prototype.getPrivateKey = function() {
+    return this.privateKey_;
+  };
+
   SftpClient.prototype.setup = function() {
     var elements = loadNaClModule.call(this);
     this.naclListener_ = elements.listener;
@@ -43,6 +55,8 @@
       var listener = this.naclEventListenerMap_[requestId];
       if (listener) {
         listener(event);
+      } else {
+        console.log("Listener[" + requestId + "] not found");
       }
     }.bind(this), true);
     this.naclListener_.addEventListener("crash", function(e) {

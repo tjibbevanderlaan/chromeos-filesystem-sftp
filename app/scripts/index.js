@@ -256,13 +256,19 @@
             username: document.querySelector("#ssh2_username").value,
             password: document.querySelector("#ssh2_password").value,
             privateKey: document.querySelector("#ssh2_privatekey").value,
-            onHandshake: function(algorithm, fingerprint, successCallback, errorCallback) {
-              successCallback();
+            onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
+              console.log("onHandshake");
+              console.log(fingerprint)
+              sftpFS.allowToConnect(
+                requestId,
+                fileSystemId,
+                function() {
+                  console.log("Connected");
+                }.bind(this),
+                function(reason) {
+                  console.log(reason);
+                }.bind(this));
             }.bind(this),
-            onSuccess: function() {
-              console.log("success");
-              console.log(sftpFS);
-            },
             onError: function(reason) {
               console.log(reason);
             }
