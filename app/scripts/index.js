@@ -1,12 +1,14 @@
 'use strict';
 (function() {
     var wordArrayToUnit8Array = function(wordArray) {
-        var buffer = new ArrayBuffer(wordArray.sigBytes);
-        var view = new DataView(buffer, 0, buffer.byteLength);
-        for (var i = 0; i < wordArray.words.length; i++) {
-            view.setInt32(i * 4, wordArray.words[i], false);
+        var words = wordArray.words;
+        var sigBytes = wordArray.sigBytes;
+        var arrayBuffer = new ArrayBuffer(sigBytes);
+        var uint8View = new Uint8Array(arrayBuffer);
+        for (var i = 0; i < sigBytes; i++) {
+            uint8View[i] = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
         }
-        return new Uint8Array(buffer);
+        return uint8View;
     };
     var uint8ArrayToWordArray = function(typedArray) {
         var typedArrayByteLength = typedArray.length;
