@@ -3,7 +3,7 @@
   var sftp_fs_ = new SftpFS();
 
   chrome.app.runtime.onLaunched.addListener(function() {
-    chrome.app.window.create("index.html", {
+    chrome.app.window.create("window.html", {
       outerBounds: {
         minWidth: 800,
         minHeight: 700
@@ -19,28 +19,8 @@
     });
   });
 
-  var mount = function(options) {
-    var options = {
-      serverName: serverName,
-      serverPort: serverPort,
-      authType: authType,
-      username: username,
-      password: password,
-      privateKey: privateKey,
-      onHandshake: function(algorithm, fingerprint, successCallback, errorCallback) {
-
-      },
-      onSuccess: function() {
-
-      },
-      onError: function(reason) {
-
-      }
-    };
-    sftp_fs_.mount(options);
-  };
-
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log(request);
     switch(request.type) {
       case "mount":
         var options = {
@@ -50,28 +30,51 @@
           username: request.username,
           password: request.password,
           privateKey: request.privateKey,
-          onHandshake: function(algorithm, fingerprint, successCallback, errorCallback) {
-
-          },
-          onSuccess: function() {
-
+          onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
+            sendResponse({
+              type: "confirmFingerprint",
+              algorithm: algorithm,
+              fingerprint: fingerprint,
+              requestId: requestId,
+              fileSystemId: fileSystemId
+            });
           },
           onError: function(reason) {
-
+            sendResponse({
+              type: "error",
+              error: reason
+            });
           }
         };
-        mount(function() {
-          sendResponse({
-            type: "mount",
-            success: true
+        sftp_fs_.mount(options);
+        break;
+      case "accept":
+        sftp_fs_.allowToConnect(
+          request.requestId,
+          request.fileSystemId,
+          function() {
+            sendResponse({
+              type: "mounted",
+              success: true
+            });
+          },
+          function(reason) {
+            sendResponse({
+              type: "error",
+              success: false,
+              error: reason
+            });
           });
-        }, function(reason) {
-          sendResponse({
-            type: "mount",
-            success: false,
-            error: reason
+        break;
+      case "decline":
+        sftp_fs_.denyToConnect(
+          request.requestId,
+          request.fileSystemId,
+          function() {
+            sendResponse({
+              type: "declined"
+            });
           });
-        });
         break;
       default:
         var message;

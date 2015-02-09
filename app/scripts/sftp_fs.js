@@ -23,11 +23,15 @@
    *   onError: The callback called when an error occurs.
    */
   SftpFS.prototype.mount = function(options) {
+    var fileSystemId = createFileSystemID.call(
+      this, options.serverName, options.serverPort, options.username);
+    if (this.sftpClientMap_[fileSystemId]) {
+      options.onError("Already mounted: " + fileSystemId);
+      return;
+    }
     var sftpClient = new SftpClient(this,
       options.serverName, options.serverPort,
       options.authType, options.username, options.password, options.privateKey);
-    var fileSystemId = createFileSystemID.call(
-      this, options.serverName, options.serverPort, options.username);
     this.sftpClientMap_[fileSystemId] = sftpClient;
     sftpClient.setup();
     var requestId = new Date().getTime() % 2147483647;

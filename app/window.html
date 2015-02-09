@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+  <title data-message="mountHeader"></title>
+
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+
+  <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="bower_components/paper-toast/paper-toast.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/paper-input/paper-input.html">
+  <link rel="import" href="bower_components/paper-radio-button/paper-radio-button.html">
+  <link rel="import" href="bower_components/paper-radio-group/paper-radio-group.html">
+  <link rel="import" href="bower_components/paper-input/paper-autogrow-textarea.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-action-dialog.html">
+
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+  <paper-toast data-message="mountAttempt" id="toast-mount-attempt"></paper-toast>
+  <paper-toast data-message="mountFail" id="toast-mount-fail"></paper-toast>
+  <paper-toast data-message="mountSuccess" id="toast-mount-success"></paper-toast>
+
+  <div class="container">
+    <h1 data-message="mountHeader"></h1>
+
+    <form>
+      <paper-input floatinglabel type="text" id="serverName" data-message="serverName"></paper-input>
+      <paper-input-decorator data-message="serverPort" floatingLabel>
+        <input is="core-input" id="serverPort" type="number" value="22">
+      </paper-input-decorator>
+      <paper-radio-group id="authType" selected="password">
+        <paper-radio-button id="authTypePassword" name="password" data-message="authTypePassword"></paper-radio-button>
+        <paper-radio-button id="authTypeKeyboardInteractive" name="keyboard-interactive" data-message="authTypeKeyboardInteractive"></paper-radio-button>
+        <paper-radio-button id="authTypePublickey" name="publickey" data-message="authTypePublicKey"></paper-radio-button>
+      </paper-radio-group>
+      <paper-input floatinglabel type="text" id="username" data-message="username"></paper-input>
+      <paper-input-decorator data-message="password" floatingLabel>
+        <input is="core-input" id="password" type="password">
+      </paper-input-decorator>
+      <paper-input-decorator id="privatekeyDecorator" data-message="privateKey" floatingLabel disabled>
+        <paper-autogrow-textarea maxRows="4">
+          <textarea id="privatekey" disabled></textarea>
+        </paper-autogrow-textarea>
+      </paper-input-decorator>
+      <paper-button raisedButton id="btnMount" data-message="mount"></paper-button>
+    </form>
+  </div>
+
+  <paper-action-dialog id="confirmFingerprintDialog" heading="Confirm fingerprint"
+      backdrop autoCloseDisabled layered="false" transition="core-transition-top">
+    <p><span id="algorithm"></span> - <span id="fingerprint"></span></p>
+    <paper-button affirmative id="btnDecline">Decline</paper-button>
+    <paper-button affirmative id="btnAccept">Accept</paper-button>
+    <input type="hidden" id="requestId" />
+    <input type="hidden" id="fileSystemId" />
+  </paper-action-dialog>
+
+  <script type="text/javascript" src="scripts/window.js"></script>
+
+</body>
+
+</html>

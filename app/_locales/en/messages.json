@@ -1,10 +1,62 @@
 {
-    "appName": {
-        "message": "sample_sftp_app",
-        "description": "The name of the application"
-    },
-    "appDescription": {
-        "message": "My Chrome App",
-        "description": "The description of the application"
-    }
+  "appName": {
+    "message": "sample_sftp_app",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "My Chrome App",
+    "description": "The description of the application"
+  },
+  "mountHeader": {
+    "message": "Mount a new SFTP server",
+    "description": "Header describing the server mount form."
+  },
+  "mount": {
+    "message": "Mount",
+    "description": "Label for a button that triggers the mount action."
+  },
+  "mountAttempt": {
+    "message": "Attempting to mount instance...",
+    "description": "Popup notifcation that informs the user that the system is attempting to mount a new instance with the credentials they provided."
+  },
+  "mountSuccess": {
+    "message": "Mounted successfully.",
+    "description": "Popup notifcation that informs the user that the system successfully mounted a new instance with the credentials they provided."
+  },
+  "mountFail": {
+    "message": "Failed to mount.",
+    "description": "Popup notifcation that informs the user that the system failed to mount a new instance with the credentials they provided."
+  },
+  "serverName": {
+    "message": "Server Host Name / IP Address",
+    "description": "The server's host name or IP address"
+  },
+  "serverPort": {
+    "message": "Server Port Number",
+    "description": "The server's port number"
+  },
+  "authTypePassword": {
+    "message": "password",
+    "description": "The authentication type: password"
+  },
+  "authTypeKeyboardInteractive": {
+    "message": "keyboard-interactive",
+    "description": "The authentication type: keyboard-interactive"
+  },
+  "authTypePublicKey": {
+    "message": "publickey",
+    "description": "The authentication type: publickey"
+  },
+  "username": {
+    "message": "User Name",
+    "description": "The user name"
+  },
+  "password": {
+    "message": "Password",
+    "description": "The user password"
+  },
+  "privateKey": {
+    "message": "Private Key",
+    "description": "The private key"
+  }
 }
