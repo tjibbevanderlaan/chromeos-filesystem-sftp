@@ -274,7 +274,11 @@
       return true;
     } else {
       if (onError) {
-        onError("Unexpected message received(expect:" + message + " actual:" + event.message + ")");
+        if (event.message === "error") {
+          onError(event.values[0]);
+        } else {
+          onError("Unexpected message received(expect:" + message + " actual:" + event.message + ")");
+        }
       }
       return false;
     }
