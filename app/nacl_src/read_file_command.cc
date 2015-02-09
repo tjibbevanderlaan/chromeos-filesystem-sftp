@@ -59,7 +59,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
   int max_buf_size = 2048;
   libssh2_uint64_t total = 0;
   std::vector<unsigned char> result_buf;
-  result_buf.reserve(33 * 1024);
+  result_buf.reserve(513 * 1024);
   do {
     int buf_size = std::min((libssh2_uint64_t)max_buf_size, length - total);
     char mem[buf_size];
@@ -85,7 +85,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
           base64::Encode(result_buf, b64encoded);
           GetListener()->OnReadFile(GetRequestID(), b64encoded, result_buf.size(), false);
           break;
-        } else if (result_buf.size() >= (32 * 1024)) {
+        } else if (result_buf.size() >= (512 * 1024)) {
           fprintf(stderr, "Flush\n");
           std::string b64encoded;
           base64::Encode(result_buf, b64encoded);
