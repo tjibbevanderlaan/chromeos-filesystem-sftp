@@ -3,7 +3,7 @@
     "browser": true,
     "esnext": true,
     "bitwise": true,
-    "camelcase": true,
+    "camelcase": false,
     "curly": true,
     "eqeqeq": true,
     "immed": true,
@@ -18,6 +18,9 @@
     "trailing": true,
     "smarttabs": true,
     "globals" : {
-        "chrome": true
+        "chrome": true,
+        "SftpFS": true,
+        "CryptoJS": true,
+        "SftpClient": true
     }
 }

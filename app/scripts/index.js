@@ -1,4 +1,5 @@
-'use strict';
+"use strict";
+
 (function() {
     var wordArrayToUnit8Array = function(wordArray) {
         var words = wordArray.words;
@@ -6,6 +7,7 @@
         var arrayBuffer = new ArrayBuffer(sigBytes);
         var uint8View = new Uint8Array(arrayBuffer);
         for (var i = 0; i < sigBytes; i++) {
+            /* jshint bitwise: false */
             uint8View[i] = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
         }
         return uint8View;
@@ -14,6 +16,7 @@
         var typedArrayByteLength = typedArray.length;
         var words = [];
         for (var i = 0; i < typedArrayByteLength; i++) {
+            /* jshint bitwise: false */
             words[i >>> 2] |= typedArray[i] << (24 - (i % 4) * 8);
         }
         return words;
@@ -209,85 +212,77 @@
             };
             sftpModule.postMessage(JSON.stringify(obj));
             console.log("sent");
-            /*
-            sftpModule.removeAttribute("id");
-            sftpModule.removeAttribute("width");
-            sftpModule.removeAttribute("height");
-            sftpModule.removeAttribute("src");
-            sftpModule.removeAttribute("type");
-            sftpModule.parentNode.removeChild(sftpModule);
-            */
         });
 
         var sftpClientTest1 = document.querySelector("#sftp_client_1");
         sftpClientTest1.addEventListener("click", function(evt) {
-          // var sftpClient = new SftpClient("ics.eisbahn.jp", 22, "password", "yoichiro", "maki3!", "");
-          var sftpClient = new SftpClient(
-            document.querySelector("#ssh2_server").value,
-            Number(document.querySelector("#ssh2_port").value),
-            document.querySelector("#ssh2_method").value,
-            document.querySelector("#ssh2_username").value,
-            document.querySelector("#ssh2_password").value,
-            document.querySelector("#ssh2_privatekey").value);
-          sftpClient.setup();
-          var onError = function(reason) {
-            console.log(reason);
-          };
-          sftpClient.connect({
-            onSuccess: function(result) {
-              output.textContent = result.algorithm + ":" + result.fingerprint;
-              sftpClient.authenticate({
-                requestId: result.requestId,
+            var sftpClient = new SftpClient(
+                document.querySelector("#ssh2_server").value,
+                Number(document.querySelector("#ssh2_port").value),
+                document.querySelector("#ssh2_method").value,
+                document.querySelector("#ssh2_username").value,
+                document.querySelector("#ssh2_password").value,
+                document.querySelector("#ssh2_privatekey").value);
+            sftpClient.setup();
+            var onError = function(reason) {
+                console.log(reason);
+            };
+            sftpClient.connect({
                 onSuccess: function(result) {
-                  console.log(result);
+                    var output = document.querySelector("#output");
+                    output.textContent = result.algorithm + ":" + result.fingerprint;
+                    sftpClient.authenticate({
+                        requestId: result.requestId,
+                        onSuccess: function(result) {
+                            console.log(result);
+                        },
+                        onError: onError
+                    });
                 },
                 onError: onError
-              });
-            },
-            onError: onError
-          });
+            });
         });
 
         var sftpFSTest1 = document.querySelector("#sftp_fs_1");
         sftpFSTest1.addEventListener("click", function(evt) {
-          var sftpFS = new SftpFS();
-          sftpFS.mount({
-            serverName: document.querySelector("#ssh2_server").value,
-            serverPort: Number(document.querySelector("#ssh2_port").value),
-            authType: document.querySelector("#ssh2_method").value,
-            username: document.querySelector("#ssh2_username").value,
-            password: document.querySelector("#ssh2_password").value,
-            privateKey: document.querySelector("#ssh2_privatekey").value,
-            onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
-              console.log("onHandshake");
-              console.log(fingerprint)
-              sftpFS.allowToConnect(
-                requestId,
-                fileSystemId,
-                function() {
-                  console.log("Connected");
+            var sftpFS = new SftpFS();
+            sftpFS.mount({
+                serverName: document.querySelector("#ssh2_server").value,
+                serverPort: Number(document.querySelector("#ssh2_port").value),
+                authType: document.querySelector("#ssh2_method").value,
+                username: document.querySelector("#ssh2_username").value,
+                password: document.querySelector("#ssh2_password").value,
+                privateKey: document.querySelector("#ssh2_privatekey").value,
+                onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
+                    console.log("onHandshake");
+                    console.log(fingerprint);
+                    sftpFS.allowToConnect(
+                        requestId,
+                        fileSystemId,
+                        function() {
+                            console.log("Connected");
+                        }.bind(this),
+                        function(reason) {
+                            console.log(reason);
+                        }.bind(this));
                 }.bind(this),
-                function(reason) {
-                  console.log(reason);
-                }.bind(this));
-            }.bind(this),
-            onError: function(reason) {
-              console.log(reason);
-            }
-          });
+                onError: function(reason) {
+                    console.log(reason);
+                }
+            });
         });
 
         var sftpFSTest2 = document.querySelector("#sftp_fs_2");
         sftpFSTest2.addEventListener("click", function(evt) {
-          var sftpFS = new SftpFS();
-          sftpFS.resume();
+            var sftpFS = new SftpFS();
+            sftpFS.resume();
         });
 
         var sftpFSTest3 = document.querySelector("#sftp_fs_3");
         sftpFSTest3.addEventListener("click", function(evt) {
-          chrome.storage.local.remove("mountedCredentials", function() {
-            console.log("Deleted");
-          });
+            chrome.storage.local.remove("mountedCredentials", function() {
+                console.log("Deleted");
+            });
         });
 
         var listener = document.querySelector("#listener");

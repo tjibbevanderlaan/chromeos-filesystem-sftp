@@ -1,0 +1,4 @@
+# Updated by fix_deps.py
+../newlib/Release/base64_arm.o: base64.cc base64.h
+base64.cc:
+base64.h:

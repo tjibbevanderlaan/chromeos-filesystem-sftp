@@ -1,4 +1,0 @@
-# Updated by fix_deps.py
-../newlib/Debug/base64_x86_64.o: base64.cc base64.h
-base64.cc:
-base64.h:
