@@ -88,7 +88,8 @@
                 args: [
                     document.querySelector("#path").value,
                     document.querySelector("#read_offset").value,
-                    document.querySelector("#read_length").value
+                    document.querySelector("#read_length").value,
+                    32
                 ]
             };
             sftpModule.postMessage(JSON.stringify(obj));

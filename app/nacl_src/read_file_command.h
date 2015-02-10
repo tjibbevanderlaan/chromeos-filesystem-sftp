@@ -21,7 +21,8 @@ class ReadFileCommand : protected AbstractCommand
                            const int request_id,
                            const std::string &path,
                            const libssh2_uint64_t offset,
-                           const libssh2_uint64_t length);
+                           const libssh2_uint64_t length,
+                           const unsigned int buffer_size);
   virtual ~ReadFileCommand();
 
   static void* Start(void *arg);
@@ -31,10 +32,13 @@ class ReadFileCommand : protected AbstractCommand
   std::string path_;
   libssh2_uint64_t offset_;
   libssh2_uint64_t length_;
+  unsigned int buffer_size_;
 
   void Execute();
   void SeekAtOffsetOf(LIBSSH2_SFTP_HANDLE *sftp_handle, const libssh2_uint64_t offset);
-  void ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle, const libssh2_uint64_t length)
+  void ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
+                        const libssh2_uint64_t length,
+                        const unsigned int buffer_size)
     throw(CommunicationException);
 
 };

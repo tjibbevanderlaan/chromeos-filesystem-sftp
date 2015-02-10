@@ -31,18 +31,19 @@ class SftpThread
   void ReadDirectory(const std::string path);
   void GetMetadata(const std::string path);
   void ReadFile(const std::string path,
-                const unsigned long offset,
-                const unsigned long length);
+                const libssh2_uint64_t offset,
+                const libssh2_uint64_t length,
+                const unsigned int buffer_size);
   void MakeDirectory(const std::string path);
   void DeleteEntry(const std::string path);
   void RenameEntry(const std::string source_path, const std::string target_path);
   void CreateFile(const std::string path);
   void WriteFile(const std::string path,
-                 const unsigned long offset,
-                 const unsigned long length,
+                 const libssh2_uint64_t offset,
+                 const libssh2_uint64_t length,
                  const std::string b64_data);
   void TruncateFile(const std::string path,
-                    const unsigned long length);
+                    const libssh2_uint64_t length);
   void Close();
 
  private:

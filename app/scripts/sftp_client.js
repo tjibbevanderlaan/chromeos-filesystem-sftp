@@ -159,7 +159,8 @@
                 });
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "read", options.requestId, [options.path, options.offset, options.length]);
+        postMessageToNaClModule.call(this, "read", options.requestId,
+                                     [options.path, options.offset, options.length, 32]);
     };
 
     SftpClient.prototype.createDirectory = function(options) {

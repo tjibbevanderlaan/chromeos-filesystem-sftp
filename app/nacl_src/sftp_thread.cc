@@ -121,8 +121,9 @@ void SftpThread::GetMetadata(const std::string path)
 }
 
 void SftpThread::ReadFile(const std::string path,
-                          const unsigned long offset,
-                          const unsigned long length)
+                          const libssh2_uint64_t offset,
+                          const libssh2_uint64_t length,
+                          const unsigned int buffer_size)
 {
   ReadFileCommand *command = new ReadFileCommand(listener_,
                                                  server_sock_,
@@ -131,7 +132,8 @@ void SftpThread::ReadFile(const std::string path,
                                                  request_id_,
                                                  path,
                                                  offset,
-                                                 length);
+                                                 length,
+                                                 buffer_size);
   pthread_t thread;
   pthread_create(&thread,
                  NULL,
@@ -201,8 +203,8 @@ void SftpThread::CreateFile(const std::string path)
 }
 
 void SftpThread::WriteFile(const std::string path,
-                           const unsigned long offset,
-                           const unsigned long length,
+                           const libssh2_uint64_t offset,
+                           const libssh2_uint64_t length,
                            const std::string b64_data)
 {
   WriteFileCommand *command = new WriteFileCommand(listener_,
@@ -222,7 +224,7 @@ void SftpThread::WriteFile(const std::string path,
 }
 
 void SftpThread::TruncateFile(const std::string path,
-                              const unsigned long length)
+                              const libssh2_uint64_t length)
 {
   TruncateFileCommand *command = new TruncateFileCommand(listener_,
                                                          server_sock_,

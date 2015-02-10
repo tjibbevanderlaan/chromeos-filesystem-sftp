@@ -10,11 +10,13 @@ ReadFileCommand::ReadFileCommand(SftpEventListener *listener,
                                  const int request_id,
                                  const std::string &path,
                                  const libssh2_uint64_t offset,
-                                 const libssh2_uint64_t length)
+                                 const libssh2_uint64_t length,
+                                 const unsigned int buffer_size)
 : AbstractCommand(session, sftp_session, server_sock, listener, request_id),
-    path_(path),
-    offset_(offset),
-    length_(length)
+  path_(path),
+  offset_(offset),
+  length_(length),
+  buffer_size_(buffer_size)
 {
 }
 
@@ -34,7 +36,7 @@ void ReadFileCommand::Execute()
   try {
     LIBSSH2_SFTP_HANDLE *sftp_handle = OpenFile(path_, LIBSSH2_FXF_READ, 0);
     SeekAtOffsetOf(sftp_handle, offset_);
-    ReadFileLengthOf(sftp_handle, length_);
+    ReadFileLengthOf(sftp_handle, length_, buffer_size_);
     libssh2_sftp_close(sftp_handle);
   } catch(CommunicationException e) {
     std::string msg;
@@ -52,14 +54,15 @@ void ReadFileCommand::SeekAtOffsetOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
 }
 
 void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
-                                       const libssh2_uint64_t length)
+                                       const libssh2_uint64_t length,
+                                       const unsigned int buffer_size)
   throw(CommunicationException)
 {
   int rc = -1;
   int max_buf_size = 2048;
   libssh2_uint64_t total = 0;
   std::vector<unsigned char> result_buf;
-  result_buf.reserve(513 * 1024);
+  result_buf.reserve((buffer_size + 1) * 1024);
   do {
     int buf_size = std::min((libssh2_uint64_t)max_buf_size, length - total);
     char mem[buf_size];
@@ -85,7 +88,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
           base64::Encode(result_buf, b64encoded);
           GetListener()->OnReadFile(GetRequestID(), b64encoded, result_buf.size(), false);
           break;
-        } else if (result_buf.size() >= (512 * 1024)) {
+        } else if (result_buf.size() >= (buffer_size * 1024)) {
           fprintf(stderr, "Flush\n");
           std::string b64encoded;
           base64::Encode(result_buf, b64encoded);
