@@ -67,7 +67,8 @@ void SftpInstance::HandleMessage(const pp::Var &var_message)
         std::string path = args[0].asString();
         libssh2_uint64_t offset = GetUint64ValueFromString(args[1].asString());
         libssh2_uint64_t length = GetUint64ValueFromString(args[2].asString());
-        sftp_thread->ReadFile(path, offset, length);
+        int buffer_size = GetIntegerValueFromString(args[3].asString());
+        sftp_thread->ReadFile(path, offset, length, buffer_size);
       } else if (command == "mkdir") {
         std::string path = args[0].asString();
         sftp_thread->MakeDirectory(path);
