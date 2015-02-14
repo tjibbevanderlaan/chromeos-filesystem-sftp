@@ -111,6 +111,8 @@
         console.log("onUnmountRequested");
         console.log(options);
         var sftpClient = getSftpClient.call(this, options.fileSystemId);
+        doUnmount.call(this, sftpClient, options.requestId, successCallback);
+        /*
         var serverName = sftpClient.getServerName();
         var serverPort = sftpClient.getServerPort();
         var username = sftpClient.getUsername();
@@ -126,10 +128,40 @@
                     sftpClient.destroy(options.requestId);
                 }.bind(this));
             }.bind(this));
+        */
+    };
+
+    var doUmount = function(sftpClient, requestId, successCallback) {
+        var serverName = sftpClient.getServerName();
+        var serverPort = sftpClient.getServerPort();
+        var username = sftpClient.getUsername();
+        unregisterMountedCredential.call(
+            this, serverName, serverPort, username,
+            function() {
+                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+                chrome.fileSystemProvider.unmount({
+                    fileSystemId: fileSystemId
+                }, function() {
+                    delete this.sftpClientMap_[fileSystemId];
+                    successCallback();
+                    sftpClient.destroy(requestId);
+                }.bind(this));
+            }.bind(this));
     };
 
     SftpFS.prototype.onNaClModuleCrashed = function(sftpClient, exitStatus) {
-        console.log("onNaClModuleCrashed");
+        console.log("onNaClModuleCrashed - " + exitStatus);
+        if (exitStatus !== 0) {
+            doUnmount.call(this, sftpClient, 999999, function() {
+                chrome.notifications.create("", {
+                    type: "basic",
+                    title: "SFTP File System",
+                    message: "The NaCl module crashed. Unmounted.",
+                    iconUrl: "images/32.png"
+                }, function(notificationId) {
+                }.bind(this));
+            }.bind(this));
+        }
     };
 
     SftpFS.prototype.onReadDirectoryRequested = function(options, successCallback, errorCallback) {
