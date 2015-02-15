@@ -112,41 +112,6 @@
         console.log(options);
         var sftpClient = getSftpClient.call(this, options.fileSystemId);
         doUnmount.call(this, sftpClient, options.requestId, successCallback);
-        /*
-        var serverName = sftpClient.getServerName();
-        var serverPort = sftpClient.getServerPort();
-        var username = sftpClient.getUsername();
-        unregisterMountedCredential.call(
-            this, serverName, serverPort, username,
-            function() {
-                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
-                chrome.fileSystemProvider.unmount({
-                    fileSystemId: fileSystemId
-                }, function() {
-                    delete this.sftpClientMap_[fileSystemId];
-                    successCallback();
-                    sftpClient.destroy(options.requestId);
-                }.bind(this));
-            }.bind(this));
-        */
-    };
-
-    var doUmount = function(sftpClient, requestId, successCallback) {
-        var serverName = sftpClient.getServerName();
-        var serverPort = sftpClient.getServerPort();
-        var username = sftpClient.getUsername();
-        unregisterMountedCredential.call(
-            this, serverName, serverPort, username,
-            function() {
-                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
-                chrome.fileSystemProvider.unmount({
-                    fileSystemId: fileSystemId
-                }, function() {
-                    delete this.sftpClientMap_[fileSystemId];
-                    successCallback();
-                    sftpClient.destroy(requestId);
-                }.bind(this));
-            }.bind(this));
     };
 
     SftpFS.prototype.onNaClModuleCrashed = function(sftpClient, exitStatus) {
@@ -434,6 +399,24 @@
                     callback();
                 }.bind(this));
         }.bind(this));
+    };
+
+    var doUnmount = function(sftpClient, requestId, successCallback) {
+        var serverName = sftpClient.getServerName();
+        var serverPort = sftpClient.getServerPort();
+        var username = sftpClient.getUsername();
+        unregisterMountedCredential.call(
+            this, serverName, serverPort, username,
+            function() {
+                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+                chrome.fileSystemProvider.unmount({
+                    fileSystemId: fileSystemId
+                }, function() {
+                    delete this.sftpClientMap_[fileSystemId];
+                    successCallback();
+                    sftpClient.destroy(requestId);
+                }.bind(this));
+            }.bind(this));
     };
 
     var registerMountedCredential = function(serverName, serverPort, authType, username, password, privateKey, callback) {
