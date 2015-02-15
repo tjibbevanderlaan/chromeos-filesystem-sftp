@@ -387,7 +387,11 @@
 
     var doMount = function(serverName, serverPort, authType, username, password, privateKey, callback) {
         var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
-        var displayName = "SFTP(" + serverName + ")";
+        var displayName = serverName;
+        if (Number(serverPort) !== 22) {
+            displayName += ":" + serverPort;
+        }
+        displayName += "(" + username + ")";
         chrome.fileSystemProvider.mount({
             fileSystemId: fileSystemId,
             displayName: displayName,
