@@ -1,15 +1,15 @@
 {
-  "name": "sample-sftp-app",
+  "name": "chromeos-filesystem-sftp",
   "version": "0.0.0",
   "dependencies": {
     "cryptojslib": "~3.1.2",
     "jquery": "~1.11.2",
-    "paper-toast": "Polymer/paper-toast#~0.5.3",
-    "paper-input": "Polymer/paper-input#~0.5.3",
-    "paper-button": "Polymer/paper-button#~0.5.3",
-    "paper-radio-button": "Polymer/paper-radio-button#~0.5.3",
-    "paper-radio-group": "Polymer/paper-radio-group#~0.5.3",
-    "paper-dialog": "Polymer/paper-dialog#~0.5.3"
+    "paper-toast": "Polymer/paper-toast#~0.5.4",
+    "paper-input": "Polymer/paper-input#~0.5.4",
+    "paper-button": "Polymer/paper-button#~0.5.4",
+    "paper-radio-button": "Polymer/paper-radio-button#~0.5.4",
+    "paper-radio-group": "Polymer/paper-radio-group#~0.5.4",
+    "paper-dialog": "Polymer/paper-dialog#~0.5.4"
   },
   "devDependencies": {}
 }

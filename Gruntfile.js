@@ -28,10 +28,6 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
-            bower: {
-                files: ['bower.json'],
-                tasks: ['bowerInstall']
-            },
             js: {
                 files: ['<%= config.app %>/scripts/{,*/}*.js'],
                 tasks: ['jshint'],
@@ -132,48 +128,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        bowerInstall: {
-            app: {
-                src: ['<%= config.app %>/index.html'],
-                ignorePath: '<%= config.app %>/'
-            }
-        },
-        useminPrepare: {
-            options: {
-                dest: '<%= config.dist %>'
-            },
-            html: [
-                '<%= config.app %>/window.html'
-            ]
-        },
-        usemin: {
-            options: {
-                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/images']
-            },
-            html: ['<%= config.dist %>/{,*/}*.html'],
-            css: ['<%= config.dist %>/styles/{,*/}*.css']
-        },
-        htmlmin: {
-            dist: {
-                options: {
-                    customAttrAssign: [/\?=/],
-                    collapseBooleanAttributes: true,
-                    collapseWhitespace: true,
-                    removeAttributeQuotes: true,
-                    removeCommentsFromCDATA: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.dist %>',
-                    src: '{,*/}*.html',
-                    dest: '<%= config.dist %>'
-                }]
-            }
-        },
         copy: {
             dist: {
                 files: [{
@@ -183,45 +137,33 @@ module.exports = function (grunt) {
                     dest: '<%= config.dist %>',
                     src: [
                         '*.{ico,png,txt}',
-                        'images/{,*/}*.{webp,gif}',
-                        '{,*/}*.html',
-                        'styles/fonts/{,*/}*.*',
+                        'images/{,*/}*.png',
+                        'styles/{,*/}*.*',
                         '_locales/{,*/}*.json',
-                        'nacl/Release/*.{pexe,nmf}'
+                        'newlib/Release/*.{nexe,nmf}'
                     ]
                 }]
-            },
-            styles: {
-                expand: true,
-                dot: true,
-                cwd: '<%= config.app %>/styles',
-                dest: '.tmp/styles/',
-                src: '{,*/}*.css'
             }
         },
-        concurrent: {
-            server: [
-                'copy:styles'
-            ],
-            chrome: [
-                'copy:styles'
-            ],
-            dist: [
-                'copy:styles'
-            ],
-            test: [
-                'copy:styles'
-            ]
+        concat: {
+            dist: {
+                src: [
+                    '<%= config.app %>/bower_components/cryptojslib/core-min.js',
+                    '<%= config.app %>/bower_components/cryptojslib/enc-base64-min.js',
+                    '<%= config.app %>/bower_components/cryptojslib/lib-typedarrays-min.js',
+                    '<%= config.app %>/scripts/sftp_client.js',
+                    '<%= config.app %>/scripts/sftp_fs.js',
+                    '<%= config.app %>/scripts/background.js'
+                ],
+                dest: '<%= config.dist %>/background.js'
+            }
         },
         chromeManifest: {
             dist: {
                 options: {
                     buildnumber: false,
                     background: {
-                        target: 'scripts/background.js',
-                        exclude: [
-                            'scripts/chromereload.js'
-                        ]
+                        target: 'background.js'
                     }
                 },
                 src: '<%= config.app %>',
@@ -233,7 +175,7 @@ module.exports = function (grunt) {
                 options: {
                     archive: function() {
                         var manifest = grunt.file.readJSON('app/manifest.json');
-                        return 'package/sample_sftp_app-' + manifest.version + '.zip';
+                        return 'package/chromeos-filesystem-sftp-' + manifest.version + '.zip';
                     }
                 },
                 files: [{
@@ -244,6 +186,16 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        bower: {
+            install: {
+                options: {
+                    targetDir: '<%= config.dist %>/bower_components',
+                    verbose: true,
+                    install: true
+//                    cleanup: true
+                }
+            }
+        },
         shell: {
             make: {
                 command: [
@@ -251,6 +203,17 @@ module.exports = function (grunt) {
                     'make CONFIG=Release',
                     'cd ../..'
                 ].join(';')
+            }
+        },
+        vulcanize: {
+            main: {
+                options: {
+                    csp: true,
+                    inline: true
+                },
+                files: {
+                    '<%= config.dist %>/window.html': '<%= config.app %>/window.html'
+                }
             }
         }
     });
@@ -265,7 +228,6 @@ module.exports = function (grunt) {
         grunt.config('watch', watch);
         grunt.task.run([
             'clean:' + platform,
-            'concurrent:' + platform,
             'connect:' + platform,
             'watch'
         ]);
@@ -278,14 +240,11 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'make',
-        'chromeManifest:dist',
-        'useminPrepare',
-        'concurrent:dist',
+        'bower:install',
         'concat',
-        'uglify',
+        'chromeManifest:dist',
         'copy',
-        'usemin',
-        'htmlmin',
+        'vulcanize',
         'compress'
     ]);
 
