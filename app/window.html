@@ -18,14 +18,22 @@
   <link rel="import" href="bower_components/paper-input/paper-autogrow-textarea.html">
   <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
   <link rel="import" href="bower_components/paper-dialog/paper-action-dialog.html">
+  <link rel="import" href="bower_components/core-menu/core-menu.html">
+  <link rel="import" href="bower_components/paper-item/paper-item.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 
   <link rel="stylesheet" href="styles/style.css">
 </head>
 
-<body>
+<body unresolved>
   <paper-toast data-message="mountAttempt" id="toast-mount-attempt"></paper-toast>
   <paper-toast data-message="mountFail" id="toast-mount-fail"></paper-toast>
   <paper-toast data-message="mountSuccess" id="toast-mount-success"></paper-toast>
+
+  <div class="list">
+    <core-menu id="credentials">
+    </core-menu>
+  </div>
 
   <div class="container">
     <h1 data-message="mountHeader"></h1>
@@ -45,11 +53,14 @@
         <input is="core-input" id="password" type="password">
       </paper-input-decorator>
       <paper-input-decorator id="privatekeyDecorator" data-message="privateKey" floatingLabel disabled>
-        <paper-autogrow-textarea maxRows="4">
+        <paper-autogrow-textarea rows="4" maxRows="4">
           <textarea id="privatekey" disabled></textarea>
         </paper-autogrow-textarea>
       </paper-input-decorator>
-      <paper-button raisedButton id="btnMount" data-message="mount"></paper-button>
+      <div horizontal layout>
+        <paper-button raised id="btnMount" data-message="mount"></paper-button>
+        <paper-button raised id="btnKeep" data-message="keep"></paper-button>
+      </div>
     </form>
   </div>
 

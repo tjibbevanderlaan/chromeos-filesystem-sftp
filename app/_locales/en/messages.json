@@ -15,6 +15,10 @@
     "message": "Mount",
     "description": "Label for a button that triggers the mount action."
   },
+  "keep": {
+    "message": "Keep",
+    "description": "Label for a button that triggers the keep action."
+  },
   "mountAttempt": {
     "message": "Attempting to mount instance...",
     "description": "Popup notifcation that informs the user that the system is attempting to mount a new instance with the credentials they provided."
