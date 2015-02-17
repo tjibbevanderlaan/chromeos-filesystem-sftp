@@ -3,6 +3,7 @@
 (function() {
 
     var onLoad = function() {
+        loadKeptCredentials();
         assignEventHandlers();
     };
 
@@ -10,6 +11,10 @@
         var btnMount = document.querySelector("#btnMount");
         btnMount.addEventListener("click", function(e) {
             onClickedBtnMount(e);
+        });
+        var btnKeep = document.querySelector("#btnKeep");
+        btnKeep.addEventListener("click", function(e) {
+            onClickedBtnKeep(e);
         });
         var btnDecline = document.querySelector("#btnDecline");
         btnDecline.addEventListener("click", function(e) {
@@ -150,6 +155,93 @@
                 break;
             }
         }
+    };
+
+    var onClickedBtnKeep = function(evt) {
+        console.log("onClickedBtnKeep");
+        var serverName = document.querySelector("#serverName").value;
+        var serverPort = document.querySelector("#serverPort").value;
+        var authType = document.querySelector("#authType").selected;
+        var username = document.querySelector("#username").value;
+        var privateKey = document.querySelector("#privatekey").value;
+        if (serverName && serverPort && username) {
+            chrome.storage.local.get("keptCredentials", function(items) {
+                var credentials = items.keptCredentials || {};
+                var key = createKey(serverName, serverPort, username);
+                var credential = {
+                    serverName: serverName,
+                    serverPort: serverPort,
+                    authType: authType,
+                    username: username,
+                    privateKey: privateKey
+                };
+                credentials[key] = credential;
+                chrome.storage.local.set({
+                    keptCredentials: credentials
+                }, function() {
+                    loadKeptCredentials();
+                });
+            });
+        }
+    };
+
+    var loadKeptCredentials = function() {
+        chrome.storage.local.get("keptCredentials", function(items) {
+            var credentials = document.querySelector("#credentials");
+            credentials.innerHTML = "";
+            var credentials = items.keptCredentials || {};
+            for (var key in credentials) {
+                appendCredentialToScreen(credentials[key]);
+            }
+        });
+    };
+
+    var appendCredentialToScreen = function(credential) {
+        var credentials = document.querySelector("#credentials");
+        var div = document.createElement("div");
+        div.setAttribute("horizontal", "true");
+        div.setAttribute("layout", "true");
+        div.setAttribute("center", "true");
+        var item = document.createElement("paper-item");
+        item.textContent = createKey(credential.serverName, credential.serverPort, credential.username);
+        item.addEventListener("click", (function(credential) {
+            return function(evt) {
+                setCredentialToForm(credential);
+            };
+        })(credential));
+        div.appendChild(item);
+        var btnClose = document.createElement("paper-icon-button");
+        btnClose.setAttribute("icon", "close");
+        btnClose.setAttribute("title", "Delete");
+        btnClose.addEventListener("click", (function(credential) {
+            return function(evt) {
+                setCredentialToForm(credential);
+                chrome.storage.local.get("keptCredentials", function(items) {
+                    var credentials = items.keptCredentials || {};
+                    var key = createKey(credential.serverName, credential.serverPort, credential.username);
+                    delete credentials[key];
+                    chrome.storage.local.set({
+                        keptCredentials: credentials
+                    }, function() {
+                        loadKeptCredentials();
+                    });
+                });
+            };
+        })(credential));
+        div.appendChild(btnClose);
+        credentials.appendChild(div);
+    };
+
+    var setCredentialToForm = function(credential) {
+        document.querySelector("#serverName").value = credential.serverName;
+        document.querySelector("#serverPort").value = credential.serverPort;
+        document.querySelector("#authType").selected = credential.authType;
+        document.querySelector("#username").value = credential.username;
+        document.querySelector("#privatekey").value = credential.privateKey;
+    };
+
+    var createKey = function(serverName, serverPort, username) {
+        return serverName + ":" + serverPort + " (" + username + ")";
     };
 
     window.addEventListener("load", function(e) {

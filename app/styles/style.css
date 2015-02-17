@@ -8,9 +8,21 @@ body {
   padding: 0px;
 }
 
+.list {
+  position: relative;
+  width: 230px;
+  height: 665px;
+  margin-right: 20px;
+  float: left;
+  background-color: #eee;
+}
+
 .container {
   margin: 0 auto;
-  width: 500px;
+  padding: 10px;
+  width: 550px;
+  float: left;
+  /* background-color: red; */
 }
 
 paper-input {
@@ -36,4 +48,17 @@ paper-button {
   margin: 30px auto 0 auto;
   width: 100px;
   font-size: 16px;
+}
+
+#btnMount {
+  color: #fff;
+  background-color: #4285f4;
+}
+
+paper-item {
+  word-wrap: break-word;
+}
+
+.list {
+  overflow-y: auto;
 }
