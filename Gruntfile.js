@@ -148,9 +148,9 @@ module.exports = function (grunt) {
         concat: {
             dist: {
                 src: [
-                    '<%= config.app %>/bower_components/cryptojslib/core-min.js',
-                    '<%= config.app %>/bower_components/cryptojslib/enc-base64-min.js',
-                    '<%= config.app %>/bower_components/cryptojslib/lib-typedarrays-min.js',
+                    '<%= config.app %>/bower_components/cryptojslib/components/core-min.js',
+                    '<%= config.app %>/bower_components/cryptojslib/components/enc-base64-min.js',
+                    '<%= config.app %>/bower_components/cryptojslib/components/lib-typedarrays-min.js',
                     '<%= config.app %>/scripts/sftp_client.js',
                     '<%= config.app %>/scripts/sftp_fs.js',
                     '<%= config.app %>/scripts/background.js'
