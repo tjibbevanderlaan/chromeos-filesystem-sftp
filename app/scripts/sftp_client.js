@@ -273,6 +273,9 @@
     };
 
     var checkEventMessage = function(event, message, onError) {
+        if (chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError);
+        }
         if (event.message === message) {
             return true;
         } else {

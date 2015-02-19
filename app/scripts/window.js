@@ -238,6 +238,7 @@
         document.querySelector("#authType").selected = credential.authType;
         document.querySelector("#username").value = credential.username;
         document.querySelector("#privatekey").value = credential.privateKey;
+        document.querySelector("#password").focus();
     };
 
     var createKey = function(serverName, serverPort, username) {
