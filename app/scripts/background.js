@@ -14,6 +14,7 @@
         });
     });
 
+/*
     window.addEventListener("load", function() {
         sftp_fs_.resume(function() {
             console.log("Resumed");
@@ -21,35 +22,49 @@
             console.log(reason);
         });
     });
+*/
+
+    var doMount = function(request, sendResponse) {
+        sftp_fs_.checkAlreadyMounted(request.serverName, request.serverPort, request.username, function(exists) {
+            if (exists) {
+                sendResponse({
+                    type: "error",
+                    error: "Already mounted"
+                });
+            } else {
+                var options = {
+                    serverName: request.serverName,
+                    serverPort: request.serverPort,
+                    authType: request.authType,
+                    username: request.username,
+                    password: request.password,
+                    privateKey: request.privateKey,
+                    onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
+                        sendResponse({
+                            type: "confirmFingerprint",
+                            algorithm: algorithm,
+                            fingerprint: fingerprint,
+                            requestId: requestId,
+                            fileSystemId: fileSystemId
+                        });
+                    },
+                    onError: function(reason) {
+                        sendResponse({
+                            type: "error",
+                            error: reason
+                        });
+                    }
+                };
+                sftp_fs_.mount(options);
+            }
+        });
+    };
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         console.log(request);
         switch(request.type) {
         case "mount":
-            var options = {
-                serverName: request.serverName,
-                serverPort: request.serverPort,
-                authType: request.authType,
-                username: request.username,
-                password: request.password,
-                privateKey: request.privateKey,
-                onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
-                    sendResponse({
-                        type: "confirmFingerprint",
-                        algorithm: algorithm,
-                        fingerprint: fingerprint,
-                        requestId: requestId,
-                        fileSystemId: fileSystemId
-                    });
-                },
-                onError: function(reason) {
-                    sendResponse({
-                        type: "error",
-                        error: reason
-                    });
-                }
-            };
-            sftp_fs_.mount(options);
+            doMount(request, sendResponse);
             break;
         case "accept":
             sftp_fs_.allowToConnect(
