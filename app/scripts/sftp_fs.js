@@ -48,14 +48,14 @@
                     requestId: requestId,
                     onSuccess: function()
                 */
-                        doMount.call(
-                            this,
-                            sftpClient.getServerName(), sftpClient.getServerPort(),
-                            sftpClient.getAuthType(),
-                            sftpClient.getUsername(), sftpClient.getPassword(), sftpClient.getPrivateKey(),
-                            function() {
-                                onSuccess();
-                            }.bind(this));
+                doMount.call(
+                    this,
+                    sftpClient.getServerName(), sftpClient.getServerPort(),
+                    sftpClient.getAuthType(),
+                    sftpClient.getUsername(), sftpClient.getPassword(), sftpClient.getPrivateKey(),
+                    function() {
+                        onSuccess();
+                    }.bind(this));
                 /*
                     }.bind(this),
                     onError: function(reason) {
@@ -637,7 +637,7 @@
         console.log("addTaskQueue: length=" + this.taskQueue_.length);
         this.taskQueue_.push(task);
         console.log("added task: length=" + this.taskQueue_.length);
-        if (this.taskQueue_.length == 1) {
+        if (this.taskQueue_.length === 1) {
             setTimeout(function() {
                 console.log("call consume task: length=" + this.taskQueue_.length);
                 consumeQueue.call(this);

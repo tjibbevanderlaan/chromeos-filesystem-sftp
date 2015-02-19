@@ -187,8 +187,7 @@
 
     var loadKeptCredentials = function() {
         chrome.storage.local.get("keptCredentials", function(items) {
-            var credentials = document.querySelector("#credentials");
-            credentials.innerHTML = "";
+            document.querySelector("#credentials").innerHTML = "";
             var credentials = items.keptCredentials || {};
             for (var key in credentials) {
                 appendCredentialToScreen(credentials[key]);
