@@ -24,12 +24,18 @@
         btnAccept.addEventListener("click", function(e) {
             onClickedBtnAccept(e);
         });
-        var password = document.querySelector("#authTypePassword");
-        password.addEventListener("core-change", onChangeAuthType);
-        var keyboardInteractive = document.querySelector("#authTypeKeyboardInteractive");
-        keyboardInteractive.addEventListener("core-change", onChangeAuthType);
-        var publickey = document.querySelector("#authTypePublickey");
-        publickey.addEventListener("core-change", onChangeAuthType);
+        var authTypePassword = document.querySelector("#authTypePassword");
+        authTypePassword.addEventListener("core-change", onChangeAuthType);
+        var authTypeKeyboardInteractive = document.querySelector("#authTypeKeyboardInteractive");
+        authTypeKeyboardInteractive.addEventListener("core-change", onChangeAuthType);
+        var authTypePublickey = document.querySelector("#authTypePublickey");
+        authTypePublickey.addEventListener("core-change", onChangeAuthType);
+        var password = document.querySelector("#password");
+        password.addEventListener("change", function(e) {
+            if (document.activeElement == this) {
+                onClickedBtnMount(e);
+            }
+        });
     };
 
     var onChangeAuthType = function(evt) {
