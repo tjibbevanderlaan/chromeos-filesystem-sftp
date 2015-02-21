@@ -6,7 +6,7 @@
 
     var SftpFS = function() {
         this.sftpClientMap_ = {};
-        this.taskQueue_ = [];
+        this.taskQueue_ = {};
         this.opened_files_ = {};
         assignEventHandlers.call(this);
     };
@@ -22,6 +22,7 @@
             options.authType, options.username,
             options.password, options.privateKey);
         this.sftpClientMap_[fileSystemId] = sftpClient;
+        // createTaskQueue.call(this, fileSystemId);
         sftpClient.setup();
         // var requestId = new Date().getTime() % 2147483647;
         var requestId = createRequestId.call(this);
@@ -473,6 +474,7 @@
                     fileSystemId: fileSystemId
                 }, function() {
                     delete this.sftpClientMap_[fileSystemId];
+                    deleteTaskQueue.call(this, fileSystemId);
                     successCallback();
                     sftpClient.destroy(requestId);
                 }.bind(this));
@@ -519,21 +521,20 @@
 
     var createEventHandler = function(callback) {
         return function(options, successCallback, errorCallback) {
-            var sftpClient = getSftpClient.call(this, options.fileSystemId);
-            if (!sftpClient) {
-                this.resume(options.fileSystemId, function() {
-                    addTaskQueue.call(this, function() {
+            var fileSystemId = options.fileSystemId;
+            addTaskQueue.call(this, fileSystemId, function() {
+                var sftpClient = getSftpClient.call(this, fileSystemId);
+                if (!sftpClient) {
+                    this.resume(fileSystemId, function() {
                         callback(options, successCallback, errorCallback);
+                    }.bind(this), function(reason) {
+                        console.log("resume failed: " + reason);
+                        errorCallback("FAILED");
                     }.bind(this));
-                }.bind(this), function(reason) {
-                    console.log("resume failed: " + reason);
-                    errorCallback("FAILED");
-                }.bind(this));
-            } else {
-                addTaskQueue.call(this, function() {
+                } else {
                     callback(options, successCallback, errorCallback);
-                }.bind(this));
-            }
+                }
+            }.bind(this));
         }.bind(this);
     };
 
@@ -599,75 +600,43 @@
     };
 
     var prepare = function(sftpClient, requestId, onSuccess, onError) {
-        /*
-        sftpClient.connect({
-            requestId: requestId,
-            onSuccess: function(result) {
-                // TODO Check fingerprint.
-                sftpClient.authenticate({
-                    requestId: result.requestId,
-                    onSuccess: function(result) {
-                        var closeCallback = function() {
-                            sftpClient.close({
-                                requestId: result.requestId,
-                                onSuccess: function() {
-                                    shiftAndConsumeQueue.call(this);
-                                }.bind(this),
-                                onError: onError
-                            });
-                        }.bind(this);
-                        onSuccess(closeCallback);
-                    }.bind(this),
-                    onError: onError
-                });
-            }.bind(this),
-            onError: onError
-        });
-        */
-        var closeCallback = function() {
-            if (chrome.runtime.lastError) {
-                console.log(chrome.runtime.lastError);
-            }
-            shiftAndConsumeQueue.call(this);
-        }.bind(this);
+        var closeCallback = (function(self, sftpClient) {
+            return function() {
+                if (chrome.runtime.lastError) {
+                    console.log(chrome.runtime.lastError);
+                }
+                var fileSystemId = createFileSystemID.call(self,
+                    sftpClient.getServerName(), sftpClient.getServerPort(), sftpClient.getUsername());
+                shiftAndConsumeQueue.call(self, fileSystemId);
+            }.bind(self);
+        })(this, sftpClient);
         onSuccess(closeCallback);
     };
 
-    var addTaskQueue = function(task) {
-        console.log("addTaskQueue: length=" + this.taskQueue_.length);
-        this.taskQueue_.push(task);
-        console.log("added task: length=" + this.taskQueue_.length);
-        if (this.taskQueue_.length === 1) {
-            setTimeout(function() {
-                console.log("call consume task: length=" + this.taskQueue_.length);
-                consumeQueue.call(this);
-            }.bind(this), 10);
+    var getTaskQueue = function(fileSystemId) {
+        console.log("getTaskQueue: " + fileSystemId);
+        var taskQueue = this.taskQueue_[fileSystemId];
+        if (!taskQueue) {
+            taskQueue = new TaskQueue();
+            this.taskQueue_[fileSystemId] = taskQueue;
+            console.log("getTaskQueue: Created. " + fileSystemId);
         }
-        // task();
+        return taskQueue;
     };
 
-    var consumeQueue = function() {
-        console.log("consumeQueue: length=" + this.taskQueue_.length);
-        if (this.taskQueue_.length > 0) {
-            var task = this.taskQueue_[0];
-            // var task = this.taskQueue_.shift();
-            if (task) {
-                console.log("execute task: length=" + this.taskQueue_.length);
-                task();
-            } else {
-                this.taskQueue_.shift();
-                console.log("dequeue task(1): length=" + this.taskQueue_.length);
-                consumeQueue.call(this);
-            }
-        } else {
-            console.log("queue: empty");
-        }
+    var deleteTaskQueue = function(fileSystemId) {
+        console.log("deleteTaskQueue: " + fileSystemId);
+        delete this.taskQueue_[fileSystemId];
     };
 
-    var shiftAndConsumeQueue = function() {
-        this.taskQueue_.shift();
-        console.log("dequeue task(2): length=" + this.taskQueue_.length);
-        consumeQueue.call(this);
+    var addTaskQueue = function(fileSystemId, task) {
+        var taskQueue = getTaskQueue.call(this, fileSystemId);
+        taskQueue.addTask(task);
+    };
+
+    var shiftAndConsumeQueue = function(fileSystemId) {
+        var taskQueue = getTaskQueue.call(this, fileSystemId);
+        taskQueue.shiftAndConsumeTask();
     };
 
     var getOpenedFiles = function(fileSystemId) {
