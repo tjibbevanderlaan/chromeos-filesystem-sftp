@@ -32,7 +32,7 @@
         authTypePublickey.addEventListener("core-change", onChangeAuthType);
         var password = document.querySelector("#password");
         password.addEventListener("change", function(e) {
-            if (document.activeElement == this) {
+            if (document.activeElement === this) {
                 onClickedBtnMount(e);
             }
         });
