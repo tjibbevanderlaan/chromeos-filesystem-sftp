@@ -21,6 +21,7 @@
         "chrome": true,
         "SftpFS": true,
         "CryptoJS": true,
+        "TaskQueue": true,
         "SftpClient": true
     }
 }
