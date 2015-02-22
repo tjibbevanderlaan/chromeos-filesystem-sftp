@@ -14,16 +14,6 @@
         });
     });
 
-/*
-    window.addEventListener("load", function() {
-        sftp_fs_.resume(function() {
-            console.log("Resumed");
-        }, function(reason) {
-            console.log(reason);
-        });
-    });
-*/
-
     var doMount = function(request, sendResponse) {
         sftp_fs_.checkAlreadyMounted(request.serverName, request.serverPort, request.username, function(exists) {
             if (exists) {
@@ -39,6 +29,7 @@
                     username: request.username,
                     password: request.password,
                     privateKey: request.privateKey,
+                    mountPath: request.mountPath,
                     onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
                         sendResponse({
                             type: "confirmFingerprint",

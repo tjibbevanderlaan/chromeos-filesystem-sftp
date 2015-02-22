@@ -62,5 +62,9 @@
   "privateKey": {
     "message": "Private Key",
     "description": "The private key"
+  },
+  "mountPath": {
+    "message": "Path as root directory",
+    "description": "The mount path as root"
   }
 }
