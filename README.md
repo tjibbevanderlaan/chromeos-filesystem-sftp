@@ -21,7 +21,7 @@ $ grunt
 
 * [libssh2](http://www.libssh2.org/)
 * [crypto-js](https://code.google.com/p/crypto-js/)
-* [Polymer](https://www.polymer-project.org/
+* [Polymer](https://www.polymer-project.org/)
 * [jQuery](http://jquery.com/)
 
 ## License
