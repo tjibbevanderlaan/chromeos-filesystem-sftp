@@ -66,7 +66,8 @@
             authType: document.querySelector("#authType").selected,
             username: document.querySelector("#username").value,
             password: document.querySelector("#password").value,
-            privateKey: document.querySelector("#privatekey").value
+            privateKey: document.querySelector("#privatekey").value,
+            mountPath: document.querySelector("#mountPath").value
         };
         chrome.runtime.sendMessage(request, function(response) {
             console.log(response);
@@ -154,7 +155,7 @@
             case "paper-toast":
                 element.setAttribute("text", messageText);
                 break;
-            case "h1":
+            case "h2":
             case "title":
                 textNode = document.createTextNode(messageText);
                 element.appendChild(textNode);
@@ -170,6 +171,7 @@
         var authType = document.querySelector("#authType").selected;
         var username = document.querySelector("#username").value;
         var privateKey = document.querySelector("#privatekey").value;
+        var mountPath = document.querySelector("#mountPath").value;
         if (serverName && serverPort && username) {
             chrome.storage.local.get("keptCredentials", function(items) {
                 var credentials = items.keptCredentials || {};
@@ -179,7 +181,8 @@
                     serverPort: serverPort,
                     authType: authType,
                     username: username,
-                    privateKey: privateKey
+                    privateKey: privateKey,
+                    mountPath: mountPath
                 };
                 credentials[key] = credential;
                 chrome.storage.local.set({
@@ -243,6 +246,7 @@
         document.querySelector("#authType").selected = credential.authType;
         document.querySelector("#username").value = credential.username;
         document.querySelector("#privatekey").value = credential.privateKey;
+        document.querySelector("#mountPath").value = credential.mountPath;
         document.querySelector("#password").focus();
     };
 

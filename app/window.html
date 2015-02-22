@@ -36,7 +36,7 @@
   </div>
 
   <div class="container">
-    <h1 data-message="mountHeader"></h1>
+    <h2 data-message="mountHeader"></h2>
 
     <form>
       <paper-input floatinglabel type="text" id="serverName" data-message="serverName"></paper-input>
@@ -53,10 +53,11 @@
         <input is="core-input" id="password" type="password">
       </paper-input-decorator>
       <paper-input-decorator id="privatekeyDecorator" data-message="privateKey" floatingLabel disabled>
-        <paper-autogrow-textarea rows="4" maxRows="4">
+        <paper-autogrow-textarea rows="3" maxRows="3">
           <textarea id="privatekey" disabled></textarea>
         </paper-autogrow-textarea>
       </paper-input-decorator>
+      <paper-input floatinglabel type="text" id="mountPath" data-message="mountPath"></paper-input>
       <div horizontal layout>
         <paper-button raised id="btnMount" data-message="mount"></paper-button>
         <paper-button raised id="btnKeep" data-message="keep"></paper-button>

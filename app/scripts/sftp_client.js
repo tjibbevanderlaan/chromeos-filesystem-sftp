@@ -4,13 +4,28 @@
 
     // Constructor
 
-    var SftpClient = function(sftpFS, serverName, serverPort, authType, username, password, privateKey) {
+    var SftpClient = function(
+            sftpFS, serverName, serverPort, authType,
+            username, password, privateKey, mountPath) {
         this.serverName_ = serverName;
         this.serverPort_ = serverPort;
         this.authType_ = authType;
         this.username_ = username;
         this.password_ = password;
         this.privateKey_ = privateKey;
+        this.mountPath_ = mountPath;
+
+        if (this.mountPath_) {
+            if (this.mountPath_.length > 1) {
+                var last = this.mountPath_.substring(this.mountPath_.length - 1);
+                if (last === "/") {
+                    this.mountPath_ = this.mountPath_.substring(0, this.mountPath_.length - 1);
+                }
+            }
+        } else {
+            this.mountPath_ = "";
+        }
+        console.log("mountPath: " + this.mountPath_);
 
         this.sftpFS_ = sftpFS;
 
@@ -44,6 +59,10 @@
 
     SftpClient.prototype.getPrivateKey = function() {
         return this.privateKey_;
+    };
+
+    SftpClient.prototype.getMountPath = function() {
+        return this.mountPath_;
     };
 
     SftpClient.prototype.setup = function() {
@@ -119,7 +138,8 @@
                 options.onError("NOT_FOUND");
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "file", options.requestId, [options.path]);
+        var realPath = createRealPath.call(this, options.path);
+        postMessageToNaClModule.call(this, "file", options.requestId, [realPath]);
     };
 
     SftpClient.prototype.readDirectory = function(options) {
@@ -141,7 +161,8 @@
                 });
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "dir", options.requestId, [options.path]);
+        var realPath = createRealPath.call(this, options.path);
+        postMessageToNaClModule.call(this, "dir", options.requestId, [realPath]);
     };
 
     SftpClient.prototype.readFile = function(options) {
@@ -159,8 +180,9 @@
                 });
             }
         }.bind(this));
+        var realPath = createRealPath.call(this, options.path);
         postMessageToNaClModule.call(this, "read", options.requestId,
-                                     [options.path, options.offset, options.length, 32]);
+                                     [realPath, options.offset, options.length, 32]);
     };
 
     SftpClient.prototype.createDirectory = function(options) {
@@ -169,7 +191,8 @@
                 options.onSuccess();
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "mkdir", options.requestId, [options.path]);
+        var realPath = createRealPath.call(this, options.path);
+        postMessageToNaClModule.call(this, "mkdir", options.requestId, [realPath]);
     };
 
     SftpClient.prototype.deleteEntry = function(options) {
@@ -178,7 +201,8 @@
                 options.onSuccess();
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "delete", options.requestId, [options.path]);
+        var realPath = createRealPath.call(this, options.path);
+        postMessageToNaClModule.call(this, "delete", options.requestId, [realPath]);
     };
 
     SftpClient.prototype.moveEntry = function(options) {
@@ -187,7 +211,9 @@
                 options.onSuccess();
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "rename", options.requestId, [options.sourcePath, options.targetPath]);
+        var realSourcePath = createRealPath.call(this, options.sourcePath);
+        var realTargetPath = createRealPath.call(this, options.targetPath);
+        postMessageToNaClModule.call(this, "rename", options.requestId, [realSourcePath, realTargetPath]);
     };
 
     SftpClient.prototype.createFile = function(options) {
@@ -196,7 +222,8 @@
                 options.onSuccess();
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "create", options.requestId, [options.path]);
+        var realPath = createRealPath.call(this, options.path);
+        postMessageToNaClModule.call(this, "create", options.requestId, [realPath]);
     };
 
     SftpClient.prototype.truncate = function(options) {
@@ -205,14 +232,15 @@
                 options.onSuccess();
             }
         }.bind(this));
-        postMessageToNaClModule.call(this, "truncate", options.requestId, [options.path, options.length]);
+        var realPath = createRealPath.call(this, options.path);
+        postMessageToNaClModule.call(this, "truncate", options.requestId, [realPath, options.length]);
     };
 
     SftpClient.prototype.writeFile = function(options) {
         var data = options.data;
         var offset = options.offset;
         var length = data.byteLength;
-        var path = options.path;
+        var realPath = createRealPath.call(this, options.path);
         var start = 0;
         var doWriteFileData = function() {
             var available = Math.min(32 * 1024, length - start);
@@ -224,7 +252,7 @@
             var b64Data = CryptoJS.enc.Base64.stringify(wordArray);
             postMessageToNaClModule.call(
                 this, "write", options.requestId,
-                [path, offset + start, available, b64Data]);
+                [realPath, offset + start, available, b64Data]);
             start += available;
         }.bind(this);
         addNaClEventListener.call(this, options.requestId, function(event) {
@@ -294,6 +322,10 @@
         var names = path.split("/");
         var name = names[names.length - 1];
         return name;
+    };
+
+    var createRealPath = function(path) {
+        return this.mountPath_ + path;
     };
 
     var wordArrayToUint8Array = function(wordArray) {

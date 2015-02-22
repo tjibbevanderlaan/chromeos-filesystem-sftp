@@ -20,7 +20,8 @@
             this,
             options.serverName, options.serverPort,
             options.authType, options.username,
-            options.password, options.privateKey);
+            options.password, options.privateKey,
+            options.mountPath);
         this.sftpClientMap_[fileSystemId] = sftpClient;
         // createTaskQueue.call(this, fileSystemId);
         sftpClient.setup();
@@ -54,6 +55,7 @@
                     sftpClient.getServerName(), sftpClient.getServerPort(),
                     sftpClient.getAuthType(),
                     sftpClient.getUsername(), sftpClient.getPassword(), sftpClient.getPrivateKey(),
+                    sftpClient.getMountPath(),
                     function() {
                         onSuccess();
                     }.bind(this));
@@ -91,6 +93,7 @@
                     username: credential.username,
                     password: credential.password,
                     privateKey: credential.privateKey,
+                    mountPath: credential.mountPath,
                     onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
                         // TODO Check the fingerprint.
                         this.allowToConnect(
@@ -434,7 +437,7 @@
 
     // Private functions
 
-    var doMount = function(serverName, serverPort, authType, username, password, privateKey, callback) {
+    var doMount = function(serverName, serverPort, authType, username, password, privateKey, mountPath, callback) {
         this.checkAlreadyMounted(serverName, serverPort, username, function(exists) {
             if (!exists) {
                 var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
@@ -449,7 +452,7 @@
                     writable: true
                 }, function() {
                     registerMountedCredential(
-                        serverName, serverPort, authType, username, password, privateKey,
+                        serverName, serverPort, authType, username, password, privateKey, mountPath,
                         function() {
                             callback();
                         }.bind(this));
@@ -481,7 +484,8 @@
             }.bind(this));
     };
 
-    var registerMountedCredential = function(serverName, serverPort, authType, username, password, privateKey, callback) {
+    var registerMountedCredential = function(
+            serverName, serverPort, authType, username, password, privateKey, mountPath, callback) {
         var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
         chrome.storage.local.get("mountedCredentials", function(items) {
             var mountedCredentials = items.mountedCredentials || {};
@@ -491,7 +495,8 @@
                 authType: authType,
                 username: username,
                 password: password,
-                privateKey: privateKey
+                privateKey: privateKey,
+                mountPath: mountPath
             };
             chrome.storage.local.set({
                 mountedCredentials: mountedCredentials
@@ -541,9 +546,20 @@
 
     var assignEventHandlers = function() {
         chrome.fileSystemProvider.onUnmountRequested.addListener(
-            createEventHandler.call(this, function(options, successCallback, errorCallback) {
-                this.onUnmountRequested(options, successCallback, errorCallback);
-            }.bind(this)));
+            function(options, successCallback, errorCallback) { // Unmount immediately
+                var fileSystemId = options.fileSystemId;
+                var sftpClient = getSftpClient.call(this, fileSystemId);
+                if (!sftpClient) {
+                    this.resume(fileSystemId, function() {
+                        this.onUnmountRequested(options, successCallback, errorCallback);
+                    }.bind(this), function(reason) {
+                        console.log("resume failed: " + reason);
+                        errorCallback("FAILED");
+                    }.bind(this));
+                } else {
+                    this.onUnmountRequested(options, successCallback, errorCallback);
+                }
+            }.bind(this));
         chrome.fileSystemProvider.onReadDirectoryRequested.addListener(
             createEventHandler.call(this, function(options, successCallback, errorCallback) {
                 this.onReadDirectoryRequested(options, successCallback, errorCallback);
