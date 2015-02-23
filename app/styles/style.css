@@ -11,7 +11,7 @@ body {
 .list {
   position: relative;
   width: 230px;
-  height: 665px;
+  height: 667px;
   margin-right: 20px;
   float: left;
   background-color: #eee;
@@ -63,6 +63,7 @@ paper-item {
   word-wrap: break-word;
 }
 
-.list {
+core-menu {
+  margin: 0;
   overflow-y: auto;
 }

@@ -36,6 +36,15 @@
                 onClickedBtnMount(e);
             }
         });
+        // Settings dialog
+        var btnSettings = document.querySelector("#btnSettings");
+        btnSettings.addEventListener("click", function(e) {
+            onClickedBtnSettings(e);
+        });
+        var keepPasswordYes = document.querySelector("#keepPasswordYes");
+        keepPasswordYes.addEventListener("core-change", onChangeKeepPassword);
+        var keepPasswordNo = document.querySelector("#keepPasswordNo");
+        keepPasswordNo.addEventListener("core-change", onChangeKeepPassword);
     };
 
     var onChangeAuthType = function(evt) {
@@ -166,32 +175,41 @@
 
     var onClickedBtnKeep = function(evt) {
         console.log("onClickedBtnKeep");
-        var serverName = document.querySelector("#serverName").value;
-        var serverPort = document.querySelector("#serverPort").value;
-        var authType = document.querySelector("#authType").selected;
-        var username = document.querySelector("#username").value;
-        var privateKey = document.querySelector("#privatekey").value;
-        var mountPath = document.querySelector("#mountPath").value;
-        if (serverName && serverPort && username) {
-            chrome.storage.local.get("keptCredentials", function(items) {
-                var credentials = items.keptCredentials || {};
-                var key = createKey(serverName, serverPort, username);
-                var credential = {
-                    serverName: serverName,
-                    serverPort: serverPort,
-                    authType: authType,
-                    username: username,
-                    privateKey: privateKey,
-                    mountPath: mountPath
-                };
-                credentials[key] = credential;
-                chrome.storage.local.set({
-                    keptCredentials: credentials
-                }, function() {
-                    loadKeptCredentials();
+        chrome.storage.local.get("settings", function(items) {
+            var settings = items.settings || {};
+            var keepPassword = settings.keepPassword || "keepPasswordNo";
+            keepPassword = (keepPassword === "keepPasswordYes");
+            var serverName = document.querySelector("#serverName").value;
+            var serverPort = document.querySelector("#serverPort").value;
+            var authType = document.querySelector("#authType").selected;
+            var username = document.querySelector("#username").value;
+            var privateKey = document.querySelector("#privatekey").value;
+            var mountPath = document.querySelector("#mountPath").value;
+            var password = document.querySelector("#password").value;
+            if (serverName && serverPort && username) {
+                chrome.storage.local.get("keptCredentials", function(items) {
+                    var credentials = items.keptCredentials || {};
+                    var key = createKey(serverName, serverPort, username);
+                    var credential = {
+                        serverName: serverName,
+                        serverPort: serverPort,
+                        authType: authType,
+                        username: username,
+                        privateKey: privateKey,
+                        mountPath: mountPath
+                    };
+                    if (keepPassword) {
+                        credential.password = password;
+                    }
+                    credentials[key] = credential;
+                    chrome.storage.local.set({
+                        keptCredentials: credentials
+                    }, function() {
+                        loadKeptCredentials();
+                    });
                 });
-            });
-        }
+            }
+        });
     };
 
     var loadKeptCredentials = function() {
@@ -247,11 +265,40 @@
         document.querySelector("#username").value = credential.username;
         document.querySelector("#privatekey").value = credential.privateKey;
         document.querySelector("#mountPath").value = credential.mountPath;
+        var password = credential.password;
+        if (password) {
+            document.querySelector("#password").value = password;
+        } else {
+            document.querySelector("#password").value = "";
+        }
         document.querySelector("#password").focus();
     };
 
     var createKey = function(serverName, serverPort, username) {
         return serverName + ":" + serverPort + " (" + username + ")";
+    };
+
+    var onClickedBtnSettings = function(evt) {
+        chrome.storage.local.get("settings", function(items) {
+            var settings = items.settings || {};
+            var keepPassword = settings.keepPassword || "keepPasswordNo";
+            if (keepPassword === "keepPasswordYes") {
+                document.querySelector("#keepPassword").selected = "keepPasswordYes";
+            } else {
+                document.querySelector("#keepPassword").selected = "keepPasswordNo";
+            }
+            document.querySelector("#settingsDialog").toggle();
+        });
+    };
+
+    var onChangeKeepPassword = function(evt) {
+        chrome.storage.local.get("settings", function(items) {
+            var settings = items.settings || {};
+            settings.keepPassword = document.querySelector("#keepPassword").selected;
+            chrome.storage.local.set({settings: settings}, function() {
+                console.log("Saving settings done.");
+            });
+        });
     };
 
     window.addEventListener("load", function(e) {

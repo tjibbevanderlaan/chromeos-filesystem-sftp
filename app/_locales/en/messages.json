@@ -66,5 +66,13 @@
   "mountPath": {
     "message": "Path as root directory",
     "description": "The mount path as root"
+  },
+  "keepPasswordYes": {
+    "message": "Yes",
+    "description": "Keep password"
+  },
+  "keepPasswordNo": {
+    "message": "No",
+    "description": "Don't keep password"
   }
 }
