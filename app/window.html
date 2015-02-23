@@ -21,6 +21,7 @@
   <link rel="import" href="bower_components/core-menu/core-menu.html">
   <link rel="import" href="bower_components/paper-item/paper-item.html">
   <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
 
   <link rel="stylesheet" href="styles/style.css">
 </head>
@@ -30,9 +31,12 @@
   <paper-toast data-message="mountFail" id="toast-mount-fail"></paper-toast>
   <paper-toast data-message="mountSuccess" id="toast-mount-success"></paper-toast>
 
-  <div class="list">
-    <core-menu id="credentials">
+  <div class="list" layout vertical>
+    <core-menu id="credentials" flex>
     </core-menu>
+    <core-toolbar>
+      <paper-icon-button icon="settings" id="btnSettings"></paper-icon-button>
+    </core-toolbar>
   </div>
 
   <div class="container">
@@ -72,6 +76,20 @@
     <paper-button affirmative id="btnAccept">Accept</paper-button>
     <input type="hidden" id="requestId" />
     <input type="hidden" id="fileSystemId" />
+  </paper-action-dialog>
+
+  <paper-action-dialog id="settingsDialog" heading="Settings"
+      backdrop autoCloseDisabled layered="false" transition="core-transition-top">
+    <form>
+      <div layout horizontal>
+        <h3>Keep password</h3>
+        <paper-radio-group id="keepPassword">
+          <paper-radio-button id="keepPasswordYes" name="keepPasswordYes" data-message="keepPasswordYes"></paper-radio-button>
+          <paper-radio-button id="keepPasswordNo" name="keepPasswordNo" data-message="keepPasswordNo"></paper-radio-button>
+        </paper-radio-group>
+      </div>
+      <paper-button affirmative>Close</paper-button>
+    </form>
   </paper-action-dialog>
 
   <script type="text/javascript" src="scripts/window.js"></script>
