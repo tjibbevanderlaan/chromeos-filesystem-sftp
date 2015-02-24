@@ -8,6 +8,7 @@
         this.sftpClientMap_ = {};
         this.taskQueue_ = {};
         this.opened_files_ = {};
+        this.metadataCache_ = {};
         assignEventHandlers.call(this);
     };
 
@@ -45,11 +46,6 @@
         sftpClient.authenticate({
             requestId: requestId,
             onSuccess: function(result) {
-                /*
-                sftpClient.close({
-                    requestId: requestId,
-                    onSuccess: function()
-                */
                 doMount.call(
                     this,
                     sftpClient.getServerName(), sftpClient.getServerPort(),
@@ -59,13 +55,6 @@
                     function() {
                         onSuccess();
                     }.bind(this));
-                /*
-                    }.bind(this),
-                    onError: function(reason) {
-                        onError(reason);
-                    }.bind(this)
-                });
-                */
             }.bind(this),
             onError: function(reason) {
                 onError(reason);
@@ -153,6 +142,8 @@
                 path: options.directoryPath,
                 onSuccess: function(result) {
                     console.log(result);
+                    var metadataCache = getMetadataCache.call(this, options.fileSystemId);
+                    metadataCache.put(options.directoryPath, result.metadataList);
                     successCallback(result.metadataList, false);
                     closeCallback();
                 }.bind(this),
@@ -174,24 +165,35 @@
         var sftpClient = getSftpClient.call(this, options.fileSystemId);
         var requestId = createRequestId.call(this);
         prepare.call(this, sftpClient, requestId, function(closeCallback) {
-            sftpClient.getMetadata({
-                requestId: requestId,
-                path: options.entryPath,
-                onSuccess: function(result) {
-                    console.log(result);
-                    successCallback(result.metadata);
-                    closeCallback();
-                }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
-                    if (reason === "NOT_FOUND") {
-                        errorCallback("NOT_FOUND");
-                    } else {
-                        errorCallback("FAILED");
-                    }
-                    closeCallback();
-                }.bind(this)
-            });
+            var metadataCache = getMetadataCache.call(this, options.fileSystemId);
+            var cache = metadataCache.get(options.entryPath);
+            if (cache.needFetch) {
+                sftpClient.getMetadata({
+                    requestId: requestId,
+                    path: options.entryPath,
+                    onSuccess: function(result) {
+                        console.log(result);
+                        successCallback(result.metadata);
+                        closeCallback();
+                    }.bind(this),
+                    onError: function(reason) {
+                        console.log(reason);
+                        if (reason === "NOT_FOUND") {
+                            errorCallback("NOT_FOUND");
+                        } else {
+                            errorCallback("FAILED");
+                        }
+                        closeCallback();
+                    }.bind(this)
+                });
+            } else {
+                if (cache.exists) {
+                    successCallback(cache.metadata);
+                } else {
+                    errorCallback("NOT_FOUND");
+                }
+                closeCallback();
+            }
         }.bind(this), function(reason) {
             console.log(reason);
             errorCallback("FAILED");
@@ -478,6 +480,7 @@
                 }, function() {
                     delete this.sftpClientMap_[fileSystemId];
                     deleteTaskQueue.call(this, fileSystemId);
+                    deleteMetadataCache.call(this, fileSystemId);
                     successCallback();
                     sftpClient.destroy(requestId);
                 }.bind(this));
@@ -630,7 +633,6 @@
     };
 
     var getTaskQueue = function(fileSystemId) {
-        console.log("getTaskQueue: " + fileSystemId);
         var taskQueue = this.taskQueue_[fileSystemId];
         if (!taskQueue) {
             taskQueue = new TaskQueue();
@@ -668,6 +670,21 @@
         // var requestId = options.requestId;
         var requestId = 0;
         return requestId;
+    };
+
+    var getMetadataCache = function(fileSystemId) {
+        var metadataCache = this.metadataCache_[fileSystemId];
+        if (!metadataCache) {
+            metadataCache = new MetadataCache();
+            this.metadataCache_[fileSystemId] = metadataCache;
+            console.log("getMetadataCache: Created. " + fileSystemId);
+        }
+        return metadataCache;
+    };
+
+    var deleteMetadataCache = function(fileSystemId) {
+        console.log("deleteMetadataCache: " + fileSystemId);
+        delete this.metadataCache_[fileSystemId];
     };
 
     // Export

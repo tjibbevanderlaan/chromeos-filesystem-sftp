@@ -22,6 +22,7 @@
         "SftpFS": true,
         "CryptoJS": true,
         "TaskQueue": true,
+        "MetadataCache": true,
         "SftpClient": true
     }
 }

@@ -1,7 +1,7 @@
 {
     "name": "__MSG_appName__",
     "description": "__MSG_appDescription__",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "manifest_version": 2,
     "default_locale": "en",
     "permissions": [
@@ -28,6 +28,7 @@
                 "bower_components/cryptojslib/components/enc-base64-min.js",
                 "bower_components/cryptojslib/components/lib-typedarrays-min.js",
                 "scripts/task_queue.js",
+                "scripts/metadata_cache.js",
                 "scripts/sftp_fs.js",
                 "scripts/sftp_client.js",
                 "scripts/background.js",
