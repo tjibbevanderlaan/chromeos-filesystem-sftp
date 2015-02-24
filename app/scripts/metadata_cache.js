@@ -38,20 +38,20 @@
                 var entry = entries[name];
                 if (entry) {
                     return {
-                        needFetch: false,
-                        exists: true,
+                        directoryExists: true,
+                        fileExists: true,
                         metadata: entry
                     };
                 } else {
                     return {
-                        needFetch: false,
-                        exists: false
+                        directoryExists: true,
+                        fileExists: false
                     };
                 }
             } else {
                 return {
-                    needFetch: true,
-                    exists: true
+                    directoryExists: false,
+                    fileExists: false
                 };
             }
         }
