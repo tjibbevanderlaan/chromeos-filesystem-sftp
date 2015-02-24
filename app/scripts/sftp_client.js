@@ -148,13 +148,16 @@
                 var metadataList = [];
                 for (var i = 0; i < event.values.length; i++) {
                     var data = event.values[i];
-                    var metadata = {
-                        isDirectory: data.isDirectory,
-                        name: getNameFromPath.call(this, data.name),
-                        size: data.size,
-                        modificationTime: new Date(data.modificationTime * 1000)
-                    };
-                    metadataList.push(metadata);
+                    var name = getNameFromPath.call(this, data.name);
+                    if (name !== "." && name !== "..") {
+                        var metadata = {
+                            isDirectory: data.isDirectory,
+                            name: name,
+                            size: data.size,
+                            modificationTime: new Date(data.modificationTime * 1000)
+                        };
+                        metadataList.push(metadata);
+                    }
                 }
                 options.onSuccess({
                     metadataList: metadataList
