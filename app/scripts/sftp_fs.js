@@ -167,7 +167,10 @@
         prepare.call(this, sftpClient, requestId, function(closeCallback) {
             var metadataCache = getMetadataCache.call(this, options.fileSystemId);
             var cache = metadataCache.get(options.entryPath);
-            if (cache.needFetch) {
+            if (cache.directoryExists && cache.fileExists) {
+                successCallback(cache.metadata);
+                closeCallback();
+            } else {
                 sftpClient.getMetadata({
                     requestId: requestId,
                     path: options.entryPath,
@@ -186,13 +189,6 @@
                         closeCallback();
                     }.bind(this)
                 });
-            } else {
-                if (cache.exists) {
-                    successCallback(cache.metadata);
-                } else {
-                    errorCallback("NOT_FOUND");
-                }
-                closeCallback();
             }
         }.bind(this), function(reason) {
             console.log(reason);
