@@ -121,6 +121,7 @@
         postMessageToNaClModule.call(this, "close", options.requestId, []);
     };
 
+    // options: requestId, path, onSuccess, onError
     SftpClient.prototype.getMetadata = function(options) {
         addNaClEventListener.call(this, options.requestId, function(event) {
             if (checkEventMessage.call(this, event, "metadataList")) {
@@ -142,6 +143,7 @@
         postMessageToNaClModule.call(this, "file", options.requestId, [realPath]);
     };
 
+    // options: requestId, path, onSuccess, onError
     SftpClient.prototype.readDirectory = function(options) {
         addNaClEventListener.call(this, options.requestId, function(event) {
             if (checkEventMessage.call(this, event, "metadataList", options.onError)) {
@@ -198,14 +200,37 @@
         postMessageToNaClModule.call(this, "mkdir", options.requestId, [realPath]);
     };
 
+    // options: requestId, path, onSuccess, onError
     SftpClient.prototype.deleteEntry = function(options) {
-        addNaClEventListener.call(this, options.requestId, function(event) {
-            if (checkEventMessage.call(this, event, "deleteSuccessful", options.onError)) {
-                options.onSuccess();
-            }
-        }.bind(this));
-        var realPath = createRealPath.call(this, options.path);
-        postMessageToNaClModule.call(this, "delete", options.requestId, [realPath]);
+        this.getMetadata({
+            requestId: options.requestId,
+            path: options.path,
+            onSuccess: function(result) {
+                var metadata = result.metadata;
+                if (metadata.isDirectory) {
+                    deleteFiles.call(this, {
+                        metadataList: [metadata],
+                        index: 0,
+                        requestId: options.requestId,
+                        path: options.path.substring(0, options.path.lastIndexOf(metadata.name) - 1),
+                        onSuccess: function() {
+                            options.onSuccess();
+                        }.bind(this),
+                        onError: options.onError
+                    });
+                } else {
+                    deleteFile.call(this, {
+                        requestId: options.requestId,
+                        path: options.path,
+                        onSuccess: function() {
+                            options.onSuccess();
+                        }.bind(this),
+                        onError: options.onError
+                    });
+                }
+            }.bind(this),
+            onError: options.onError
+        });
     };
 
     SftpClient.prototype.moveEntry = function(options) {
@@ -341,6 +366,72 @@
             uint8View[i] = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
         }
         return uint8View;
+    };
+
+    // options: metadataList, index, requestId, path, onSuccess, onError
+    var deleteFiles = function(options) {
+        if (options.metadataList.length === options.index) {
+            options.onSuccess();
+        } else {
+            var call_deleteFiles = function(options) {
+                deleteFiles.call(this, {
+                    metadataList: options.metadataList,
+                    index: ++options.index,
+                    requestId: options.requestId,
+                    path: options.path,
+                    onSuccess: options.onSuccess,
+                    onError: options.onError
+                });
+            }.bind(this);
+            var metadata = options.metadataList[options.index];
+            if (metadata.isDirectory) {
+                this.readDirectory({
+                    requestId: options.requestId,
+                    path: options.path + "/" + metadata.name,
+                    onSuccess: function(result) {
+                        var metadataList = result.metadataList;
+                        deleteFiles.call(this, {
+                            metadataList: metadataList,
+                            index: 0,
+                            requestId: options.requestId,
+                            path: options.path + "/" + metadata.name,
+                            onSuccess: function() {
+                                deleteFile.call(this, {
+                                    requestId: options.requestId,
+                                    path: options.path + "/" + metadata.name,
+                                    onSuccess: function() {
+                                        call_deleteFiles(options);
+                                    }.bind(this),
+                                    onError: options.onError
+                                });
+                            }.bind(this),
+                            onError: options.onError
+                        });
+                    }.bind(this),
+                    onError: options.onError
+                });
+            } else {
+                deleteFile.call(this, {
+                    requestId: options.requestId,
+                    path: options.path + "/" + metadata.name,
+                    onSuccess: function() {
+                        call_deleteFiles(options);
+                    }.bind(this),
+                    onError: options.onError
+                });
+            }
+        }
+    };
+
+    // options: requestId, path, onSuccess, onError
+    var deleteFile = function(options) {
+        addNaClEventListener.call(this, options.requestId, function(event) {
+            if (checkEventMessage.call(this, event, "deleteSuccessful", options.onError)) {
+                options.onSuccess();
+            }
+        }.bind(this));
+        var realPath = createRealPath.call(this, options.path);
+        postMessageToNaClModule.call(this, "delete", options.requestId, [realPath]);
     };
 
     // Export
