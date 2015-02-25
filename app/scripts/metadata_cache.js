@@ -57,6 +57,18 @@
         }
     };
 
+    MetadataCache.prototype.remove = function(entryPath) {
+        for (var key in this.directories_) {
+            if (key.indexOf(entryPath) === 0) {
+                delete this.directories_[key];
+            }
+        }
+        var lastDelimiterPos = entryPath.lastIndexOf("/");
+        if (lastDelimiterPos !== 0) {
+            delete this.directories_[entryPath.substring(0, lastDelimiterPos)];
+        }
+    };
+
     window.MetadataCache = MetadataCache;
 
 })();

@@ -293,6 +293,8 @@
                 requestId: requestId,
                 path: options.entryPath,
                 onSuccess: function() {
+                    var metadataCache = getMetadataCache.call(this, options.fileSystemId);
+                    metadataCache.remove(options.entryPath);
                     successCallback();
                     closeCallback();
                 }.bind(this),
@@ -319,6 +321,9 @@
                 sourcePath: options.sourcePath,
                 targetPath: options.targetPath,
                 onSuccess: function() {
+                    var metadataCache = getMetadataCache.call(this, options.fileSystemId);
+                    metadataCache.remove(options.sourcePath);
+                    metadataCache.remove(options.targetPath);
                     successCallback();
                     closeCallback();
                 }.bind(this),
@@ -405,6 +410,8 @@
                 requestId: requestId,
                 path: options.filePath,
                 onSuccess: function() {
+                    var metadataCache = getMetadataCache.call(this, options.fileSystemId);
+                    metadataCache.remove(options.filePath);
                     successCallback();
                     closeCallback();
                 }.bind(this),
