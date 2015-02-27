@@ -73,8 +73,11 @@ void ReadDirectoryCommand::FetchEntriesInDirectory(LIBSSH2_SFTP_HANDLE *sftp_han
       if (attrs.flags & LIBSSH2_SFTP_ATTR_PERMISSIONS) {
         if (LIBSSH2_SFTP_S_ISDIR(attrs.permissions)) {
           metadata["isDirectory"] = true;
-        } else {
+        } else if (LIBSSH2_SFTP_S_ISREG(attrs.permissions)) {
           metadata["isDirectory"] = false;
+        } else {
+          // Ignore special file
+          continue;
         }
       }
       if (attrs.flags & LIBSSH2_SFTP_ATTR_SIZE) {
