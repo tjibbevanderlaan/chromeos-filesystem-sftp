@@ -7,6 +7,10 @@
     "message": "Access a SFTP server directly from the Files app.",
     "description": "The description of the application"
   },
+  "shortName": {
+    "message": "SFTP",
+    "description": "The short name of the application"
+  },
   "mountHeader": {
     "message": "Mount a new SFTP server",
     "description": "Header describing the server mount form."
