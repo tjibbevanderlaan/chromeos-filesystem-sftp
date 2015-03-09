@@ -71,9 +71,7 @@
 
     SftpFS.prototype.resume = function(fileSystemId, onSuccess, onError) {
         console.log("resume - start");
-        chrome.storage.local.get("mountedCredentials", function(items) {
-            var mountedCredentials = items.mountedCredentials || {};
-            var credential = mountedCredentials[fileSystemId];
+        getMountedCredential.call(this, fileSystemId, function(credential) {
             if (credential) {
                 this.mount({
                     serverName: credential.serverName,
@@ -124,7 +122,7 @@
                     type: "basic",
                     title: "SFTP File System",
                     message: "The NaCl module crashed. Unmounted.",
-                    iconUrl: "images/48.png"
+                    iconUrl: "/images/48.png"
                 }, function(notificationId) {
                 }.bind(this));
             }.bind(this));
@@ -470,9 +468,19 @@
 
     var doUnmount = function(sftpClient, requestId, successCallback) {
         console.log("doUnmount");
-        var serverName = sftpClient.getServerName();
-        var serverPort = sftpClient.getServerPort();
-        var username = sftpClient.getUsername();
+        _doUnmount.call(
+            this,
+            sftpClient.getServerName(),
+            sftpClient.getServerPort(),
+            sftpClient.getUsername(),
+            function() {
+                successCallback();
+                sftpClient.destroy(requestId);
+            }.bind(this));
+    };
+
+    var _doUnmount = function(serverName, serverPort, username, successCallback) {
+        console.log("_doUnmount");
         unregisterMountedCredential.call(
             this, serverName, serverPort, username,
             function() {
@@ -485,7 +493,6 @@
                     deleteTaskQueue.call(this, fileSystemId);
                     deleteMetadataCache.call(this, fileSystemId);
                     successCallback();
-                    sftpClient.destroy(requestId);
                 }.bind(this));
             }.bind(this));
     };
@@ -525,6 +532,14 @@
         }.bind(this));
     };
 
+    var getMountedCredential = function(fileSystemId, callback) {
+        chrome.storage.local.get("mountedCredentials", function(items) {
+            var mountedCredentials = items.mountedCredentials || {};
+            var credential = mountedCredentials[fileSystemId];
+            callback(credential);
+        }.bind(this));
+    }
+
     var createFileSystemID = function(serverName, serverPort, username) {
         var id = "sftpfs://" + serverName + ":" + serverPort + "/" + username;
         return id;
@@ -540,7 +555,28 @@
                         callback(options, successCallback, errorCallback);
                     }.bind(this), function(reason) {
                         console.log("resume failed: " + reason);
-                        errorCallback("FAILED");
+                        chrome.notifications.create("", {
+                            type: "basic",
+                            title: "SFTP File System",
+                            message: "Resuming connection failed. Unmount.",
+                            iconUrl: "/images/48.png"
+                        }, function(notificationId) {
+                        }.bind(this));
+                        getMountedCredential.call(this, fileSystemId, function(credential) {
+                            if (credential) {
+                                _doUnmount.call(
+                                    this,
+                                    credential.serverName,
+                                    credential.serverPort,
+                                    credential.username,
+                                    function() {
+                                        errorCallback("FAILED");
+                                    }.bind(this));
+                            } else {
+                                console.log("Credential for [" + fileSystemId + "] not found.");
+                                errorCallback("FAILED");
+                            }
+                        }.bind(this));
                     }.bind(this));
                 } else {
                     callback(options, successCallback, errorCallback);
@@ -548,7 +584,6 @@
             }.bind(this));
         }.bind(this);
     };
-
 
     var assignEventHandlers = function() {
         chrome.fileSystemProvider.onUnmountRequested.addListener(
