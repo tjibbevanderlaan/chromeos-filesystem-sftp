@@ -338,13 +338,7 @@
             if (onError) {
                 if (event.message === "error") {
                     for (var i = 0; i < event.values.length; i++) {
-                        chrome.notifications.create("", {
-                            type: "basic",
-                            title: "SFTP File System",
-                            message: event.values[i],
-                            iconUrl: "/images/48.png"
-                        }, function(notificationId) {
-                        }.bind(this));
+                        showNotification.call(this, event.values[i]);
                     }
                     onError(event.values[0]);
                 } else {
@@ -353,6 +347,16 @@
             }
             return false;
         }
+    };
+
+    var showNotification = function(message) {
+        chrome.notifications.create("", {
+            type: "basic",
+            title: "SFTP File System",
+            message: message,
+            iconUrl: "/images/48.png"
+        }, function(notificationId) {
+        }.bind(this));
     };
 
     var getNameFromPath = function(path) {

@@ -538,7 +538,7 @@
             var credential = mountedCredentials[fileSystemId];
             callback(credential);
         }.bind(this));
-    }
+    };
 
     var createFileSystemID = function(serverName, serverPort, username) {
         var id = "sftpfs://" + serverName + ":" + serverPort + "/" + username;
