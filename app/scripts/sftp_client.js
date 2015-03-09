@@ -337,6 +337,15 @@
         } else {
             if (onError) {
                 if (event.message === "error") {
+                    for (var i = 0; i < event.values.length; i++) {
+                        chrome.notifications.create("", {
+                            type: "basic",
+                            title: "SFTP File System",
+                            message: event.values[i],
+                            iconUrl: "/images/48.png"
+                        }, function(notificationId) {
+                        }.bind(this));
+                    }
                     onError(event.values[0]);
                 } else {
                     onError("Unexpected message received(expect:" + message + " actual:" + event.message + ")");
