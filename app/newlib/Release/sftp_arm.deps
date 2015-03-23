@@ -7,7 +7,17 @@
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_stdint.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/ppb.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/nacl_io/ostypes.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/sdk_util/macros.h sftp.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/sdk_util/macros.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_dictionary.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_bool.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_var.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/pass_ref.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/resource.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_resource.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance_handle.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_array.h \
+ sftp.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/utility/completion_callback_factory.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/completion_callback.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_completion_callback.h \
@@ -16,18 +26,11 @@
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/module.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_module.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/ppb_core.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_bool.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_resource.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_time.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/core.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/output_traits.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/array_output.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_array_output.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/pass_ref.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_var.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/resource.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance_handle.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/utility/completion_callback_factory_thread_traits.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/utility/threading/lock.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance.h \
@@ -39,15 +42,7 @@
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_size.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/point.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/size.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/json.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/autolink.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/config.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/value.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/reader.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/features.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/writer.h \
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_array_buffer.h \
  sftp_thread.h communication_exception.h sftp_event_listener.h
 sftp.cc:
 /Applications/nacl/nacl_sdk/pepper_39/include/newlib/sys/mount.h:
@@ -58,6 +53,15 @@ sftp.cc:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/ppb.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/nacl_io/ostypes.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/sdk_util/macros.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_dictionary.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_bool.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_var.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/pass_ref.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/resource.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_resource.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance_handle.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_array.h:
 sftp.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/utility/completion_callback_factory.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/completion_callback.h:
@@ -67,18 +71,11 @@ sftp.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/module.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_module.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/ppb_core.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_bool.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_resource.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_time.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/core.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/output_traits.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/array_output.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_array_output.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/pass_ref.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_var.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/resource.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance_handle.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/utility/completion_callback_factory_thread_traits.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/utility/threading/lock.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance.h:
@@ -90,15 +87,7 @@ sftp.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_size.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/point.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/size.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/json.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/autolink.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/config.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/value.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/reader.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/features.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/writer.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_array_buffer.h:
 sftp_thread.h:
 communication_exception.h:
 sftp_event_listener.h:

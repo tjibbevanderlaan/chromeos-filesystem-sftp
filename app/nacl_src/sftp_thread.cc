@@ -5,10 +5,8 @@
 #include <sys/select.h>
 
 #include "ppapi/cpp/var.h"
-#include "json/json.h"
 
 #include "sftp_thread.h"
-#include "base64.h"
 
 #include "read_directory_command.h"
 #include "get_metadata_command.h"
@@ -204,8 +202,8 @@ void SftpThread::CreateFile(const std::string path)
 
 void SftpThread::WriteFile(const std::string path,
                            const libssh2_uint64_t offset,
-                           const libssh2_uint64_t length,
-                           const std::string b64_data)
+                           const size_t length,
+                           const pp::VarArrayBuffer &buffer)
 {
   WriteFileCommand *command = new WriteFileCommand(listener_,
                                                    server_sock_,
@@ -215,7 +213,7 @@ void SftpThread::WriteFile(const std::string path,
                                                    path,
                                                    offset,
                                                    length,
-                                                   b64_data);
+                                                   buffer);
   pthread_t thread;
   pthread_create(&thread,
                  NULL,

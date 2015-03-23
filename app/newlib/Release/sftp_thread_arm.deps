@@ -16,15 +16,6 @@
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_resource.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance_handle.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_instance.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/json.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/autolink.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/config.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/value.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/reader.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/features.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h \
- /Applications/nacl/nacl_sdk/pepper_39/include/json/writer.h \
  sftp_thread.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/completion_callback.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_completion_callback.h \
@@ -48,11 +39,11 @@
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_size.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/point.h \
  /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/size.h \
- communication_exception.h sftp_event_listener.h base64.h \
- read_directory_command.h abstract_command.h get_metadata_command.h \
- read_file_command.h make_directory_command.h delete_entry_command.h \
- rename_entry_command.h create_file_command.h write_file_command.h \
- truncate_file_command.h
+ /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_array_buffer.h \
+ communication_exception.h sftp_event_listener.h read_directory_command.h \
+ abstract_command.h get_metadata_command.h read_file_command.h \
+ make_directory_command.h delete_entry_command.h rename_entry_command.h \
+ create_file_command.h write_file_command.h truncate_file_command.h
 sftp_thread.cc:
 /Applications/nacl/nacl_sdk/pepper_39/include/newlib/sys/socket.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/newlib/netinet/in.h:
@@ -70,15 +61,6 @@ sftp_thread.cc:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_resource.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/instance_handle.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_instance.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/json.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/autolink.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/config.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/value.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/reader.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/features.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/forwards.h:
-/Applications/nacl/nacl_sdk/pepper_39/include/json/writer.h:
 sftp_thread.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/completion_callback.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_completion_callback.h:
@@ -102,9 +84,9 @@ sftp_thread.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/c/pp_size.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/point.h:
 /Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/size.h:
+/Applications/nacl/nacl_sdk/pepper_39/include/ppapi/cpp/var_array_buffer.h:
 communication_exception.h:
 sftp_event_listener.h:
-base64.h:
 read_directory_command.h:
 abstract_command.h:
 get_metadata_command.h:

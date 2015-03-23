@@ -3,8 +3,11 @@
 
 #include <string>
 
+#include "ppapi/cpp/var_array_buffer.h"
+
 #include "libssh2.h"
 #include "libssh2_sftp.h"
+
 #include "communication_exception.h"
 #include "sftp_event_listener.h"
 #include "abstract_command.h"
@@ -21,8 +24,8 @@ class WriteFileCommand : protected AbstractCommand
                             const int request_id,
                             const std::string &path,
                             const libssh2_uint64_t offset,
-                            const libssh2_uint64_t length,
-                            const std::string &b64_data);
+                            const size_t length,
+                            const pp::VarArrayBuffer &data);
   virtual ~WriteFileCommand();
 
   static void* Start(void *arg);
@@ -31,14 +34,14 @@ class WriteFileCommand : protected AbstractCommand
 
   std::string path_;
   libssh2_uint64_t offset_;
-  libssh2_uint64_t length_;
-  std::string b64_data_;
+  size_t length_;
+  pp::VarArrayBuffer data_;
 
   void Execute();
   void WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
                  const libssh2_uint64_t offset,
-                 const libssh2_uint64_t length,
-                 const std::string &b64_data)
+                 const size_t length,
+                 pp::VarArrayBuffer &buffer)
     throw(CommunicationException);
 
 };

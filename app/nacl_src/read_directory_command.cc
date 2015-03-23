@@ -1,3 +1,6 @@
+#include "ppapi/cpp/var.h"
+#include "ppapi/cpp/var_dictionary.h"
+
 #include "read_directory_command.h"
 
 ReadDirectoryCommand::ReadDirectoryCommand(SftpEventListener *listener,
@@ -57,7 +60,7 @@ LIBSSH2_SFTP_HANDLE* ReadDirectoryCommand::OpenDirectory(const std::string path)
 void ReadDirectoryCommand::FetchEntriesInDirectory(LIBSSH2_SFTP_HANDLE *sftp_handle)
     throw(CommunicationException)
 {
-  std::vector<Json::Value> metadataList;
+  std::vector<pp::Var> metadataList;
   do {
     char mem[512];
     LIBSSH2_SFTP_ATTRIBUTES attrs;
@@ -69,24 +72,24 @@ void ReadDirectoryCommand::FetchEntriesInDirectory(LIBSSH2_SFTP_HANDLE *sftp_han
       }
     } while (rc == LIBSSH2_ERROR_EAGAIN);
     if (rc > 0) {
-      Json::Value metadata(Json::objectValue);
+      pp::VarDictionary metadata;
       if (attrs.flags & LIBSSH2_SFTP_ATTR_PERMISSIONS) {
         if (LIBSSH2_SFTP_S_ISDIR(attrs.permissions)) {
-          metadata["isDirectory"] = true;
+          metadata.Set(pp::Var("isDirectory"), pp::Var(true));
         } else if (LIBSSH2_SFTP_S_ISREG(attrs.permissions)) {
-          metadata["isDirectory"] = false;
+          metadata.Set(pp::Var("isDirectory"), pp::Var(false));
         } else {
           // Ignore special file
           continue;
         }
       }
       if (attrs.flags & LIBSSH2_SFTP_ATTR_SIZE) {
-        metadata["size"] = attrs.filesize;
+        metadata.Set(pp::Var("size"), pp::Var(static_cast<double>(attrs.filesize)));
       }
       if (attrs.flags & LIBSSH2_SFTP_ATTR_ACMODTIME) {
-        metadata["modificationTime"] = (u_int64_t)attrs.mtime;
+        metadata.Set(pp::Var("modificationTime"), pp::Var(static_cast<double>(attrs.mtime)));
       }
-      metadata["name"] = mem;
+      metadata.Set(pp::Var("name"), pp::Var(mem));
       metadataList.push_back(metadata);
     } else {
       break;

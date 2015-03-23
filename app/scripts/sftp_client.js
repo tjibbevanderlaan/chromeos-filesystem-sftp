@@ -70,7 +70,7 @@
         this.naclListener_ = elements.listener;
         this.naclEmbed_ = elements.embed;
         this.naclListener_.addEventListener("message", function(e) {
-            var event = JSON.parse(e.data);
+            var event = e.data;
             console.log(event);
             var requestId = event.request;
             var listener = this.naclEventListenerMap_[requestId];
@@ -173,21 +173,22 @@
     SftpClient.prototype.readFile = function(options) {
         addNaClEventListener.call(this, options.requestId, function(event) {
             if (checkEventMessage.call(this, event, "readFile", options.onError)) {
-                var base64 = event.value.b64Data;
+                var data = event.value.data;
                 var length = event.value.length;
                 var hasMore = event.value.hasMore;
-                var decodedWordArray = CryptoJS.enc.Base64.parse(base64);
-                console.log(decodedWordArray);
-                var decodedTypedArray = wordArrayToUint8Array.call(this, decodedWordArray);
+                //var decodedWordArray = CryptoJS.enc.Base64.parse(base64);
+                //console.log(decodedWordArray);
+                //var decodedTypedArray = wordArrayToUint8Array.call(this, decodedWordArray);
                 options.onSuccess({
-                    data: decodedTypedArray.buffer,
+                    data: data,
                     hasMore: hasMore
                 });
             }
         }.bind(this));
         var realPath = createRealPath.call(this, options.path);
-        postMessageToNaClModule.call(this, "read", options.requestId,
-                                     [realPath, options.offset, options.length, 32]);
+        postMessageToNaClModule.call(
+            this, "read", options.requestId,
+            [realPath, String(options.offset), String(options.length), "32"]);
     };
 
     SftpClient.prototype.createDirectory = function(options) {
@@ -261,7 +262,8 @@
             }
         }.bind(this));
         var realPath = createRealPath.call(this, options.path);
-        postMessageToNaClModule.call(this, "truncate", options.requestId, [realPath, options.length]);
+        postMessageToNaClModule.call(
+            this, "truncate", options.requestId, [realPath, String(options.length)]);
     };
 
     SftpClient.prototype.writeFile = function(options) {
@@ -276,11 +278,9 @@
             var buffer = new ArrayBuffer(available);
             var bufferView = new Uint8Array(buffer);
             bufferView.set(view);
-            var wordArray = CryptoJS.lib.WordArray.create(buffer);
-            var b64Data = CryptoJS.enc.Base64.stringify(wordArray);
             postMessageToNaClModule.call(
                 this, "write", options.requestId,
-                [realPath, offset + start, available, b64Data]);
+                [realPath, String(offset + start), String(available), buffer]);
             start += available;
         }.bind(this);
         addNaClEventListener.call(this, options.requestId, function(event) {
@@ -321,11 +321,11 @@
     };
 
     var postMessageToNaClModule = function(command, requestId, args) {
-        this.naclEmbed_.postMessage(JSON.stringify({
+        this.naclEmbed_.postMessage({
             command: command,
-            request: requestId,
+            request: String(requestId),
             args: args
-        }));
+        });
     };
 
     var checkEventMessage = function(event, message, onError) {

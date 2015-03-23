@@ -9,6 +9,7 @@
 #include "ppapi/cpp/completion_callback.h"
 #include "ppapi/cpp/instance.h"
 #include "ppapi/cpp/module.h"
+#include "ppapi/cpp/var_array_buffer.h"
 
 #include "communication_exception.h"
 #include "sftp_event_listener.h"
@@ -40,8 +41,8 @@ class SftpThread
   void CreateFile(const std::string path);
   void WriteFile(const std::string path,
                  const libssh2_uint64_t offset,
-                 const libssh2_uint64_t length,
-                 const std::string b64_data);
+                 const size_t length,
+                 const pp::VarArrayBuffer &buffer);
   void TruncateFile(const std::string path,
                     const libssh2_uint64_t length);
   void Close();

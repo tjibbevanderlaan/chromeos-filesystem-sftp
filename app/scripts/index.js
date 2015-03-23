@@ -34,7 +34,7 @@
                     document.querySelector("#ssh2_port").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var authenticate = document.querySelector("#authenticate");
@@ -50,7 +50,7 @@
                     document.querySelector("#ssh2_privatekey").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var dir = document.querySelector("#dir");
@@ -63,7 +63,7 @@
                     document.querySelector("#path").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var file = document.querySelector("#file");
@@ -76,7 +76,7 @@
                     document.querySelector("#path").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var read = document.querySelector("#read");
@@ -89,11 +89,12 @@
                     document.querySelector("#path").value,
                     document.querySelector("#read_offset").value,
                     document.querySelector("#read_length").value,
-                    32
+                    "32"
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
+            console.log(new Date());
         });
         var mkdir = document.querySelector("#mkdir");
         mkdir.addEventListener("click", function(evt) {
@@ -105,7 +106,7 @@
                     document.querySelector("#path").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var deleteFile = document.querySelector("#delete");
@@ -118,7 +119,7 @@
                     document.querySelector("#path").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var rename = document.querySelector("#rename");
@@ -132,7 +133,7 @@
                     document.querySelector("#target").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var create = document.querySelector("#create");
@@ -145,7 +146,7 @@
                     document.querySelector("#path").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var write = document.querySelector("#write");
@@ -170,12 +171,13 @@
                 request: document.querySelector("#request_id").value,
                 args: [
                     document.querySelector("#path").value,
-                    Number(document.querySelector("#write_offset").value),
-                    Number(document.querySelector("#write_length").value),
-                    b64Data
+                    document.querySelector("#write_offset").value,
+                    document.querySelector("#write_length").value,
+                    //b64Data
+                    buffer
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var truncate = document.querySelector("#truncate");
@@ -186,10 +188,10 @@
                 request: document.querySelector("#request_id").value,
                 args: [
                     document.querySelector("#path").value,
-                    Number(document.querySelector("#write_length").value)
+                    document.querySelector("#write_length").value
                 ]
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var close = document.querySelector("#close");
@@ -200,7 +202,7 @@
                 request: document.querySelector("#request_id").value,
                 args: []
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
         var destroy = document.querySelector("#destroy");
@@ -211,7 +213,7 @@
                 request: document.querySelector("#request_id").value,
                 args: []
             };
-            sftpModule.postMessage(JSON.stringify(obj));
+            sftpModule.postMessage(obj);
             console.log("sent");
         });
 
@@ -290,15 +292,17 @@
         listener.addEventListener("message", function(evt) {
             console.log(evt);
             var output = document.querySelector("#output");
-            output.textContent = evt.data;
-            var result = JSON.parse(evt.data);
-            console.log(result);
-            if (result.message === "readFile") {
-                var wordArray  = CryptoJS.enc.Base64.parse(result.value.b64Data);
-                console.log(wordArray);
-                var typedArray = wordArrayToUnit8Array(wordArray);
-                console.log(typedArray);
+            output.textContent = JSON.stringify(evt.data);
+            //var result = JSON.parse(evt.data);
+            //console.log(result);
+            if (evt.data.message === "readFile") {
+                //var wordArray  = CryptoJS.enc.Base64.parse(result.value.b64Data);
+                //console.log(wordArray);
+                //var typedArray = wordArrayToUnit8Array(wordArray);
+                //console.log(typedArray);
+                console.log(evt.data.value.data.byteLength);
             }
+            console.log(new Date());
         }, true);
         listener.addEventListener("crash", function(evt) {
             console.log(evt);

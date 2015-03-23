@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "base64.h"
+#include "ppapi/cpp/var_array_buffer.h"
 #include "read_file_command.h"
 
 ReadFileCommand::ReadFileCommand(SftpEventListener *listener,
@@ -74,9 +74,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
       fprintf(stderr, "buf_size: %d, rc:%d total:%llu length:%llu result_buf:%d\n", buf_size, rc, total, length, result_buf.size());
       if (rc == 0) {
         fprintf(stderr, "Reading completed - 2\n");
-        std::string b64encoded;
-        base64::Encode(result_buf, b64encoded);
-        GetListener()->OnReadFile(GetRequestID(), b64encoded, result_buf.size(), false);
+        OnReadFile(result_buf, false);
         break;
       } else {
         for (int i = 0; i < rc; i++) {
@@ -84,15 +82,11 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
         }
         if (length <= total) {
           fprintf(stderr, "Reading completed - 1\n");
-          std::string b64encoded;
-          base64::Encode(result_buf, b64encoded);
-          GetListener()->OnReadFile(GetRequestID(), b64encoded, result_buf.size(), false);
+          OnReadFile(result_buf, false);
           break;
         } else if (result_buf.size() >= (buffer_size * 1024)) {
           fprintf(stderr, "Flush\n");
-          std::string b64encoded;
-          base64::Encode(result_buf, b64encoded);
-          GetListener()->OnReadFile(GetRequestID(), b64encoded, result_buf.size(), true);
+          OnReadFile(result_buf, true);
           result_buf.clear();
         }
       }
@@ -100,4 +94,18 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
       THROW_COMMUNICATION_EXCEPTION("Reading file failed", rc);
     }
   } while (1);
+}
+
+void ReadFileCommand::OnReadFile(const std::vector<unsigned char> &result_buf, bool has_more)
+{
+  pp::VarArrayBuffer buffer(result_buf.size());
+  char* data = static_cast<char*>(buffer.Map());
+  std::vector<unsigned char>::const_iterator i;
+  int cnt = 0;
+  for (i = result_buf.begin(); i != result_buf.end(); ++i) {
+    unsigned char value = *i;
+    data[cnt] = value;
+    cnt++;
+  }
+  GetListener()->OnReadFile(GetRequestID(), buffer, result_buf.size(), has_more);
 }
