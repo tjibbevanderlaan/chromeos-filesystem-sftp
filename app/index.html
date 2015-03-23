@@ -34,9 +34,9 @@
     SSH2 password: <input id="ssh2_password" type="password" value="" /><br />
     SSH2 Private key: <textarea id="ssh2_privatekey"></textarea><br />
     SSH2 Method: <select id="ssh2_method">
-      <option value="keyboard-interactive">keyboard-interactive</option>
+      <option value="keyboard-interactive" selected>keyboard-interactive</option>
       <option value="password">password</option>
-      <option value="publickey" selected>publickey</option>
+      <option value="publickey">publickey</option>
     </select><br />
     Request ID: <input id="request_id" type="text" value="1" /><br />
     <button id="handshake">handshake</button>
@@ -45,7 +45,7 @@
     <button id="dir">dir</button>
     <button id="file">file</button><br />
     <input id="read_offset" type="text" value="0" />
-    <input id="read_length" type="text" value="24084506" />
+    <input id="read_length" type="text" value="10485760" />
     <button id="read">read</button><br />
     <button id="mkdir">mkdir</button>
     <button id="delete">delete</button>

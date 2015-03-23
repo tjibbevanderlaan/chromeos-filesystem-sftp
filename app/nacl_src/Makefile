@@ -13,11 +13,10 @@ OUTBASE = ..
 include $(NACL_SDK_ROOT)/tools/common.mk
 
 TARGET = sftp
-LIBS = jsoncpp ssh2 crypto nacl_io ppapi_cpp ppapi pthread
+LIBS = ssh2 crypto nacl_io ppapi_cpp ppapi pthread
 
 CFLAGS = -Wall -std=c++0x
-SOURCES = base64.cc \
-          communication_exception.cc \
+SOURCES = communication_exception.cc \
           abstract_command.cc \
           read_directory_command.cc \
           get_metadata_command.cc \

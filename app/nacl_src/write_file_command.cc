@@ -1,7 +1,6 @@
 #include <vector>
 #include <cstdio>
 
-#include "base64.h"
 #include "write_file_command.h"
 
 WriteFileCommand::WriteFileCommand(SftpEventListener *listener,
@@ -11,13 +10,13 @@ WriteFileCommand::WriteFileCommand(SftpEventListener *listener,
                                    const int request_id,
                                    const std::string &path,
                                    const libssh2_uint64_t offset,
-                                   const libssh2_uint64_t length,
-                                   const std::string &b64_data)
+                                   const size_t length,
+                                   const pp::VarArrayBuffer &data)
  : AbstractCommand(session, sftp_session, server_sock, listener, request_id),
    path_(path),
    offset_(offset),
    length_(length),
-   b64_data_(b64_data)
+   data_(data)
 {
 }
 
@@ -37,7 +36,7 @@ void WriteFileCommand::Execute()
   LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
   try {
     sftp_handle = OpenFile(path_, LIBSSH2_FXF_WRITE, 0);
-    WriteFile(sftp_handle, offset_, length_, b64_data_);
+    WriteFile(sftp_handle, offset_, length_, data_);
     GetListener()->OnWriteFileFinished(GetRequestID());
   } catch(CommunicationException e) {
     std::string msg;
@@ -52,19 +51,18 @@ void WriteFileCommand::Execute()
 
 void WriteFileCommand::WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
                                  const libssh2_uint64_t offset,
-                                 const libssh2_uint64_t length,
-                                 const std::string &b64_data)
+                                 const size_t length,
+                                 pp::VarArrayBuffer &buffer)
   throw(CommunicationException)
 {
-  std::vector<unsigned char> data(length);
-  base64::Decode(b64_data, data);
   libssh2_sftp_seek64(sftp_handle, offset);
   int rc = -1;
   int w_pos = 0;
-  libssh2_uint64_t remain = std::min(length, (const libssh2_uint64_t)data.size());
+  uint32_t data_length = buffer.ByteLength();
+  size_t remain = std::min(length, static_cast<size_t>(data_length));
+  char* data = static_cast<char*>(buffer.Map());
   do {
-    const char *buffer = (char*)&data[w_pos];
-    while ((rc = libssh2_sftp_write(sftp_handle, buffer, remain)) == LIBSSH2_ERROR_EAGAIN) {
+    while ((rc = libssh2_sftp_write(sftp_handle, (data + w_pos), remain)) == LIBSSH2_ERROR_EAGAIN) {
       WaitSocket(GetServerSock(), GetSession());
     }
     if (rc < 0) {

@@ -7,7 +7,9 @@
 #include "ppapi/cpp/instance.h"
 #include "ppapi/cpp/module.h"
 #include "ppapi/cpp/var.h"
-#include "json/json.h"
+#include "ppapi/cpp/var_dictionary.h"
+#include "ppapi/cpp/var_array.h"
+#include "ppapi/cpp/var_array_buffer.h"
 
 #include "sftp_thread.h"
 #include "sftp_event_listener.h"
@@ -29,9 +31,9 @@ class SftpInstance : public pp::Instance, public SftpEventListener
   virtual void OnShutdown(const int request_id);
   virtual void OnErrorOccurred(const int request_id,const std::string &message);
   virtual void OnMetadataListFetched(const int request_id,
-                                     const std::vector<Json::Value> &metadataList);
+                                     const std::vector<pp::Var> &metadataList);
   virtual void OnReadFile(const int request_id,
-                          const std::string &b64_data,
+                          const pp::VarArrayBuffer &buffer,
                           const int length,
                           const bool has_more);
   virtual void OnMakeDirectoryFinished(const int request_id);
@@ -52,6 +54,7 @@ class SftpInstance : public pp::Instance, public SftpEventListener
 
   int GetIntegerValueFromString(const std::string &source);
   libssh2_uint64_t GetUint64ValueFromString(const std::string &source);
+  size_t GetSizeValueFromString(const std::string &source);
 
   void SendResponse(const int request_id,
                     const std::string &message,
@@ -62,18 +65,18 @@ class SftpInstance : public pp::Instance, public SftpEventListener
                                  const std::vector<std::string> &values);
   void SendResponse(const int request_id,
                     const std::string &message,
-                    const std::vector<Json::Value> &values);
+                    const std::vector<pp::Var> &values);
   void SendResponseAsJsonObjectArray(int32_t result,
                                      const int request_id,
                                      const std::string &message,
-                                     const std::vector<Json::Value> &values);
+                                     const std::vector<pp::Var> &values);
   void SendResponse(const int request_id,
                     const std::string &message,
-                    const Json::Value &value);
+                    const pp::VarDictionary &value);
   void SendResponseAsJsonObject(int32_t result,
                                 const int request_id,
                                 const std::string &message,
-                                const Json::Value &value);
+                                const pp::VarDictionary &value);
 
 };
 

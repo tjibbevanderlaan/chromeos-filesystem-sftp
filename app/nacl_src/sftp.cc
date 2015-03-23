@@ -2,8 +2,9 @@
 #include <errno.h>
 #include <sys/mount.h>
 
-
 #include "nacl_io/nacl_io.h"
+#include "ppapi/cpp/var_dictionary.h"
+#include "ppapi/cpp/var_array.h"
 
 #include "sftp.h"
 
@@ -25,80 +26,75 @@ SftpInstance::~SftpInstance()
 
 void SftpInstance::HandleMessage(const pp::Var &var_message)
 {
-  if (!var_message.is_string()) {
+  if (!var_message.is_dictionary()) {
     return;
   }
 
-  Json::Value root;
-  if (Json::Reader().parse(var_message.AsString(), root) &&
-      root.isObject()) {
-    std::string command = root["command"].asString();
-    int request_id = GetIntegerValueFromString(root["request"].asString());
-    SftpThread *sftp_thread;
-    if (sftp_thread_map_.find(request_id) == sftp_thread_map_.end()) {
-      sftp_thread = new SftpThread(this, this, request_id);
-      sftp_thread_map_[request_id] = sftp_thread;
-    } else {
-      sftp_thread = sftp_thread_map_[request_id];
-    }
-    const Json::Value &args = root["args"];
-    if (!command.empty() && args.isArray()) {
-      if (command == "connect") {
-        std::string server_hostname = args[0].asString();
-        int server_port = GetIntegerValueFromString(args[1].asString());
-        sftp_thread->ConnectAndHandshake(server_hostname,
-                                         server_port);
-      } else if (command == "authenticate") {
-        std::string auth_type = args[0].asString();
-        std::string username = args[1].asString();
-        std::string password = args[2].asString();
-        std::string private_key  = args[3].asString();
-        sftp_thread->Authenticate(auth_type,
-                                  username,
-                                  password,
-                                  private_key);
-      } else if (command == "dir") {
-        std::string path = args[0].asString();
-        sftp_thread->ReadDirectory(path);
-      } else if (command == "file") {
-        std::string path = args[0].asString();
-        sftp_thread->GetMetadata(path);
-      } else if (command == "read") {
-        std::string path = args[0].asString();
-        libssh2_uint64_t offset = GetUint64ValueFromString(args[1].asString());
-        libssh2_uint64_t length = GetUint64ValueFromString(args[2].asString());
-        int buffer_size = GetIntegerValueFromString(args[3].asString());
-        sftp_thread->ReadFile(path, offset, length, buffer_size);
-      } else if (command == "mkdir") {
-        std::string path = args[0].asString();
-        sftp_thread->MakeDirectory(path);
-      } else if (command == "delete") {
-        std::string path = args[0].asString();
-        sftp_thread->DeleteEntry(path);
-      } else if (command == "rename") {
-        std::string source_path = args[0].asString();
-        std::string target_path = args[1].asString();
-        sftp_thread->RenameEntry(source_path, target_path);
-      } else if (command == "create") {
-        std::string path = args[0].asString();
-        sftp_thread->CreateFile(path);
-      } else if (command == "write") {
-        std::string path = args[0].asString();
-        libssh2_uint64_t offset = GetUint64ValueFromString(args[1].asString());
-        libssh2_uint64_t length = GetUint64ValueFromString(args[2].asString());
-        std::string b64Data = args[3].asString();
-        sftp_thread->WriteFile(path, offset, length, b64Data);
-      } else if (command == "truncate") {
-        std::string path = args[0].asString();
-        libssh2_uint64_t length = GetUint64ValueFromString(args[1].asString());
-        sftp_thread->TruncateFile(path, length);
-      } else if (command == "close") {
-        sftp_thread->Close();
-      } else if (command == "destroy") {
-        // Terminate immediately
-        exit(0);
-      }
-    }
+  pp::VarDictionary dict(var_message);
+  std::string command = dict.Get("command").AsString();
+  int request_id = GetIntegerValueFromString(dict.Get("request").AsString());
+  SftpThread *sftp_thread;
+  if (sftp_thread_map_.find(request_id) == sftp_thread_map_.end()) {
+    sftp_thread = new SftpThread(this, this, request_id);
+    sftp_thread_map_[request_id] = sftp_thread;
+  } else {
+    sftp_thread = sftp_thread_map_[request_id];
+  }
+  pp::VarArray args(dict.Get("args"));
+  if (command == "connect") {
+    std::string server_hostname = args.Get(0).AsString();
+    int server_port = GetIntegerValueFromString(args.Get(1).AsString());
+    sftp_thread->ConnectAndHandshake(server_hostname,
+                                     server_port);
+  } else if (command == "authenticate") {
+    std::string auth_type = args.Get(0).AsString();
+    std::string username = args.Get(1).AsString();
+    std::string password = args.Get(2).AsString();
+    std::string private_key  = args.Get(3).AsString();
+    sftp_thread->Authenticate(auth_type,
+                              username,
+                              password,
+                              private_key);
+  } else if (command == "dir") {
+    std::string path = args.Get(0).AsString();
+    sftp_thread->ReadDirectory(path);
+  } else if (command == "file") {
+    std::string path = args.Get(0).AsString();
+    sftp_thread->GetMetadata(path);
+  } else if (command == "read") {
+    std::string path = args.Get(0).AsString();
+    libssh2_uint64_t offset = GetUint64ValueFromString(args.Get(1).AsString());
+    libssh2_uint64_t length = GetUint64ValueFromString(args.Get(2).AsString());
+    int buffer_size = GetIntegerValueFromString(args.Get(3).AsString());
+    sftp_thread->ReadFile(path, offset, length, buffer_size);
+  } else if (command == "mkdir") {
+    std::string path = args.Get(0).AsString();
+    sftp_thread->MakeDirectory(path);
+  } else if (command == "delete") {
+    std::string path = args.Get(0).AsString();
+    sftp_thread->DeleteEntry(path);
+  } else if (command == "rename") {
+    std::string source_path = args.Get(0).AsString();
+    std::string target_path = args.Get(1).AsString();
+    sftp_thread->RenameEntry(source_path, target_path);
+  } else if (command == "create") {
+    std::string path = args.Get(0).AsString();
+    sftp_thread->CreateFile(path);
+  } else if (command == "write") {
+    std::string path = args.Get(0).AsString();
+    libssh2_uint64_t offset = GetUint64ValueFromString(args.Get(1).AsString());
+    size_t length = GetSizeValueFromString(args.Get(2).AsString());
+    pp::VarArrayBuffer data(args.Get(3));
+    sftp_thread->WriteFile(path, offset, length, data);
+  } else if (command == "truncate") {
+    std::string path = args.Get(0).AsString();
+    libssh2_uint64_t length = GetUint64ValueFromString(args.Get(1).AsString());
+    sftp_thread->TruncateFile(path, length);
+  } else if (command == "close") {
+    sftp_thread->Close();
+  } else if (command == "destroy") {
+    // Terminate immediately
+    exit(0);
   }
 }
 
@@ -113,6 +109,13 @@ libssh2_uint64_t SftpInstance::GetUint64ValueFromString(const std::string &sourc
 {
   libssh2_uint64_t result;
   sscanf(source.c_str(), "%llu", &result);
+  return result;
+}
+
+size_t SftpInstance::GetSizeValueFromString(const std::string &source)
+{
+  size_t result;
+  sscanf(source.c_str(), "%d", &result);
   return result;
 }
 
@@ -146,20 +149,20 @@ void SftpInstance::OnErrorOccurred(const int request_id, const std::string &mess
 }
 
 void SftpInstance::OnMetadataListFetched(const int request_id,
-                                         const std::vector<Json::Value> &metadataList)
+                                         const std::vector<pp::Var> &metadataList)
 {
   SendResponse(request_id, std::string("metadataList"), metadataList);
 }
 
 void SftpInstance::OnReadFile(const int request_id,
-                              const std::string &b64_data,
+                              const pp::VarArrayBuffer &buffer,
                               const int length,
                               const bool has_more)
 {
-  Json::Value obj;
-  obj["b64Data"] = b64_data;
-  obj["length"] = length;
-  obj["hasMore"] = has_more;
+  pp::VarDictionary obj;
+  obj.Set(pp::Var("data"), buffer);
+  obj.Set(pp::Var("length"), pp::Var(length));
+  obj.Set(pp::Var("hasMore"), pp::Var(has_more));
   SendResponse(request_id, std::string("readFile"), obj);
 }
 
@@ -207,7 +210,7 @@ void SftpInstance::SendResponse(const int request_id,
 
 void SftpInstance::SendResponse(const int request_id,
                                 const std::string &message,
-                                const std::vector<Json::Value> &values)
+                                const std::vector<pp::Var> &values)
 {
   pp::CompletionCallback callback =
     factory_.NewCallback(&SftpInstance::SendResponseAsJsonObjectArray,
@@ -219,7 +222,7 @@ void SftpInstance::SendResponse(const int request_id,
 
 void SftpInstance::SendResponse(const int request_id,
                                 const std::string &message,
-                                const Json::Value &value)
+                                const pp::VarDictionary &value)
 {
   pp::CompletionCallback callback =
     factory_.NewCallback(&SftpInstance::SendResponseAsJsonObject,
@@ -234,56 +237,51 @@ void SftpInstance::SendResponseAsStringArray(int32_t result,
                                              const std::string &message,
                                              const std::vector<std::string> &values)
 {
-  Json::Value root(Json::objectValue);
-  root["request"] = request_id;
-  root["message"] = message;
-  Json::Value json_values(Json::arrayValue);
+  pp::VarDictionary dict;
+  dict.Set(pp::Var("request"), pp::Var(request_id));
+  dict.Set(pp::Var("message"), pp::Var(message));
+  pp::VarArray args;
+  int cnt = 0;
   std::vector<std::string>::const_iterator i;
   for (i = values.begin(); i != values.end(); ++i) {
     std::string value = *i;
-    json_values.append(value);
+    args.Set(cnt, pp::Var(value));
+    cnt++;
   }
-  root["values"] = json_values;
-
-  Json::FastWriter writer;
-  std::string json = writer.write(root);
-  PostMessage(pp::Var(json));
+  dict.Set(pp::Var("values"), args);
+  PostMessage(dict);
 }
 
 void SftpInstance::SendResponseAsJsonObjectArray(int32_t result,
                                                  const int request_id,
                                                  const std::string &message,
-                                                 const std::vector<Json::Value> &values)
+                                                 const std::vector<pp::Var> &values)
 {
-  Json::Value root(Json::objectValue);
-  root["request"] = request_id;
-  root["message"] = message;
-  Json::Value json_values(Json::arrayValue);
-  std::vector<Json::Value>::const_iterator i;
+  pp::VarDictionary root;
+  root.Set(pp::Var("request"), pp::Var(request_id));
+  root.Set(pp::Var("message"), pp::Var(message));
+  pp::VarArray args;
+  std::vector<pp::Var>::const_iterator i;
+  int cnt = 0;
   for (i = values.begin(); i != values.end(); ++i) {
-    Json::Value value = *i;
-    json_values.append(value);
+    pp::Var value = *i;
+    args.Set(cnt, value);
+    cnt++;
   }
-  root["values"] = json_values;
-
-  Json::FastWriter writer;
-  std::string json = writer.write(root);
-  PostMessage(pp::Var(json));
+  root.Set(pp::Var("values"), args);
+  PostMessage(root);
 }
 
 void SftpInstance::SendResponseAsJsonObject(int32_t result,
                                             const int request_id,
                                             const std::string &message,
-                                            const Json::Value &value)
+                                            const pp::VarDictionary &value)
 {
-  Json::Value root(Json::objectValue);
-  root["request"] = request_id;
-  root["message"] = message;
-  root["value"] = value;
-
-  Json::FastWriter writer;
-  std::string json = writer.write(root);
-  PostMessage(pp::Var(json));
+  pp::VarDictionary root;
+  root.Set(pp::Var("request"), pp::Var(request_id));
+  root.Set(pp::Var("message"), pp::Var(message));
+  root.Set(pp::Var("value"), value);
+  PostMessage(root);
 }
 
 // class SftpModule

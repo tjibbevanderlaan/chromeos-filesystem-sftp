@@ -1,7 +1,8 @@
 #ifndef SFTP_EVENT_LISTENER
 #define SFTP_EVENT_LISTENER
 
-#include "json/json.h"
+#include "ppapi/cpp/var.h"
+#include "ppapi/cpp/var_array_buffer.h"
 
 #include <string>
 #include <vector>
@@ -21,9 +22,9 @@ class SftpEventListener
   virtual void OnShutdown(const int request_id) = 0;
   virtual void OnAuthenticationFinished(const int request_id) = 0;
   virtual void OnMetadataListFetched(const int request_id,
-                                     const std::vector<Json::Value> &metadataList) = 0;
+                                     const std::vector<pp::Var> &metadataList) = 0;
   virtual void OnReadFile(const int request_id,
-                          const std::string &b64_data,
+                          const pp::VarArrayBuffer &buffer,
                           const int length,
                           const bool has_more) = 0;
   virtual void OnMakeDirectoryFinished(const int request_id) = 0;
