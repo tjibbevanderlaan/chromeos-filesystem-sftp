@@ -66,7 +66,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
   const int max_sftp_size = buffer_size * 1024;
   // SFTP read size is unpredictable, so we have to handle up to 2x chunk size.
   char result_buf[max_sftp_size * 2];
-  int buf_offset = 0;
+  unsigned int buf_offset = 0;
   do {
     int buf_size = std::min((libssh2_uint64_t)max_sftp_size, length - total);
     //char mem[buf_size];
