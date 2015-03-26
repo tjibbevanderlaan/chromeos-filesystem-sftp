@@ -306,8 +306,8 @@
         var embed = document.createElement("embed");
         embed.width = 0;
         embed.height = 0;
-        embed.src = "newlib/Release/sftp.nmf";
-        embed.type = "application/x-nacl";
+        embed.src = "pnacl/Release/sftp.nmf";
+        embed.type = "application/x-pnacl";
         listener.appendChild(embed);
         document.body.appendChild(listener);
         return {
