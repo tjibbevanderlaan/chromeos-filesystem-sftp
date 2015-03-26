@@ -93,7 +93,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
           break;
         } else if (buf_offset >= (buffer_size * 1024)) {
           fprintf(stderr, "Flush\n");
-          OnReadFile(result_buf, buf_offset, false);
+          OnReadFile(result_buf, buf_offset, true);
           //result_buf.clear();
           buf_offset = 0;
         }
