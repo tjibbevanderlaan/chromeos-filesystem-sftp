@@ -5,7 +5,7 @@
 # GNU Makefile based on shared rules provided by the Native Client SDK.
 # See README.Makefiles for more details.
 
-VALID_TOOLCHAINS := newlib
+VALID_TOOLCHAINS := pnacl
 
 NACL_SDK_ROOT ?= $(abspath $(CURDIR)/../..)
 OUTBASE = ..
@@ -15,7 +15,8 @@ include $(NACL_SDK_ROOT)/tools/common.mk
 TARGET = sftp
 LIBS = ssh2 crypto nacl_io ppapi_cpp ppapi pthread
 
-CFLAGS = -Wall -std=c++0x
+#CFLAGS = -Wall -std=c++0x
+CFLAGS = -Wall -std=gnu++11 -Wno-unused-private-field
 SOURCES = communication_exception.cc \
           abstract_command.cc \
           read_directory_command.cc \

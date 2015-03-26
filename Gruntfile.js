@@ -140,7 +140,7 @@ module.exports = function (grunt) {
                         'images/{,*/}*.png',
                         'styles/{,*/}*.*',
                         '_locales/{,*/}*.json',
-                        'newlib/Release/*.{nexe,nmf}'
+                        'pnacl/Release/*.{pexe,nexe,nmf}'
                     ]
                 }]
             }
