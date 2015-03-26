@@ -59,19 +59,14 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
   throw(CommunicationException)
 {
   int rc = -1;
-  //int max_buf_size = 2048;
   libssh2_uint64_t total = 0;
-  //std::vector<unsigned char> result_buf;
-  //result_buf.reserve((buffer_size + 1) * 1024);
   const int max_sftp_size = buffer_size * 1024;
   // SFTP read size is unpredictable, so we have to handle up to 2x chunk size.
   char result_buf[max_sftp_size * 2];
   unsigned int buf_offset = 0;
   do {
     int buf_size = std::min((libssh2_uint64_t)max_sftp_size, length - total);
-    //char mem[buf_size];
     char* sftp_buffer = result_buf + buf_offset;
-    //rc = libssh2_sftp_read(sftp_handle, mem, sizeof(mem));
     rc = libssh2_sftp_read(sftp_handle, sftp_buffer, buf_size);
     if (rc == LIBSSH2_ERROR_EAGAIN) {
       WaitSocket(GetServerSock(), GetSession());
@@ -84,9 +79,6 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
         OnReadFile(result_buf, buf_offset, false);
         break;
       } else {
-        //for (int i = 0; i < rc; i++) {
-        //  result_buf.push_back(mem[i]);
-        //}
         if (length <= total) {
           fprintf(stderr, "Reading completed - 1\n");
           OnReadFile(result_buf, buf_offset, false);
@@ -94,7 +86,6 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
         } else if (buf_offset >= (buffer_size * 1024)) {
           fprintf(stderr, "Flush\n");
           OnReadFile(result_buf, buf_offset, true);
-          //result_buf.clear();
           buf_offset = 0;
         }
       }
@@ -109,13 +100,5 @@ void ReadFileCommand::OnReadFile(const char *result_buf, int length, bool has_mo
   pp::VarArrayBuffer buffer(length);
   char* data = static_cast<char*>(buffer.Map());
   memcpy(data, result_buf, length);
-  /*
-  std::vector<unsigned char>::const_iterator i;
-  int cnt = 0;
-  for (i = result_buf.begin(); i != result_buf.end(); ++i) {
-    unsigned char value = *i;
-    data[cnt] = value;
-    cnt++;
-  }  */
   GetListener()->OnReadFile(GetRequestID(), buffer, length, has_more);
 }
