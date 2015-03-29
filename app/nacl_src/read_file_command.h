@@ -40,7 +40,7 @@ class ReadFileCommand : protected AbstractCommand
                         const libssh2_uint64_t length,
                         const unsigned int buffer_size)
     throw(CommunicationException);
-  void OnReadFile(const std::vector<unsigned char> &result_buf, bool has_more);
+  void OnReadFile(const char* result_buf, int length, bool has_more);
 
 };
 
