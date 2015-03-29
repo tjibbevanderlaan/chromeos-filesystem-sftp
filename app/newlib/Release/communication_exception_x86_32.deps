@@ -1,6 +1,0 @@
-# Updated by fix_deps.py
-../newlib/Release/communication_exception_x86_32.o: \
- communication_exception.cc communication_exception.h
-:
-communication_exception.cc:
-communication_exception.h:
