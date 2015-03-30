@@ -81,11 +81,59 @@
         chrome.runtime.sendMessage(request, function(response) {
             console.log(response);
             if (response.type === "confirmFingerprint") {
-                document.querySelector("#algorithm").textContent = response.algorithm;
-                document.querySelector("#fingerprint").textContent = response.fingerprint;
-                document.querySelector("#requestId").value = response.requestId;
-                document.querySelector("#fileSystemId").value = response.fileSystemId;
-                document.querySelector("#confirmFingerprintDialog").toggle();
+                var fingerprint = response.fingerprint;
+                var serverName = document.querySelector("#serverName").value;
+                var serverPort = document.querySelector("#serverPort").value;
+                getFingerprint(serverName, serverPort, function(prevFingerprint) {
+                    document.querySelector("#algorithm").textContent = response.algorithm;
+                    document.querySelector("#fingerprint").textContent = response.fingerprint;
+                    document.querySelector("#requestId").value = response.requestId;
+                    document.querySelector("#fileSystemId").value = response.fileSystemId;
+                    var prev = document.querySelector("#prev");
+                    if (prevFingerprint) {
+                        if (fingerprint === prevFingerprint.value) {
+                            accept(response.requestId, response.fileSystemId);
+                            return;
+                        } else {
+                            prev.style.display = "block";
+                            document.querySelector("#prevAlgorithm").textContent = prevFingerprint.algorithm;
+                            document.querySelector("#prevFingerprint").textContent = prevFingerprint.value;
+                        }
+                    } else {
+                        prev.style.display = "none";
+                    }
+                    document.querySelector("#confirmFingerprintDialog").toggle();
+                });
+            } else {
+                var toast = document.getElementById("toast-mount-fail");
+                if (response.error) {
+                    toast.setAttribute("text", response.error);
+                }
+                toast.show();
+                btnMount.removeAttribute("disabled");
+            }
+        });
+    };
+    
+    var accept = function(requestId, fileSystemId) {
+        var request = {
+            type: "accept",
+            requestId: requestId,
+            fileSystemId: fileSystemId
+        };
+        chrome.runtime.sendMessage(request, function(response) {
+            if (response.success) {
+                storeFingerprint(
+                    document.querySelector("#serverName").value,
+                    document.querySelector("#serverPort").value,
+                    document.querySelector("#algorithm").textContent,
+                    document.querySelector("#fingerprint").textContent,
+                    function() {
+                        document.getElementById("toast-mount-success").show();
+                        window.setTimeout(function() {
+                            window.close();
+                        }, 2000);
+                    });
             } else {
                 var toast = document.getElementById("toast-mount-fail");
                 if (response.error) {
@@ -102,26 +150,7 @@
         var btnMount = document.querySelector("#btnMount");
         var requestId = document.querySelector("#requestId").value;
         var fileSystemId = document.querySelector("#fileSystemId").value;
-        var request = {
-            type: "accept",
-            requestId: requestId,
-            fileSystemId: fileSystemId
-        };
-        chrome.runtime.sendMessage(request, function(response) {
-            if (response.success) {
-                document.getElementById("toast-mount-success").show();
-                window.setTimeout(function() {
-                    window.close();
-                }, 2000);
-            } else {
-                var toast = document.getElementById("toast-mount-fail");
-                if (response.error) {
-                    toast.setAttribute("text", response.error);
-                }
-                toast.show();
-                btnMount.removeAttribute("disabled");
-            }
-        });
+        accept(requestId, fileSystemId);
     };
 
     var onClickedBtnDecline = function(evt) {
@@ -297,6 +326,32 @@
             settings.keepPassword = document.querySelector("#keepPassword").selected;
             chrome.storage.local.set({settings: settings}, function() {
                 console.log("Saving settings done.");
+            });
+        });
+    };
+
+    var loadFingerprints = function(callback) {
+        chrome.storage.local.get("fingerprints", function(items) {
+            var fingerprints = items.fingerprints || {};
+            callback(fingerprints);
+        });
+    };
+    
+    var getFingerprint = function(serverName, serverPort, callback) {
+        loadFingerprints(function(fingerprints) {
+            var fingerprint = fingerprints[serverName + ":" + serverPort];
+            callback(fingerprint);
+        });
+    };
+    
+    var storeFingerprint = function(serverName, serverPort, algorithm, fingerprint, callback) {
+        loadFingerprints(function(fingerprints) {
+            fingerprints[serverName + ":" + serverPort] = {
+                value: fingerprint,
+                algorithm: algorithm
+            };
+            chrome.storage.local.set({fingerprints: fingerprints}, function() {
+                callback();
             });
         });
     };
