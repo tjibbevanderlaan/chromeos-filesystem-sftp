@@ -71,7 +71,8 @@
 
   <paper-action-dialog id="confirmFingerprintDialog" heading="Confirm fingerprint"
       backdrop autoCloseDisabled layered="false" transition="core-transition-top">
-    <p><span id="algorithm"></span> - <span id="fingerprint"></span></p>
+    <p>Current: <span id="algorithm"></span> - <span id="fingerprint"></span></p>
+    <p id="prev">Previous: <span id="prevAlgorithm"></span> - <span id="prevFingerprint"></span></p>
     <paper-button affirmative id="btnDecline">Decline</paper-button>
     <paper-button affirmative id="btnAccept">Accept</paper-button>
     <input type="hidden" id="requestId" />
