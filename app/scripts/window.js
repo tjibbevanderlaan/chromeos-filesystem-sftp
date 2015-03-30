@@ -114,7 +114,7 @@
             }
         });
     };
-    
+
     var accept = function(requestId, fileSystemId) {
         var request = {
             type: "accept",
@@ -140,6 +140,7 @@
                     toast.setAttribute("text", response.error);
                 }
                 toast.show();
+                var btnMount = document.querySelector("#btnMount");
                 btnMount.removeAttribute("disabled");
             }
         });
@@ -147,7 +148,6 @@
 
     var onClickedBtnAccept = function(evt) {
         console.log("onClickedBtnAccept");
-        var btnMount = document.querySelector("#btnMount");
         var requestId = document.querySelector("#requestId").value;
         var fileSystemId = document.querySelector("#fileSystemId").value;
         accept(requestId, fileSystemId);
@@ -336,14 +336,14 @@
             callback(fingerprints);
         });
     };
-    
+
     var getFingerprint = function(serverName, serverPort, callback) {
         loadFingerprints(function(fingerprints) {
             var fingerprint = fingerprints[serverName + ":" + serverPort];
             callback(fingerprint);
         });
     };
-    
+
     var storeFingerprint = function(serverName, serverPort, algorithm, fingerprint, callback) {
         loadFingerprints(function(fingerprints) {
             fingerprints[serverName + ":" + serverPort] = {
