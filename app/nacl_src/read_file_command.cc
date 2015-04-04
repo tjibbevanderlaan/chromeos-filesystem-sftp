@@ -37,7 +37,7 @@ void ReadFileCommand::Execute()
     LIBSSH2_SFTP_HANDLE *sftp_handle = OpenFile(path_, LIBSSH2_FXF_READ, 0);
     SeekAtOffsetOf(sftp_handle, offset_);
     ReadFileLengthOf(sftp_handle, length_, buffer_size_);
-    libssh2_sftp_close(sftp_handle);
+    CloseSftpHandle(sftp_handle);
   } catch(CommunicationException e) {
     std::string msg;
     msg = e.toString();
