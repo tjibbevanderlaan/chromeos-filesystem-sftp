@@ -44,7 +44,7 @@ void WriteFileCommand::Execute()
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
   if (sftp_handle) {
-    libssh2_sftp_close(sftp_handle);
+    CloseSftpHandle(sftp_handle);
   }
   delete this;
 }
