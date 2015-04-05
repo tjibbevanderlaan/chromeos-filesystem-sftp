@@ -91,15 +91,6 @@ void AbstractCommand::CloseSftpHandle(LIBSSH2_SFTP_HANDLE *sftp_handle)
   throw(CommunicationException)
 {
   if (sftp_handle) {
-    int rc = -1;
-    do {
-      rc = libssh2_sftp_close(sftp_handle);
-      if (rc == LIBSSH2_ERROR_EAGAIN) {
-        WaitSocket(GetServerSock(), GetSession());
-      }
-    } while (rc == LIBSSH2_ERROR_EAGAIN);
-    if (rc < 0) {
-      THROW_COMMUNICATION_EXCEPTION("Closing SFTP handle failed", rc);
-    }
+    libssh2_sftp_close_handle(sftp_handle);
   }
 }
