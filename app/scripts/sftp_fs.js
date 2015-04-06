@@ -606,9 +606,24 @@
                 this.onReadDirectoryRequested(options, successCallback, errorCallback);
             }.bind(this)));
         chrome.fileSystemProvider.onGetMetadataRequested.addListener(
-            createEventHandler.call(this, function(options, successCallback, errorCallback) {
-                this.onGetMetadataRequested(options, successCallback, errorCallback);
-            }.bind(this)));
+            function(options, successCallback, errorCallback) {
+                var handler = createEventHandler.call(this, function(options, successCallback, errorCallback) {
+                    this.onGetMetadataRequested(options, successCallback, errorCallback);
+                }.bind(this));
+                var fileSystemId = options.fileSystemId;
+                var sftpClient = getSftpClient.call(this, fileSystemId);
+                if (sftpClient) {
+                    var metadataCache = getMetadataCache.call(this, fileSystemId);
+                    var cache = metadataCache.get(options.entryPath);
+                    if (cache.directoryExists && cache.fileExists) {
+                        successCallback(cache.metadata);
+                    } else {
+                        handler(options, successCallback, errorCallback);
+                    }
+                } else {
+                    handler(options, successCallback, errorCallback);
+                }
+            }.bind(this));
         chrome.fileSystemProvider.onOpenFileRequested.addListener(
             createEventHandler.call(this, function(options, successCallback, errorCallback) {
                 this.onOpenFileRequested(options, successCallback, errorCallback);
