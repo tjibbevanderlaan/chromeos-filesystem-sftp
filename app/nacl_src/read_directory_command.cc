@@ -30,7 +30,7 @@ void ReadDirectoryCommand::Execute()
   try {
     LIBSSH2_SFTP_HANDLE *sftp_handle = OpenDirectory(path_);
     FetchEntriesInDirectory(sftp_handle);
-    libssh2_sftp_closedir(sftp_handle);
+    CloseSftpHandle(sftp_handle);
   } catch(CommunicationException e) {
     std::string msg;
     msg = e.toString();

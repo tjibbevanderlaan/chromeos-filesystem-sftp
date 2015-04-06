@@ -32,7 +32,6 @@ class CommunicationException : public std::exception {
   const char *file_name_;
   const char *function_name_;
   const int line_number_;
-
 };
 
 #endif // COMMUNICATION_EXCEPTION_H

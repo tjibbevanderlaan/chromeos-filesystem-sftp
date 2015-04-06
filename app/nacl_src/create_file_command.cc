@@ -55,5 +55,5 @@ void CreateFileCommand::CreateFile(const std::string &path)
       }
     }
   } while (!sftp_handle);
-  libssh2_sftp_close(sftp_handle);
+  CloseSftpHandle(sftp_handle);
 }

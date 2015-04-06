@@ -1,5 +1,7 @@
 #include <sstream>
 
+#include <errno.h>
+
 #include "communication_exception.h"
 
 CommunicationException::CommunicationException(const std::string message,
@@ -49,6 +51,8 @@ const std::string CommunicationException::toString()
   std::ostringstream oss;
   oss << message_.c_str() << " ";
   oss << result_code_;
+  oss << " ";
+  oss << errno;
   std::string result = oss.str();
   return result;
 }
