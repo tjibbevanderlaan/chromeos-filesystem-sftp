@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "ppapi/cpp/var.h"
 #include "ppapi/cpp/var_dictionary.h"
 
@@ -12,10 +14,12 @@ ReadDirectoryCommand::ReadDirectoryCommand(SftpEventListener *listener,
   : AbstractCommand(session, sftp_session, server_sock, listener, request_id),
     path_(path)
 {
+  fprintf(stderr, "ReadDirectoryCommand::ReadDirectoryCommand\n");
 }
 
 ReadDirectoryCommand::~ReadDirectoryCommand()
 {
+  fprintf(stderr, "ReadDirectoryCommand::~ReadDirectoryCommand\n");
 }
 
 void* ReadDirectoryCommand::Start(void *arg)
@@ -27,6 +31,7 @@ void* ReadDirectoryCommand::Start(void *arg)
 
 void ReadDirectoryCommand::Execute()
 {
+  fprintf(stderr, "ReadDirectoryCommand::Execute\n");
   try {
     LIBSSH2_SFTP_HANDLE *sftp_handle = OpenDirectory(path_);
     FetchEntriesInDirectory(sftp_handle);
@@ -36,16 +41,19 @@ void ReadDirectoryCommand::Execute()
     msg = e.toString();
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
+  fprintf(stderr, "ReadDirectoryCommand::Execute End\n");
   delete this;
 }
 
 LIBSSH2_SFTP_HANDLE* ReadDirectoryCommand::OpenDirectory(const std::string path)
     throw(CommunicationException)
 {
+  fprintf(stderr, "ReadDirectoryCommand::OpenDirectory\n");
   LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
   do {
     sftp_handle = libssh2_sftp_opendir(GetSftpSession(), path.c_str());
     int last_error_no = libssh2_session_last_errno(GetSession());
+    fprintf(stderr, "ReadDirectoryCommand::OpenDirectory errno=%d\n", last_error_no);
     if (!sftp_handle) {
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(GetServerSock(), GetSession());
@@ -54,12 +62,14 @@ LIBSSH2_SFTP_HANDLE* ReadDirectoryCommand::OpenDirectory(const std::string path)
       }
     }
   } while (!sftp_handle);
+  fprintf(stderr, "ReadDirectoryCommand::OpenDirectory End\n");
   return sftp_handle;
 }
 
 void ReadDirectoryCommand::FetchEntriesInDirectory(LIBSSH2_SFTP_HANDLE *sftp_handle)
     throw(CommunicationException)
 {
+  fprintf(stderr, "ReadDirectoryCommand::FetchEntriesInDirectory\n");
   std::vector<pp::Var> metadataList;
   do {
     char mem[512];
@@ -71,6 +81,7 @@ void ReadDirectoryCommand::FetchEntriesInDirectory(LIBSSH2_SFTP_HANDLE *sftp_han
         WaitSocket(GetServerSock(), GetSession());
       }
     } while (rc == LIBSSH2_ERROR_EAGAIN);
+    fprintf(stderr, "ReadDirectoryCommand::FetchEntriesInDirectory rc=%d\n", rc);
     if (rc > 0) {
       pp::VarDictionary metadata;
       if (attrs.flags & LIBSSH2_SFTP_ATTR_PERMISSIONS) {
@@ -96,4 +107,5 @@ void ReadDirectoryCommand::FetchEntriesInDirectory(LIBSSH2_SFTP_HANDLE *sftp_han
     }
   } while (1);
   GetListener()->OnMetadataListFetched(GetRequestID(), metadataList);
+  fprintf(stderr, "ReadDirectoryCommand::FetchEntriesInDirectory End\n");
 }

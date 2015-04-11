@@ -14,10 +14,12 @@ TruncateFileCommand::TruncateFileCommand(SftpEventListener *listener,
    path_(path),
    length_(length)
 {
+  fprintf(stderr, "TruncateFileCommand::TruncateFileCommand\n");
 }
 
 TruncateFileCommand::~TruncateFileCommand()
 {
+  fprintf(stderr, "TruncateFileCommand::~TruncateFileCommand\n");
 }
 
 void* TruncateFileCommand::Start(void *arg)
@@ -32,6 +34,7 @@ void* TruncateFileCommand::Start(void *arg)
 // Probably, the read data should write as the file temporarily.
 void TruncateFileCommand::Execute()
 {
+  fprintf(stderr, "TruncateFileCommand::Execute\n");
   LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
   try {
     sftp_handle = OpenFile(path_, LIBSSH2_FXF_READ, 0);
@@ -58,12 +61,14 @@ void TruncateFileCommand::Execute()
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
   CloseSftpHandle(sftp_handle);
+  fprintf(stderr, "TruncateFileCommand::Execute End\n");
   delete this;
 }
 
 libssh2_uint64_t TruncateFileCommand::GetFileSize(LIBSSH2_SFTP_HANDLE *sftp_handle)
     throw(CommunicationException)
 {
+  fprintf(stderr, "TruncateFileCommand::GetFileSize\n");
   LIBSSH2_SFTP_ATTRIBUTES attrs;
   int rc = -1;
   do {
@@ -72,6 +77,7 @@ libssh2_uint64_t TruncateFileCommand::GetFileSize(LIBSSH2_SFTP_HANDLE *sftp_hand
       WaitSocket(GetServerSock(), GetSession());
     }
   } while (rc == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "TruncateFileCommand::GetFileSize rc=%d\n", rc);
   if (rc == 0) {
     if (attrs.flags & LIBSSH2_SFTP_ATTR_SIZE) {
       return attrs.filesize;
@@ -88,6 +94,7 @@ void TruncateFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
                                            std::vector<char> &buffer)
   throw(CommunicationException)
 {
+  fprintf(stderr, "TruncateFileCommand::ReadFileLengthOf\n");
   int rc = -1;
   libssh2_uint64_t total = 0;
   buffer.reserve(length);
@@ -122,12 +129,14 @@ void TruncateFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
       THROW_COMMUNICATION_EXCEPTION("Reading file failed", rc);
     }
   } while (1);
+  fprintf(stderr, "TruncateFileCommand::ReadFileLengthOf End\n");
 }
 
 void TruncateFileCommand::WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
                                     std::vector<char> &data)
   throw(CommunicationException)
 {
+  fprintf(stderr, "TruncateFileCommand::WriteFile\n");
   int rc = -1;
   int w_pos = 0;
   int remain = data.size();
@@ -136,10 +145,12 @@ void TruncateFileCommand::WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
     while ((rc = libssh2_sftp_write(sftp_handle, buffer, remain)) == LIBSSH2_ERROR_EAGAIN) {
       WaitSocket(GetServerSock(), GetSession());
     }
+    fprintf(stderr, "TruncateFileCommand::WriteFile rc=%d\n", rc);
     if (rc < 0) {
       THROW_COMMUNICATION_EXCEPTION("Writing file failed", rc);
     }
     w_pos += rc;
     remain -= rc;
   } while (remain);
+  fprintf(stderr, "TruncateFileCommand::WriteFile End\n");
 }

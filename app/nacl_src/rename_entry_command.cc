@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "rename_entry_command.h"
 
 RenameEntryCommand::RenameEntryCommand(SftpEventListener *listener,
@@ -11,10 +13,12 @@ RenameEntryCommand::RenameEntryCommand(SftpEventListener *listener,
     source_path_(source_path),
     target_path_(target_path)
 {
+  fprintf(stderr, "RenameEntryCommand::RenameEntryCommand\n");
 }
 
 RenameEntryCommand::~RenameEntryCommand()
 {
+  fprintf(stderr, "RenameEntryCommand::~RenameEntryCommand\n");
 }
 
 void* RenameEntryCommand::Start(void *arg)
@@ -26,6 +30,7 @@ void* RenameEntryCommand::Start(void *arg)
 
 void RenameEntryCommand::Execute()
 {
+  fprintf(stderr, "RenameEntryCommand::Execute\n");
   try {
     RenameEntry(source_path_, target_path_);
     GetListener()->OnRenameEntryFinished(GetRequestID());
@@ -34,6 +39,7 @@ void RenameEntryCommand::Execute()
     msg = e.toString();
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
+  fprintf(stderr, "RenameEntryCommand::Execute End\n");
   delete this;
 }
 
@@ -41,6 +47,7 @@ void RenameEntryCommand::RenameEntry(const std::string &source_path,
                                      const std::string &target_path)
   throw(CommunicationException)
 {
+  fprintf(stderr, "RenameEntryCommand::RenameEntry\n");
   int rc = -1;
   do {
     rc = libssh2_sftp_rename(GetSftpSession(), source_path.c_str(), target_path.c_str());
@@ -48,6 +55,7 @@ void RenameEntryCommand::RenameEntry(const std::string &source_path,
       WaitSocket(GetServerSock(), GetSession());
     }
   } while (rc == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "RenameEntryCommand::RenameEntry rc=%d\n", rc);
   if (rc < 0) {
     THROW_COMMUNICATION_EXCEPTION("Renaming entry failed", rc);
   }

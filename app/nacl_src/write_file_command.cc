@@ -18,10 +18,12 @@ WriteFileCommand::WriteFileCommand(SftpEventListener *listener,
    length_(length),
    data_(data)
 {
+  fprintf(stderr, "WriteFileCommand::WriteFileCommand\n");
 }
 
 WriteFileCommand::~WriteFileCommand()
 {
+  fprintf(stderr, "WriteFileCommand::~WriteFileCommand\n");
 }
 
 void* WriteFileCommand::Start(void *arg)
@@ -33,6 +35,7 @@ void* WriteFileCommand::Start(void *arg)
 
 void WriteFileCommand::Execute()
 {
+  fprintf(stderr, "WriteFileCommand::Execute\n");
   LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
   try {
     sftp_handle = OpenFile(path_, LIBSSH2_FXF_WRITE, 0);
@@ -46,6 +49,7 @@ void WriteFileCommand::Execute()
   if (sftp_handle) {
     CloseSftpHandle(sftp_handle);
   }
+  fprintf(stderr, "WriteFileCommand::Execute End\n");
   delete this;
 }
 
@@ -55,6 +59,7 @@ void WriteFileCommand::WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
                                  pp::VarArrayBuffer &buffer)
   throw(CommunicationException)
 {
+  fprintf(stderr, "WriteFileCommand::WriteFile\n");
   libssh2_sftp_seek64(sftp_handle, offset);
   int rc = -1;
   int w_pos = 0;
@@ -65,10 +70,12 @@ void WriteFileCommand::WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
     while ((rc = libssh2_sftp_write(sftp_handle, (data + w_pos), remain)) == LIBSSH2_ERROR_EAGAIN) {
       WaitSocket(GetServerSock(), GetSession());
     }
+    fprintf(stderr, "WriteFileCommand::WriteFile rc=%d\n", rc);
     if (rc < 0) {
       THROW_COMMUNICATION_EXCEPTION("Writing file failed", rc);
     }
     w_pos += rc;
     remain -= rc;
   } while (remain);
+  fprintf(stderr, "WriteFileCommand::WriteFile End\n");
 }

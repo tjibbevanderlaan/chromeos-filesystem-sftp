@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "ppapi/cpp/var.h"
 #include "ppapi/cpp/var_dictionary.h"
 
@@ -12,10 +14,12 @@ GetMetadataCommand::GetMetadataCommand(SftpEventListener *listener,
   : AbstractCommand(session, sftp_session, server_sock, listener, request_id),
     path_(path)
 {
+  fprintf(stderr, "GetMetadataCommand::GetMetadataCommand\n");
 }
 
 GetMetadataCommand::~GetMetadataCommand()
 {
+  fprintf(stderr, "GetMetadataCommand::~GetMetadataCommand\n");
 }
 
 void* GetMetadataCommand::Start(void *arg)
@@ -27,6 +31,7 @@ void* GetMetadataCommand::Start(void *arg)
 
 void GetMetadataCommand::Execute()
 {
+  fprintf(stderr, "GetMetadataCommand::Execute\n");
   try {
     LIBSSH2_SFTP_HANDLE *sftp_handle = OpenFile(path_, LIBSSH2_FXF_READ, 0);
     FetchEntry(sftp_handle, path_);
@@ -36,12 +41,14 @@ void GetMetadataCommand::Execute()
     msg = e.toString();
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
+  fprintf(stderr, "GetMetadataCommand::Execute End\n");
   delete this;
 }
 
 void GetMetadataCommand::FetchEntry(LIBSSH2_SFTP_HANDLE *sftp_handle, const std::string &path)
     throw(CommunicationException)
 {
+  fprintf(stderr, "GetMetadataCommand::FetchEntry\n");
   std::vector<pp::Var> metadataList;
   LIBSSH2_SFTP_ATTRIBUTES attrs;
   int rc = -1;
@@ -51,6 +58,7 @@ void GetMetadataCommand::FetchEntry(LIBSSH2_SFTP_HANDLE *sftp_handle, const std:
       WaitSocket(GetServerSock(), GetSession());
     }
   } while (rc == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "GetMetadataCommand::FetchEntry rc=%d\n", rc);
   if (rc == 0) {
     pp::VarDictionary metadata;
     if (attrs.flags & LIBSSH2_SFTP_ATTR_PERMISSIONS) {
@@ -71,4 +79,5 @@ void GetMetadataCommand::FetchEntry(LIBSSH2_SFTP_HANDLE *sftp_handle, const std:
   } else {
     THROW_COMMUNICATION_EXCEPTION("Getting metadata failed", rc);
   }
+  fprintf(stderr, "GetMetadataCommand::FetchEntry End\n");
 }
