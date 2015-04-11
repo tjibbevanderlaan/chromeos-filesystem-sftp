@@ -15,17 +15,21 @@ SftpInstance::SftpInstance(PP_Instance instance)
     pp_core_(pp::Module::Get()->core()),
     factory_(this)
 {
+  fprintf(stderr, "SftpInstance::SftpInstance\n");
   nacl_io_init_ppapi(instance, pp::Module::Get()->get_browser_interface());
   mount("", "/sftp", "memfs", 0, "");
   //sftp_thread_ = new SftpThread(this, this);
+  fprintf(stderr, "SftpInstance::SftpInstance End\n");
 }
 
 SftpInstance::~SftpInstance()
 {
+  fprintf(stderr, "SftpInstance::~SftpInstance\n");
 }
 
 void SftpInstance::HandleMessage(const pp::Var &var_message)
 {
+  fprintf(stderr, "SftpInstance::HandleMessage\n");
   if (!var_message.is_dictionary()) {
     return;
   }
@@ -33,12 +37,16 @@ void SftpInstance::HandleMessage(const pp::Var &var_message)
   pp::VarDictionary dict(var_message);
   std::string command = dict.Get("command").AsString();
   int request_id = GetIntegerValueFromString(dict.Get("request").AsString());
+  fprintf(stderr, "SftpInstance::HandleMessage %s %d\n", command.c_str(), request_id);
+
   SftpThread *sftp_thread;
   if (sftp_thread_map_.find(request_id) == sftp_thread_map_.end()) {
     sftp_thread = new SftpThread(this, this, request_id);
     sftp_thread_map_[request_id] = sftp_thread;
+    fprintf(stderr, "SftpInstance::HandleMessage SftpThread instance created\n");
   } else {
     sftp_thread = sftp_thread_map_[request_id];
+    fprintf(stderr, "SftpInstance::HandleMessage Re-use SftpThread instance\n");
   }
   pp::VarArray args(dict.Get("args"));
   if (command == "connect") {
@@ -94,8 +102,10 @@ void SftpInstance::HandleMessage(const pp::Var &var_message)
     sftp_thread->Close();
   } else if (command == "destroy") {
     // Terminate immediately
+    fprintf(stderr, "SftpInstance::HandleMessage exit(0)\n");
     exit(0);
   }
+  fprintf(stderr, "SftpInstance::HandleMessage End\n");
 }
 
 int SftpInstance::GetIntegerValueFromString(const std::string &source)
@@ -123,6 +133,7 @@ void SftpInstance::OnHandshakeFinished(const int request_id,
                                        const std::string &fingerprint,
                                        const std::string &hostkey_method)
 {
+  fprintf(stderr, "SftpInstance::OnHandshakeFinished\n");
   SendResponse(request_id,
                std::string("fingerprint"),
                std::vector<std::string>{fingerprint, hostkey_method});
@@ -130,11 +141,13 @@ void SftpInstance::OnHandshakeFinished(const int request_id,
 
 void SftpInstance::OnAuthenticationFinished(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnAuthenticationFinished\n");
   SendResponse(request_id, std::string("authenticated"), std::vector<std::string>{});
 }
 
 void SftpInstance::OnShutdown(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnShutdown\n");
   SendResponse(request_id, std::string("shutdown"), std::vector<std::string>{});
   if (sftp_thread_map_.find(request_id) != sftp_thread_map_.end()) {
     SftpThread *sftp_thread = sftp_thread_map_[request_id];
@@ -145,12 +158,14 @@ void SftpInstance::OnShutdown(const int request_id)
 
 void SftpInstance::OnErrorOccurred(const int request_id, const std::string &message)
 {
+  fprintf(stderr, "SftpInstance::OnErrorOccurred\n");
   SendResponse(request_id, std::string("error"), std::vector<std::string>{message});
 }
 
 void SftpInstance::OnMetadataListFetched(const int request_id,
                                          const std::vector<pp::Var> &metadataList)
 {
+  fprintf(stderr, "SftpInstance::OnMetadataListFetched\n");
   SendResponse(request_id, std::string("metadataList"), metadataList);
 }
 
@@ -159,6 +174,7 @@ void SftpInstance::OnReadFile(const int request_id,
                               const int length,
                               const bool has_more)
 {
+  fprintf(stderr, "SftpInstance::OnReadFile\n");
   pp::VarDictionary obj;
   obj.Set(pp::Var("data"), buffer);
   obj.Set(pp::Var("length"), pp::Var(length));
@@ -168,31 +184,37 @@ void SftpInstance::OnReadFile(const int request_id,
 
 void SftpInstance::OnMakeDirectoryFinished(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnMakeDirectoryFinished\n");
   SendResponse(request_id, std::string("mkdirSuccessful"), std::vector<std::string>{});
 }
 
 void SftpInstance::OnDeleteEntryFinished(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnDeleteEntryFinished\n");
   SendResponse(request_id, std::string("deleteSuccessful"), std::vector<std::string>{});
 }
 
 void SftpInstance::OnRenameEntryFinished(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnRenameEntryFinished\n");
   SendResponse(request_id, std::string("renameSuccessful"), std::vector<std::string>{});
 }
 
 void SftpInstance::OnCreateFileFinished(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnCreateFileFinished\n");
   SendResponse(request_id, std::string("createSuccessful"), std::vector<std::string>{});
 }
 
 void SftpInstance::OnWriteFileFinished(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnWriteFileFinished\n");
   SendResponse(request_id, std::string("writeSuccessful"), std::vector<std::string>{});
 }
 
 void SftpInstance::OnTruncateFileFinished(const int request_id)
 {
+  fprintf(stderr, "SftpInstance::OnTruncateFileFinished\n");
   SendResponse(request_id, std::string("truncateSuccessful"), std::vector<std::string>{});
 }
 
@@ -237,6 +259,7 @@ void SftpInstance::SendResponseAsStringArray(int32_t result,
                                              const std::string &message,
                                              const std::vector<std::string> &values)
 {
+  fprintf(stderr, "SftpInstance::SendResponseAsStringArray\n");
   pp::VarDictionary dict;
   dict.Set(pp::Var("request"), pp::Var(request_id));
   dict.Set(pp::Var("message"), pp::Var(message));
@@ -250,6 +273,7 @@ void SftpInstance::SendResponseAsStringArray(int32_t result,
   }
   dict.Set(pp::Var("values"), args);
   PostMessage(dict);
+  fprintf(stderr, "SftpInstance::SendResponseAsStringArray End\n");
 }
 
 void SftpInstance::SendResponseAsJsonObjectArray(int32_t result,
@@ -257,6 +281,7 @@ void SftpInstance::SendResponseAsJsonObjectArray(int32_t result,
                                                  const std::string &message,
                                                  const std::vector<pp::Var> &values)
 {
+  fprintf(stderr, "SftpInstance::SendResponseAsJsonObjectArray\n");
   pp::VarDictionary root;
   root.Set(pp::Var("request"), pp::Var(request_id));
   root.Set(pp::Var("message"), pp::Var(message));
@@ -270,6 +295,7 @@ void SftpInstance::SendResponseAsJsonObjectArray(int32_t result,
   }
   root.Set(pp::Var("values"), args);
   PostMessage(root);
+  fprintf(stderr, "SftpInstance::SendResponseAsJsonObjectArray End\n");
 }
 
 void SftpInstance::SendResponseAsJsonObject(int32_t result,
@@ -277,11 +303,13 @@ void SftpInstance::SendResponseAsJsonObject(int32_t result,
                                             const std::string &message,
                                             const pp::VarDictionary &value)
 {
+  fprintf(stderr, "SftpInstance::SendResponseAsJsonObject\n");
   pp::VarDictionary root;
   root.Set(pp::Var("request"), pp::Var(request_id));
   root.Set(pp::Var("message"), pp::Var(message));
   root.Set(pp::Var("value"), value);
   PostMessage(root);
+  fprintf(stderr, "SftpInstance::SendResponseAsJsonObject End\n");
 }
 
 // class SftpModule

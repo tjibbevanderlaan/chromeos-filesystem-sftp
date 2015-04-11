@@ -18,10 +18,12 @@ ReadFileCommand::ReadFileCommand(SftpEventListener *listener,
   length_(length),
   buffer_size_(buffer_size)
 {
+  fprintf(stderr, "ReadFileCommand::ReadFileCommand\n");
 }
 
 ReadFileCommand::~ReadFileCommand()
 {
+  fprintf(stderr, "ReadFileCommand::~ReadFileCommand\n");
 }
 
 void* ReadFileCommand::Start(void *arg)
@@ -33,6 +35,7 @@ void* ReadFileCommand::Start(void *arg)
 
 void ReadFileCommand::Execute()
 {
+  fprintf(stderr, "ReadFileCommand::Execute\n");
   try {
     LIBSSH2_SFTP_HANDLE *sftp_handle = OpenFile(path_, LIBSSH2_FXF_READ, 0);
     SeekAtOffsetOf(sftp_handle, offset_);
@@ -43,6 +46,7 @@ void ReadFileCommand::Execute()
     msg = e.toString();
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
+  fprintf(stderr, "ReadFileCommand::Execute End\n");
   delete this;
 }
 
@@ -50,7 +54,9 @@ void ReadFileCommand::Execute()
 void ReadFileCommand::SeekAtOffsetOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
                                      const libssh2_uint64_t offset)
 {
+  fprintf(stderr, "ReadFileCommand::SeekAtOffsetOf\n");
   libssh2_sftp_seek64(sftp_handle, offset);
+  fprintf(stderr, "ReadFileCommand::SeekAtOffsetOf End\n");
 }
 
 void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
@@ -58,6 +64,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
                                        const unsigned int buffer_size)
   throw(CommunicationException)
 {
+  fprintf(stderr, "ReadFileCommand::ReadFileLengthOf\n");
   int rc = -1;
   libssh2_uint64_t total = 0;
   const int max_sftp_size = buffer_size * 1024;
@@ -93,12 +100,15 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
       THROW_COMMUNICATION_EXCEPTION("Reading file failed", rc);
     }
   } while (1);
+  fprintf(stderr, "ReadFileCommand::ReadFileLengthOf End\n");
 }
 
 void ReadFileCommand::OnReadFile(const char *result_buf, int length, bool has_more)
 {
+  fprintf(stderr, "ReadFileCommand::OnReadFile\n");
   pp::VarArrayBuffer buffer(length);
   char* data = static_cast<char*>(buffer.Map());
   memcpy(data, result_buf, length);
   GetListener()->OnReadFile(GetRequestID(), buffer, length, has_more);
+  fprintf(stderr, "ReadFileCommand::OnReadFile End\n");
 }

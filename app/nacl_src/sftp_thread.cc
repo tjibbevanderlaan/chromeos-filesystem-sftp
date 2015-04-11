@@ -37,17 +37,18 @@ SftpThread::SftpThread(pp::Instance *instance,
     session_(NULL),
     sftp_session_(NULL)
 {
-  fprintf(stderr, "SftpThread: Constructor\n");
+  fprintf(stderr, "SftpThread::SftpThread\n");
 }
 
 SftpThread::~SftpThread()
 {
-  fprintf(stderr, "SftpThread: Destructor\n");
+  fprintf(stderr, "SftpThread::~SftpThread\n");
 }
 
 void SftpThread::ConnectAndHandshake(const std::string server_hostname,
                                      const int server_port)
 {
+  fprintf(stderr, "SftpThread::ConnectAndHandshake\n");
   if (!thread_) {
     server_hostname_ = server_hostname;
     server_port_ = server_port;
@@ -55,6 +56,7 @@ void SftpThread::ConnectAndHandshake(const std::string server_hostname,
                    NULL,
                    &SftpThread::StartConnectAndHandshakeThread,
                    this);
+    fprintf(stderr, "SftpThread::ConnectAndHandshake Thread started\n");
   } else {
     listener_->OnErrorOccurred(request_id_, std::string("Thread already running"));
   }
@@ -65,6 +67,7 @@ void SftpThread::Authenticate(const std::string auth_type,
                               const std::string password,
                               const std::string private_key)
 {
+  fprintf(stderr, "SftpThread::Authenticate\n");
   if (!thread_) {
     if (!session_) {
       listener_->OnErrorOccurred(request_id_, std::string("Not connected and handshaked"));
@@ -78,6 +81,7 @@ void SftpThread::Authenticate(const std::string auth_type,
                    NULL,
                    &SftpThread::StartAuthenticate,
                    this);
+    fprintf(stderr, "SftpThread::Authenticate Thread started\n");
   } else {
     listener_->OnErrorOccurred(request_id_, std::string("Thread already running"));
   }
@@ -90,6 +94,7 @@ std::string SftpThread::GetPassword()
 
 void SftpThread::ReadDirectory(const std::string path)
 {
+  fprintf(stderr, "SftpThread::ReadDirectory\n");
   ReadDirectoryCommand *command = new ReadDirectoryCommand(listener_,
                                                            server_sock_,
                                                            session_,
@@ -101,10 +106,12 @@ void SftpThread::ReadDirectory(const std::string path)
                  NULL,
                  &ReadDirectoryCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::ReadDirectory Thread started\n");
 }
 
 void SftpThread::GetMetadata(const std::string path)
 {
+  fprintf(stderr, "SftpThread::GetMetadata\n");
   GetMetadataCommand *command = new GetMetadataCommand(listener_,
                                                        server_sock_,
                                                        session_,
@@ -116,6 +123,7 @@ void SftpThread::GetMetadata(const std::string path)
                  NULL,
                  &GetMetadataCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::GetMetadata Thread started\n");
 }
 
 void SftpThread::ReadFile(const std::string path,
@@ -123,6 +131,7 @@ void SftpThread::ReadFile(const std::string path,
                           const libssh2_uint64_t length,
                           const unsigned int buffer_size)
 {
+  fprintf(stderr, "SftpThread::ReadFile\n");
   ReadFileCommand *command = new ReadFileCommand(listener_,
                                                  server_sock_,
                                                  session_,
@@ -137,10 +146,12 @@ void SftpThread::ReadFile(const std::string path,
                  NULL,
                  &ReadFileCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::ReadFile Thread started\n");
 }
 
 void SftpThread::MakeDirectory(const std::string path)
 {
+  fprintf(stderr, "SftpThread::MakeDirectory\n");
   MakeDirectoryCommand *command = new MakeDirectoryCommand(listener_,
                                                            server_sock_,
                                                            session_,
@@ -152,10 +163,12 @@ void SftpThread::MakeDirectory(const std::string path)
                  NULL,
                  &MakeDirectoryCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::MakeDirectory Thread started\n");
 }
 
 void SftpThread::DeleteEntry(const std::string path)
 {
+  fprintf(stderr, "SftpThread::DeleteEntry\n");
   DeleteEntryCommand *command = new DeleteEntryCommand(listener_,
                                                        server_sock_,
                                                        session_,
@@ -167,10 +180,12 @@ void SftpThread::DeleteEntry(const std::string path)
                  NULL,
                  &DeleteEntryCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::DeleteEntry Thread started\n");
 }
 
 void SftpThread::RenameEntry(const std::string source_path, std::string target_path)
 {
+  fprintf(stderr, "SftpThread::RenameEntry\n");
   RenameEntryCommand *command = new RenameEntryCommand(listener_,
                                                        server_sock_,
                                                        session_,
@@ -183,10 +198,12 @@ void SftpThread::RenameEntry(const std::string source_path, std::string target_p
                  NULL,
                  &RenameEntryCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::RenameEntry Thread started\n");
 }
 
 void SftpThread::CreateFile(const std::string path)
 {
+  fprintf(stderr, "SftpThread::CreateFile\n");
   CreateFileCommand *command = new CreateFileCommand(listener_,
                                                      server_sock_,
                                                      session_,
@@ -198,6 +215,7 @@ void SftpThread::CreateFile(const std::string path)
                  NULL,
                  &CreateFileCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::CreateFile Thread started\n");
 }
 
 void SftpThread::WriteFile(const std::string path,
@@ -205,6 +223,7 @@ void SftpThread::WriteFile(const std::string path,
                            const size_t length,
                            const pp::VarArrayBuffer &buffer)
 {
+  fprintf(stderr, "SftpThread::WriteFile\n");
   WriteFileCommand *command = new WriteFileCommand(listener_,
                                                    server_sock_,
                                                    session_,
@@ -219,11 +238,13 @@ void SftpThread::WriteFile(const std::string path,
                  NULL,
                  &WriteFileCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::WriteFile Thread started\n");
 }
 
 void SftpThread::TruncateFile(const std::string path,
                               const libssh2_uint64_t length)
 {
+  fprintf(stderr, "SftpThread::TruncateFile\n");
   TruncateFileCommand *command = new TruncateFileCommand(listener_,
                                                          server_sock_,
                                                          session_,
@@ -236,15 +257,18 @@ void SftpThread::TruncateFile(const std::string path,
                  NULL,
                  &TruncateFileCommand::Start,
                  command);
+  fprintf(stderr, "SftpThread::TruncateFile Thread started\n");
 }
 
 void SftpThread::Close()
 {
+  fprintf(stderr, "SftpThread::Close\n");
   if (!thread_) {
     pthread_create(&thread_,
                    NULL,
                    &SftpThread::StartClose,
                    this);
+    fprintf(stderr, "SftpThread::Close Thread started\n");
   } else {
     listener_->OnErrorOccurred(request_id_, std::string("Thread already running"));
   }
@@ -263,11 +287,14 @@ void* SftpThread::StartConnectAndHandshakeThread(void *arg)
 
 void SftpThread::ConnectAndHandshakeImpl()
 {
+  fprintf(stderr, "SftpThread::ConnectAndHandshakeImpl\n");
   if (session_) {
+    fprintf(stderr, "SftpThread::ConnectAndHandshakeImpl Close already opened session\n");
     CloseSession(session_);
     close(server_sock_);
     server_sock_ = -1;
     session_ = NULL;
+    fprintf(stderr, "SftpThread::ConnectAndHandshakeImpl Closing session completed\n");
   }
   int sock = 1;
   LIBSSH2_SESSION *session = NULL;
@@ -294,12 +321,15 @@ void SftpThread::ConnectAndHandshakeImpl()
     thread_ = NULL;
     listener_->OnErrorOccurred(request_id_, msg);
   }
+  fprintf(stderr, "SftpThread::ConnectAndHandshakeImpl End\n");
 }
 
 void SftpThread::InitializeLibssh2() throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::InitializeLibssh2\n");
   int rc;
   rc = libssh2_init(0);
+  fprintf(stderr, "SftpThread::InitializeLibssh2 rc=%d\n", rc);
   if (rc != 0) {
     THROW_COMMUNICATION_EXCEPTION("libssh2 initialization failed", rc);
   }
@@ -308,19 +338,23 @@ void SftpThread::InitializeLibssh2() throw(CommunicationException)
 int SftpThread::ConnectToSshServer(const std::string &hostname, const int port)
   throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::ConnectToSshServer\n");
   struct hostent *hostent;
   hostent = gethostbyname(hostname.c_str());
   if (hostent == NULL) {
+    fprintf(stderr, "SftpThread::ConnectToSshServer hostent is NULL\n");
     THROW_COMMUNICATION_EXCEPTION("hostent is NULL", errno);
   }
   int sock;
   sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+  fprintf(stderr, "SftpThread::ConnectToSshServer sock=%d\n", sock);
   struct sockaddr_in sin;
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
   memcpy(&sin.sin_addr.s_addr, hostent->h_addr_list[0], hostent->h_length);
   int rc;
   rc = connect(sock, (struct sockaddr*)(&sin), sizeof(struct sockaddr_in));
+  fprintf(stderr, "SftpThread::ConnectToSshServer rc=%d\n", rc);
   if (rc != 0) {
     THROW_COMMUNICATION_EXCEPTION("connect() failed", rc);
   }
@@ -329,19 +363,24 @@ int SftpThread::ConnectToSshServer(const std::string &hostname, const int port)
 
 LIBSSH2_SESSION* SftpThread::InitializeSession() throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::InitializeSession\n");
   LIBSSH2_SESSION *session;
   session = libssh2_session_init_ex(NULL, NULL, NULL, this);
   if (!session) {
+    fprintf(stderr, "SftpThread::InitializeSession Initializing session failed\n");
     THROW_COMMUNICATION_EXCEPTION("libssh2_session_init() failed", 0);
   }
+  fprintf(stderr, "SftpThread::InitializeSession Initialized session \n");
   return session;
 }
 
 void SftpThread::HandshakeSession(LIBSSH2_SESSION *session, int sock)
   throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::HandshakeSession\n");
   int rc;
   while ((rc = libssh2_session_handshake(session, sock)) == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "SftpThread::HandshakeSession rc=%d\n", rc);
   if (rc) {
     THROW_COMMUNICATION_EXCEPTION("Error when starting up SSH session", rc);
   }
@@ -349,6 +388,7 @@ void SftpThread::HandshakeSession(LIBSSH2_SESSION *session, int sock)
 
 std::string SftpThread::GetHostKeyHash(LIBSSH2_SESSION *session)
 {
+  fprintf(stderr, "SftpThread::GetHostKeyHash\n");
   const char *fingerprint;
   fingerprint = libssh2_hostkey_hash(session, LIBSSH2_HOSTKEY_HASH_MD5);
   std::ostringstream oss;
@@ -358,13 +398,16 @@ std::string SftpThread::GetHostKeyHash(LIBSSH2_SESSION *session)
     oss << std::setw(2) << std::hex << ((unsigned int)fingerprint[i] & 0xFF);
   }
   std::string result = oss.str();
+  fprintf(stderr, "SftpThread::GetHostKeyHash hash=%s\n", result.c_str());
   return result;
 }
 
 std::string SftpThread::GetHostKeyMethod(LIBSSH2_SESSION *session)
 {
+  fprintf(stderr, "SftpThread::GetHostKeyMethod\n");
   const char *method = libssh2_session_methods(session, LIBSSH2_METHOD_HOSTKEY);
   std::string result = method;
+  fprintf(stderr, "SftpThread::GetHostKeyMethod method=%s\n", result.c_str());
   return result;
 }
 
@@ -379,6 +422,7 @@ void* SftpThread::StartAuthenticate(void *arg)
 
 void SftpThread::AuthenticateImpl()
 {
+  fprintf(stderr, "SftpThread::AuthenticateImpl\n");
   try {
     AuthenticateUser();
     SetNonBlocking(session_);
@@ -391,12 +435,15 @@ void SftpThread::AuthenticateImpl()
     thread_ = NULL;
     listener_->OnErrorOccurred(request_id_, msg);
   }
+  fprintf(stderr, "SftpThread::AuthenticateImpl End\n");
 }
 
 void SftpThread::AuthenticateUser() throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::AuthenticateUser\n");
   char *user_auth_list;
   user_auth_list = libssh2_userauth_list(session_, username_.c_str(), strlen(username_.c_str()));
+  fprintf(stderr, "SftpThread::AuthenticateUser auth_list=%s\n", user_auth_list);
   if (auth_type_ == "password") {
     if (strstr(user_auth_list, auth_type_.c_str())) {
       AuthenticateByPassword(session_, username_, password_);
@@ -425,10 +472,12 @@ void SftpThread::AuthenticateByPassword(LIBSSH2_SESSION *session,
                                         const std::string &password)
   throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::AuthenticateByPassword\n");
   int rc = -1;
   while((rc = libssh2_userauth_password(session,
                                         username.c_str(),
                                         password.c_str())) == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "SftpThread::AuthenticateByPassword rc=%d\n", rc);
   if (rc) {
     THROW_COMMUNICATION_EXCEPTION("Authentication by password failed", rc);
   }
@@ -439,11 +488,13 @@ void SftpThread::AuthenticateByKeyboardInteractive(LIBSSH2_SESSION *session,
                                                    const std::string &password)
   throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::AuthenticateByKeyboardInteractive\n");
   int rc = -1;
   auto callback = &SftpThread::KeyboardCallback;
   while((rc = libssh2_userauth_keyboard_interactive(session,
                                                     username.c_str(),
                                                     callback)) == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "SftpThread::AuthenticateByKeyboardInteractive rc=%d\n", rc);
   if (rc) {
     THROW_COMMUNICATION_EXCEPTION("Authentication by keyboard-interactive failed", rc);
   }
@@ -478,6 +529,8 @@ void SftpThread::AuthenticateByPublicKey(LIBSSH2_SESSION *session,
                                          const std::string &private_key)
   throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::AuthenticateByPublicKey\n");
+
   int rc = -1;
   size_t len;
 
@@ -497,6 +550,7 @@ void SftpThread::AuthenticateByPublicKey(LIBSSH2_SESSION *session,
                                                   NULL,
                                                   "/sftp/private_key",
                                                   password.c_str())) == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "SftpThread::AuthenticateByPublicKey rc=%d\n", rc);
   if (rc) {
     char *err_msg;
     libssh2_session_last_error(session, &err_msg, NULL, 0);
@@ -506,15 +560,19 @@ void SftpThread::AuthenticateByPublicKey(LIBSSH2_SESSION *session,
 
 void SftpThread::SetNonBlocking(LIBSSH2_SESSION *session)
 {
+  fprintf(stderr, "SftpThread::SetNonBlocking\n");
   libssh2_session_set_blocking(session, 0);
+  fprintf(stderr, "SftpThread::SetNonBlocking End\n");
 }
 
 LIBSSH2_SFTP* SftpThread::OpenSftpSession(LIBSSH2_SESSION *session) throw(CommunicationException)
 {
+  fprintf(stderr, "SftpThread::OpenSftpSession\n");
   LIBSSH2_SFTP *sftp_session = NULL;
   do {
     sftp_session = libssh2_sftp_init(session);
     int last_error_no = libssh2_session_last_errno(session);
+    fprintf(stderr, "SftpThread::OpenSftpSession errno=%d\n", last_error_no);
     if (!sftp_session) {
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(server_sock_, session);
@@ -523,6 +581,7 @@ LIBSSH2_SFTP* SftpThread::OpenSftpSession(LIBSSH2_SESSION *session) throw(Commun
       }
     }
   } while (!sftp_session);
+  fprintf(stderr, "SftpThread::OpenSftpSession End\n");
   return sftp_session;
 }
 
@@ -553,6 +612,7 @@ int SftpThread::WaitSocket(int socket_fd, LIBSSH2_SESSION *session)
 
 void SftpThread::CloseSession(LIBSSH2_SESSION *session)
 {
+  fprintf(stderr, "SftpThread::CloseSession\n");
   if (session) {
     int rc = -1;
     do {
@@ -561,6 +621,7 @@ void SftpThread::CloseSession(LIBSSH2_SESSION *session)
         WaitSocket(server_sock_, session);
       }
     } while (rc == LIBSSH2_ERROR_EAGAIN);
+    fprintf(stderr, "SftpThread::CloseSession 1 rc=%d\n", rc);
     if (rc < 0) {
       THROW_COMMUNICATION_EXCEPTION("Disconnecting SSH2 session failed", rc);
     }
@@ -570,6 +631,7 @@ void SftpThread::CloseSession(LIBSSH2_SESSION *session)
         WaitSocket(server_sock_, session);
       }
     } while (rc == LIBSSH2_ERROR_EAGAIN);
+    fprintf(stderr, "SftpThread::CloseSession 2 rc=%d\n", rc);
     if (rc < 0) {
       THROW_COMMUNICATION_EXCEPTION("Free SSH2 session failed", rc);
     }
@@ -578,6 +640,7 @@ void SftpThread::CloseSession(LIBSSH2_SESSION *session)
 
 void SftpThread::CloseSftpSession(LIBSSH2_SFTP *sftp_session)
 {
+  fprintf(stderr, "SftpThread::CloseSftpSession\n");
   if (sftp_session) {
     int rc = -1;
     do {
@@ -586,6 +649,7 @@ void SftpThread::CloseSftpSession(LIBSSH2_SFTP *sftp_session)
         WaitSocket(server_sock_, session_);
       }
     } while (rc == LIBSSH2_ERROR_EAGAIN);
+    fprintf(stderr, "SftpThread::CloseSftpSession rc=%d\n", rc);
     if (rc < 0) {
       THROW_COMMUNICATION_EXCEPTION("Closing SFTP session failed", rc);
     }
@@ -601,6 +665,7 @@ void* SftpThread::StartClose(void *arg)
 
 void SftpThread::CloseImpl()
 {
+  fprintf(stderr, "SftpThread::CloseImpl\n");
   CloseSftpSession(sftp_session_);
   CloseSession(session_);
   close(server_sock_);

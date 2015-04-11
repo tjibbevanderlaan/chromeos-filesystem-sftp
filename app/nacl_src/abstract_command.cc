@@ -1,4 +1,5 @@
 #include <sys/select.h>
+#include <cstdio>
 
 #include "abstract_command.h"
 
@@ -13,10 +14,12 @@ AbstractCommand::AbstractCommand(LIBSSH2_SESSION *session,
     listener_(listener),
     request_id_(request_id)
 {
+  fprintf(stderr, "AbstractCommand::AbstractCommand\n");
 }
 
 AbstractCommand::~AbstractCommand()
 {
+  fprintf(stderr, "AbstractCommand::~AbstractCommand\n");
 }
 
 LIBSSH2_SESSION* AbstractCommand::GetSession()
@@ -72,10 +75,12 @@ LIBSSH2_SFTP_HANDLE* AbstractCommand::OpenFile(const std::string path,
                                                const int mode)
   throw(CommunicationException)
 {
+  fprintf(stderr, "AbstractCommand::OpenFile\n");
   LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
   do {
     sftp_handle = libssh2_sftp_open(sftp_session_, path.c_str(), flags, mode);
     int last_error_no = libssh2_session_last_errno(session_);
+    fprintf(stderr, "AbstractCommand::OpenFile errno=%d\n", last_error_no);
     if (!sftp_handle) {
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(server_sock_, session_);
@@ -84,13 +89,17 @@ LIBSSH2_SFTP_HANDLE* AbstractCommand::OpenFile(const std::string path,
       }
     }
   } while (!sftp_handle);
+  fprintf(stderr, "AbstractCommand::OpenFile End\n");
   return sftp_handle;
 }
 
 void AbstractCommand::CloseSftpHandle(LIBSSH2_SFTP_HANDLE *sftp_handle)
   throw(CommunicationException)
 {
+  fprintf(stderr, "AbstractCommand::CloseSftpHandle\n");
   if (sftp_handle) {
     libssh2_sftp_close_handle(sftp_handle);
+    fprintf(stderr, "AbstractCommand::CloseSftpHandle closing completed\n");
   }
+  fprintf(stderr, "AbstractCommand::CloseSftpHandle End\n");
 }

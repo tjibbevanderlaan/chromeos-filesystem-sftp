@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "make_directory_command.h"
 
 MakeDirectoryCommand::MakeDirectoryCommand(SftpEventListener *listener,
@@ -9,10 +11,12 @@ MakeDirectoryCommand::MakeDirectoryCommand(SftpEventListener *listener,
   : AbstractCommand(session, sftp_session, server_sock, listener, request_id),
     path_(path)
 {
+  fprintf(stderr, "MakeDirectoryCommand::MakeDirectoryCommand\n");
 }
 
 MakeDirectoryCommand::~MakeDirectoryCommand()
 {
+  fprintf(stderr, "MakeDirectoryCommand::~MakeDirectoryCommand\n");
 }
 
 void* MakeDirectoryCommand::Start(void *arg)
@@ -24,6 +28,7 @@ void* MakeDirectoryCommand::Start(void *arg)
 
 void MakeDirectoryCommand::Execute()
 {
+  fprintf(stderr, "MakeDirectoryCommand::Execute\n");
   try {
     Mkdir(path_);
     GetListener()->OnMakeDirectoryFinished(GetRequestID());
@@ -32,11 +37,13 @@ void MakeDirectoryCommand::Execute()
     msg = e.toString();
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
+  fprintf(stderr, "MakeDirectoryCommand::Execute End\n");
   delete this;
 }
 
 void MakeDirectoryCommand::Mkdir(const std::string &path) throw(CommunicationException)
 {
+  fprintf(stderr, "MakeDirectoryCommand::Mkdir path=%s\n", path.c_str());
   int rc = -1;
   do {
     rc = libssh2_sftp_mkdir(GetSftpSession(), path.c_str(),
@@ -51,4 +58,5 @@ void MakeDirectoryCommand::Mkdir(const std::string &path) throw(CommunicationExc
       THROW_COMMUNICATION_EXCEPTION("Making directory failed", rc);
     }
   } while (rc == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "MakeDirectoryCommand::Mkdir End\n");
 }

@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "create_file_command.h"
 
 CreateFileCommand::CreateFileCommand(SftpEventListener *listener,
@@ -9,10 +11,12 @@ CreateFileCommand::CreateFileCommand(SftpEventListener *listener,
   : AbstractCommand(session, sftp_session, server_sock, listener, request_id),
     path_(path)
 {
+  fprintf(stderr, "CreateFileCommand::CreateFileCommand\n");
 }
 
 CreateFileCommand::~CreateFileCommand()
 {
+  fprintf(stderr, "CreateFileCommand::~CreateFileCommand\n");
 }
 
 void* CreateFileCommand::Start(void *arg)
@@ -24,6 +28,7 @@ void* CreateFileCommand::Start(void *arg)
 
 void CreateFileCommand::Execute()
 {
+  fprintf(stderr, "CreateFileCommand::Execute\n");
   try {
     CreateFile(path_);
     GetListener()->OnCreateFileFinished(GetRequestID());
@@ -32,12 +37,14 @@ void CreateFileCommand::Execute()
     msg = e.toString();
     GetListener()->OnErrorOccurred(GetRequestID(), msg);
   }
+  fprintf(stderr, "CreateFileCommand::Execute End\n");
   delete this;
 }
 
 void CreateFileCommand::CreateFile(const std::string &path)
   throw(CommunicationException)
 {
+  fprintf(stderr, "CreateFileCommand::CreateFile path=%s\n", path.c_str());
   LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
   do {
     sftp_handle = libssh2_sftp_open(GetSftpSession(),
@@ -47,6 +54,7 @@ void CreateFileCommand::CreateFile(const std::string &path)
                                     LIBSSH2_SFTP_S_IRGRP |
                                     LIBSSH2_SFTP_S_IROTH);
     int last_error_no = libssh2_session_last_errno(GetSession());
+    fprintf(stderr, "CreateFileCommand::CreateFile errno=%d\n", last_error_no);
     if (!sftp_handle) {
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(GetServerSock(), GetSession());
@@ -56,4 +64,5 @@ void CreateFileCommand::CreateFile(const std::string &path)
     }
   } while (!sftp_handle);
   CloseSftpHandle(sftp_handle);
+  fprintf(stderr, "CreateFileCommand::CreateFile End\n");
 }
