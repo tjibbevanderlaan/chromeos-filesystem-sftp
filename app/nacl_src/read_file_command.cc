@@ -40,7 +40,7 @@ void ReadFileCommand::Execute()
     LIBSSH2_SFTP_HANDLE *sftp_handle = OpenFile(path_, LIBSSH2_FXF_READ, 0);
     SeekAtOffsetOf(sftp_handle, offset_);
     ReadFileLengthOf(sftp_handle, length_, buffer_size_);
-    CloseSftpHandle(sftp_handle);
+    // The sftp_handle will beclosed in the ReadFileLengthOf() function.
   } catch(CommunicationException e) {
     std::string msg;
     msg = e.toString();
@@ -83,11 +83,13 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
       fprintf(stderr, "SFTP read buf_size: %d, rc:%d total:%llu length:%llu result_buf:%d\n", buf_size, rc, total, length, buf_offset);
       if (rc == 0) {
         fprintf(stderr, "Reading completed - 2\n");
+        CloseSftpHandle(sftp_handle);
         OnReadFile(result_buf, buf_offset, false);
         break;
       } else {
         if (length <= total) {
           fprintf(stderr, "Reading completed - 1\n");
+          CloseSftpHandle(sftp_handle);
           OnReadFile(result_buf, buf_offset, false);
           break;
         } else if (buf_offset >= (buffer_size * 1024)) {
