@@ -352,6 +352,8 @@ int SftpThread::ConnectToSshServer(const std::string &hostname, const int port)
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
   memcpy(&sin.sin_addr.s_addr, hostent->h_addr_list[0], hostent->h_length);
+  memset(&sin.sin_zero, 0, sizeof(sin.sin_zero));
+  fprintf(stderr, "SftpThread::ConnectToSshServer sockaddr_in ready\n");
   int rc;
   rc = connect(sock, (struct sockaddr*)(&sin), sizeof(struct sockaddr_in));
   fprintf(stderr, "SftpThread::ConnectToSshServer rc=%d\n", rc);
