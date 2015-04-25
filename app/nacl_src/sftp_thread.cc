@@ -20,11 +20,9 @@
 
 // --- public method
 
-SftpThread::SftpThread(pp::Instance *instance,
-                       SftpEventListener *listener,
+SftpThread::SftpThread(SftpEventListener *listener,
                        const int request_id)
   : thread_(NULL),
-    pp_instance_(instance),
     listener_(listener),
     request_id_(request_id),
     server_hostname_(""),

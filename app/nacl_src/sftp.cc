@@ -18,7 +18,6 @@ SftpInstance::SftpInstance(PP_Instance instance)
   fprintf(stderr, "SftpInstance::SftpInstance\n");
   nacl_io_init_ppapi(instance, pp::Module::Get()->get_browser_interface());
   mount("", "/sftp", "memfs", 0, "");
-  //sftp_thread_ = new SftpThread(this, this);
   fprintf(stderr, "SftpInstance::SftpInstance End\n");
 }
 
@@ -41,7 +40,7 @@ void SftpInstance::HandleMessage(const pp::Var &var_message)
 
   SftpThread *sftp_thread;
   if (sftp_thread_map_.find(request_id) == sftp_thread_map_.end()) {
-    sftp_thread = new SftpThread(this, this, request_id);
+    sftp_thread = new SftpThread(this, request_id);
     sftp_thread_map_[request_id] = sftp_thread;
     fprintf(stderr, "SftpInstance::HandleMessage SftpThread instance created\n");
   } else {

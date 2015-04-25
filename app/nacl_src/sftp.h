@@ -50,8 +50,6 @@ class SftpInstance : public pp::Instance, public SftpEventListener
   pp::Core *pp_core_;
   pp::CompletionCallbackFactory<SftpInstance> factory_;
 
-  SftpThread *sftp_thread_;
-
   int GetIntegerValueFromString(const std::string &source);
   libssh2_uint64_t GetUint64ValueFromString(const std::string &source);
   size_t GetSizeValueFromString(const std::string &source);
