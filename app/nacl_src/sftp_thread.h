@@ -18,8 +18,7 @@ class SftpThread
 {
  public:
 
-  explicit SftpThread(pp::Instance *instance,
-                      SftpEventListener *listener,
+  explicit SftpThread(SftpEventListener *listener,
                       const int request_id);
   virtual ~SftpThread();
 
@@ -50,7 +49,6 @@ class SftpThread
  private:
 
   pthread_t thread_;
-  pp::Instance *pp_instance_;
   SftpEventListener *listener_;
   int request_id_;
 
