@@ -39,5 +39,6 @@
     },
     "file_system_provider_capabilities": {
         "source": "network"
-    }
+    },
+    "minimum_chrome_version": "42"
 }
