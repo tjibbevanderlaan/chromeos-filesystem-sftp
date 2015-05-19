@@ -2,7 +2,7 @@
     "name": "__MSG_appName__",
     "description": "__MSG_appDescription__",
     "short_name": "__MSG_shortName__",
-    "version": "1.7.6",
+    "version": "1.7.7",
     "manifest_version": 2,
     "default_locale": "en",
     "permissions": [
@@ -36,5 +36,9 @@
                 "scripts/chromereload.js"
             ]
         }
-    }
+    },
+    "file_system_provider_capabilities": {
+        "source": "network"
+    },
+    "minimum_chrome_version": "42"
 }
