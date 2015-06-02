@@ -4,7 +4,7 @@
 
     var sftp_fs_ = new SftpFS();
 
-    chrome.app.runtime.onLaunched.addListener(function() {
+    var openWindow = function() {
         chrome.app.window.create("window.html", {
             outerBounds: {
                 width: 800,
@@ -12,7 +12,13 @@
             },
             resizable: false
         });
-    });
+    };
+
+    chrome.app.runtime.onLaunched.addListener(openWindow);
+
+    if (chrome.fileSystemProvider.onMountRequested) {
+        chrome.fileSystemProvider.onMountRequested.addListener(openWindow);
+    }
 
     var doMount = function(request, sendResponse) {
         sftp_fs_.checkAlreadyMounted(request.serverName, request.serverPort, request.username, function(exists) {
