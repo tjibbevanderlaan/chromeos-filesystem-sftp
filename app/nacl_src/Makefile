@@ -5,6 +5,14 @@
 # GNU Makefile based on shared rules provided by the Native Client SDK.
 # See README.Makefiles for more details.
 
+UNAME = ${shell uname}
+ifeq ($(UNAME),Linux)
+  PFNAME = linux
+endif
+ifeq ($(UNAME),Darwin)
+  PFNAME = mac
+endif
+
 VALID_TOOLCHAINS := clang-newlib
 
 NACL_SDK_ROOT ?= $(abspath $(CURDIR)/../..)
@@ -43,14 +51,14 @@ ifneq (,$(or $(findstring pnacl,$(TOOLCHAIN)),$(findstring Release,$(CONFIG))))
   $(eval $(call LINK_RULE,$(TARGET)_unstripped,$(SOURCES),$(LIBS),$(DEPS)))
   $(eval $(call STRIP_RULE,$(TARGET),$(TARGET)_unstripped))
   ARCHES = x86_32
-  LDFLAGS = "-L$(NACL_SDK_ROOT)/toolchain/mac_pnacl/i686-nacl/usr/lib"
+  LDFLAGS = "-L$(NACL_SDK_ROOT)/toolchain/$(PFNAME)_pnacl/i686-nacl/usr/lib"
   $(eval $(call LINK_RULE,$(TARGET)_unstripped,$(SOURCES),$(LIBS),$(DEPS)))
   $(eval $(call STRIP_RULE,$(TARGET),$(TARGET)_unstripped))
 else
   ARCHES = x86_64 arm
   $(eval $(call LINK_RULE,$(TARGET),$(SOURCES),$(LIBS),$(DEPS)))
   ARCHES = x86_32
-  LDFLAGS = "-L$(NACL_SDK_ROOT)/toolchain/mac_pnacl/i686-nacl/usr/lib"
+  LDFLAGS = "-L$(NACL_SDK_ROOT)/toolchain/$(PFNAME)_pnacl/i686-nacl/usr/lib"
   $(eval $(call LINK_RULE,$(TARGET),$(SOURCES),$(LIBS),$(DEPS)))
 endif
 
