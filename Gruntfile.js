@@ -204,7 +204,8 @@ module.exports = function (grunt) {
                     'cd <%= config.app %>/nacl_src',
                     'make CONFIG=Release',
                     'cd ../..'
-                ].join(';')
+                ].join(';'),
+                failOnError: true
             }
         },
         vulcanize: {
