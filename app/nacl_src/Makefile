@@ -10,7 +10,7 @@ VALID_TOOLCHAINS := clang-newlib
 NACL_SDK_ROOT ?= $(abspath $(CURDIR)/../..)
 OUTBASE = ..
 
-include $(NACL_SDK_ROOT)/tools/common.m
+include $(NACL_SDK_ROOT)/tools/common.mk
 
 TARGET = sftp
 
