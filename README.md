@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/yoichiro/chromeos-filesystem-sftp/badges/gpa.svg)](https://codeclimate.com/github/yoichiro/chromeos-filesystem-sftp)
+
 # SFTP File System
 
 SFTP File System provides you an ability to access to a SFTP server directly from the Files app.
