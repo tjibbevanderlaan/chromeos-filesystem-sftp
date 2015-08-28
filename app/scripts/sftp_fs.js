@@ -118,7 +118,7 @@
         if (Number(exitStatus) !== 0) {
             // doUnmount.call(this, sftpClient, 999999, function() {
             doUnmount.call(this, sftpClient, 0, function() {
-                chrome.notifications.create("", {
+                chrome.notifications.create("crash", {
                     type: "basic",
                     title: "SFTP File System",
                     message: "The NaCl module crashed. Unmounted.",
@@ -555,7 +555,7 @@
                         callback(options, successCallback, errorCallback);
                     }.bind(this), function(reason) {
                         console.log("resume failed: " + reason);
-                        chrome.notifications.create("", {
+                        chrome.notifications.create("connection_fail", {
                             type: "basic",
                             title: "SFTP File System",
                             message: "Resuming connection failed. Unmount.",
