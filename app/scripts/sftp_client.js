@@ -350,7 +350,7 @@
     };
 
     var showNotification = function(message) {
-        chrome.notifications.create("", {
+        chrome.notifications.create(message, {
             type: "basic",
             title: "SFTP File System",
             message: message,
