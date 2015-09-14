@@ -6,12 +6,14 @@ body {
   font-family: Helvetica, Arial, sans-serif;
   margin: 0px;
   padding: 0px;
+  font-size: 16px;
+  line-height: 14px;
 }
 
 .list {
   position: relative;
   width: 230px;
-  height: 667px;
+  height: 517px;
   margin-right: 20px;
   float: left;
   background-color: #eee;
@@ -66,4 +68,16 @@ paper-item {
 core-menu {
   margin: 0;
   overflow-y: auto;
+}
+
+core-toolbar {
+  background-color: #2298f2;
+}
+
+core-toolbar paper-icon-button {
+  color: white;
+}
+
+div.fieldContainer {
+  width: 500px;
 }
