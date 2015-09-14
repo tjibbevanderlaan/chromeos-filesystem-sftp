@@ -43,19 +43,23 @@
     <h2 data-message="mountHeader"></h2>
 
     <form>
-      <paper-input floatinglabel type="text" id="serverName" data-message="serverName"></paper-input>
-      <paper-input-decorator data-message="serverPort" floatingLabel>
-        <input is="core-input" id="serverPort" type="number" value="22">
-      </paper-input-decorator>
+      <div layout horizontal class="fieldContainer">
+        <paper-input floatinglabel type="text" id="serverName" data-message="serverName"></paper-input>
+        <paper-input-decorator data-message="serverPort" floatingLabel>
+          <input is="core-input" id="serverPort" type="number" value="22">
+        </paper-input-decorator>
+      </div>
       <paper-radio-group id="authType" selected="password">
         <paper-radio-button id="authTypePassword" name="password" data-message="authTypePassword"></paper-radio-button>
         <paper-radio-button id="authTypeKeyboardInteractive" name="keyboard-interactive" data-message="authTypeKeyboardInteractive"></paper-radio-button>
         <paper-radio-button id="authTypePublickey" name="publickey" data-message="authTypePublicKey"></paper-radio-button>
       </paper-radio-group>
-      <paper-input floatinglabel type="text" id="username" data-message="username"></paper-input>
-      <paper-input-decorator data-message="password" floatingLabel>
-        <input is="core-input" id="password" type="password">
-      </paper-input-decorator>
+      <div layout horizontal class="fieldContainer">
+        <paper-input floatinglabel type="text" id="username" data-message="username"></paper-input>
+        <paper-input-decorator data-message="password" floatingLabel>
+          <input is="core-input" id="password" type="password">
+        </paper-input-decorator>
+      </div>
       <paper-input-decorator id="privatekeyDecorator" data-message="privateKey" floatingLabel disabled>
         <paper-autogrow-textarea rows="3" maxRows="3">
           <textarea id="privatekey" disabled></textarea>
