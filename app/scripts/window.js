@@ -5,6 +5,24 @@
     var onLoad = function() {
         loadKeptCredentials();
         assignEventHandlers();
+        showSeasonImage();
+    };
+
+    var showSeasonImage = function() {
+        var today = new Date();
+        var month = today.getMonth() + 1;
+        var date = today.getDate();
+        // Xmas
+        if (month === 12 && (1 <= date && date <= 25)) {
+            var img = document.createElement("img");
+            img.src = "images/xmas.png";
+            img.classList.add("season");
+            var logo = document.querySelector("#logo");
+            img.style.top = logo.getBoundingClientRect().top + "px";
+            img.style.left = (logo.getBoundingClientRect().left + 24) + "px";
+            var body = document.querySelector("body");
+            body.appendChild(img);
+        }
     };
 
     var assignEventHandlers = function() {

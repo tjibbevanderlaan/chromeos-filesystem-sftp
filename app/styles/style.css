@@ -81,3 +81,19 @@ core-toolbar paper-icon-button {
 div.fieldContainer {
   width: 500px;
 }
+
+#logo {
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
+}
+
+img.season {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+}
+
+div.header {
+  margin-top: 5px;
+}

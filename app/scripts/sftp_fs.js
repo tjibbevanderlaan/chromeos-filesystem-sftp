@@ -486,13 +486,14 @@
             function() {
                 var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
                 console.log(fileSystemId);
+                delete this.sftpClientMap_[fileSystemId];
+                deleteTaskQueue.call(this, fileSystemId);
+                deleteMetadataCache.call(this, fileSystemId);
+                successCallback();
                 chrome.fileSystemProvider.unmount({
                     fileSystemId: fileSystemId
                 }, function() {
-                    delete this.sftpClientMap_[fileSystemId];
-                    deleteTaskQueue.call(this, fileSystemId);
-                    deleteMetadataCache.call(this, fileSystemId);
-                    successCallback();
+                    // N/A
                 }.bind(this));
             }.bind(this));
     };
