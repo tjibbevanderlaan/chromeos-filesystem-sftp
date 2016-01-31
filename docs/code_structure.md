@@ -49,7 +49,9 @@ This HTML elements consists of Polymer components. Each click event is handled b
 
 ## JavaScript
 
-TBD
+This software consists of some JavaScript files. The abstract structure is the following:
+
+![code_structure_1.png](https://raw.githubusercontent.com/yoichiro/chromeos-filesystem-sftp/master/docs/code_structure_1.png)
 
 ### [/app/scripts/window.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/window.js)
 
