@@ -55,7 +55,13 @@ This software consists of some JavaScript files. The abstract structure is the f
 
 ### [/app/scripts/window.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/window.js)
 
-TBD
+This window.js file is in charge of handling each click event fired on the window.html. For instance, there are the events below:
+
+* Mount button click event
+* Keep button click event
+* Setting button click event
+
+Each event handler is assigned by the assignEventHandlers() function.
 
 ### [/app/scripts/background.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/background.js)
 
