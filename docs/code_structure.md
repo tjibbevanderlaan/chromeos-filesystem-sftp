@@ -41,7 +41,11 @@ This software is using [bower](http://bower.io/) to manage packages. This softwa
 
 ### [/app/window.html](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/window.html)
 
-TBD
+This HTML file provides a screen to fill in a connection information. The connection information form consists of server hostname, the port number, user name, authentication type, user password and etc. When users pushes the "KEEP" button, the connection information the user filled in is stored the shared storage with chrome.storage.sync API. All stored information are dislayed on the left pane.
+
+This window.html file has two dialogs. One is to dislay and confirm fingerprints. This software has an ability to keep each fingerprints which a connected server was returned. Users always can know all fingerprints on this dialog. Another one is to configure a setting. If the user wants to store the entered password, the user can turn on the setting on this dialog.
+
+This HTML elements consists of Polymer components. Each click event is handled by the function defined by /app/scripts/window.js file.
 
 ## JavaScript
 
