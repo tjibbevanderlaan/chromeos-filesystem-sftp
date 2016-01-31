@@ -63,6 +63,21 @@ This window.js file is in charge of handling each click event fired on the windo
 
 Each event handler is assigned by the assignEventHandlers() function.
 
+#### Mount button click event
+
+When this event fired, the onClickedBtnMount() function is called. The window.js file doesn't have any process to mount the SFTP server. Instead, this event handler delegates the actual process to the background page represented by the background.js file. For instance, the onClickedBtnMount() function sends a message to the background page. The message has key/value pairs: type:"mount" and other information to login which was filled in each field by the user.
+
+Actually, the following interactions occurs:
+
+1. The window.js sends the message which has type:"mount" and other information needed to login to the background.js.
+1. If this is the first time to connect to the server, or if the previous fingerprint is not same as the new fingerprint, the background.js returns type:"confirmFingerprint" message.
+1. The window.js shows the dialog to display the new fingerprint to the user. The user has two options: "Accept" and "Decline". To continue to do the login process, the user needs to choose the "Accept".
+1. The window.js sends the message which has type:"accept".
+1. The background.js do login process. If it succeeded, the background.js returns the message which has "success".
+1. If the user chooses the "Decline", the window.js sends the message which has type:"decline". The background.js does the post-cleaning.
+
+The reason why the window.js shows the fingerprint to the user is a concern of security issues. That is, the user must confirm whether the server which the user is trying to connect is correct server or not by the fingerprint.
+
 ### [/app/scripts/background.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/background.js)
 
 TBD
