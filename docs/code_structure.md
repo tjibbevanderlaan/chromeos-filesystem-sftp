@@ -88,7 +88,9 @@ When this event fired, the onClickedBtnSettings() function is called. The functi
 
 ### [/app/scripts/background.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/background.js)
 
-TBD
+This is a background page script. Mainly, this script has a responsibility of launching the window when users want to mount the SFTP server. Also, this script has an ability to receive the message from the window.js script. When the message received, this script delegates the request of mounting the SFTP server to the [/app/scripts/sftp_fs.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/sftp_fs.js) script. Especially, this script has one SftpFS instance.
+
+This script can know what users want to mount the SFTP server by handling [chrome.fileSystemProvider.onMountRequested](https://developer.chrome.com/extensions/fileSystemProvider#event-onMountRequested) event. When this event fired, this script opens the window.html.
 
 ### [/app/scripts/sftp_fs.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/sftp_fs.js)
 
