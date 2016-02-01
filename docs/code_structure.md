@@ -78,6 +78,14 @@ Actually, the following interactions occurs:
 
 The reason why the window.js shows the fingerprint to the user is a concern of security issues. That is, the user must confirm whether the server which the user is trying to connect is correct server or not by the fingerprint.
 
+#### Keep button click event
+
+When this event fired, the onClickedBtnKeep() function is called. This function has an ability to store the entered information to login to the server to local storage with [chrome.storage.local](https://developer.chrome.com/apps/storage#property-local) API. If the same server name, port number and user name entry exists, it will be overwritten.
+
+#### Setting button click event
+
+When this event fired, the onClickedBtnSettings() function is called. The function opens the dialog to configure some settings. Currently, there is one setting item whether the password is stored or not.
+
 ### [/app/scripts/background.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/background.js)
 
 TBD
