@@ -110,7 +110,27 @@ This script provides an ability to keep metadata objects. As the result, whole p
 
 ### [/app/scripts/task_queue.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/task_queue.js)
 
-TBD
+This Class provides you an ability of a Queue Mechanism. You can register a new task, and the registered tasks will be executed sequentially.
+
+Actually, this is not a completed queue. Because, you must call shiftAndConsumeTask() function to execute a next task like "non-preemptive multitasking".
+
+* addTask() - Register a new task. If the queue size was empty at registering above, the registered task will be called after 10ms.
+* shiftAndConsumeTask() - You must call shiftAndConsumeTask() function to shift the executed task and to execute the next task.
+
+The standard usage is like the following:
+
+```js
+let taskQueue = new TaskQueue();
+...
+chrome.fileSystemProvider.on***Requested.addListener(
+  (options, successCallback, errorCallback) => { <- createEventHandler()
+    taskQueue.addTask(() => { <- prepare()
+      ...
+      taskQueue.shiftAndConsumeTask();
+    });
+  }
+);
+```
 
 ## Native Client Library Module
 
