@@ -257,7 +257,7 @@ JavaScript files described above don't have an ability to communicate to the SFT
 
 ### [/app/nacl_src/Makefile](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/Makefile)
 
-TBD
+This Makefile file is the extended file from common.mk file included in the NaCl SDK.
 
 ### [/app/nacl_src/sftp.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp.h),[sftp.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp.cc)
 
