@@ -123,9 +123,101 @@ This script defines a SftpFS class. The SftpFS instance is created by the backgr
 
 If users reboot ChromeOS and do such operations, the connection to the SFTP server will be disconnected. That is, after that, if the user starts the ChromeOS again, this software must reconnect to the SFTP server. First, the SftpClient instance is created after the connection is established. That is, if the SftpClient instance which has the information the user wants to connect to not exists in the sftpClientMap_, this software should connect to the SFTP server and should complete to do the mounting process. Each event handler checks this at first (See: createEventHandler() function). If sftpClient not found, the resume() function is called. The resume() function retrieve the client credential which was stored at the previous connecting, and reconnect to the SFTP server with the credential.
 
+You may understand this behavior by the code like below:
+
+```js
+chrome.fileSystemProvider.on***Requested.addListener(function(options, successCallback, errorCallback) {
+  var sftpClient = this.sftpClientMap_[options.fileSystemId];
+  if (!sftpClient) {
+    this.resume(options.fileSystemId, function(...) {
+      // Do something...
+    });
+  } else {
+    // Do something...
+  }
+});
+```
+
 ### [/app/scripts/sftp_client.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/sftp_client.js)
 
-TBD
+This script provides an ability to communicate with NaCl module. That is, this script cannot communicate with SFTP server directly. Instead, this script delegates each request to the NaCl module via [Messaging System](https://developer.chrome.com/native-client/devguide/coding/message-system).
+
+#### Creating NaCl module instance
+
+When users request mounting, the SftpFS instance creates a new SftpClient instance and calls SftpClient#setup() function. Actually, the setup() function creates the element like the following:
+
+```html
+<div>
+  <embed
+      width="0"
+      height="0"
+      src="clang-newlib/Release/sftp.nmf"
+      type="application/x-nacl">
+  </embed>
+</div>
+```
+
+When NaCl module returns some result, "message" event is fired from the embed element. In the setup() function, the "message" event handler is registered to the div element. Also, the "crash" event handler is registered to the embed element to handle if the NaCl module is crashed.
+
+#### Sending request to the NaCl module and receiving the result
+
+When some File System Provider event occurs, the SftpFS instance handles it and calls the related function of the SftpClient instance. Then, the SftpClient sends the request to the NaCl module. Especially, the function does the following process:
+
+1. Add an event listener to handle the result from the NaCl module.
+1. Send a request to the NaCl module.
+1. The event listener called at receiving the result from the NaCl module.
+1. Check whether the result has the expected contents or not.
+
+The abstract code will be like the following:
+
+```js
+SftpClient.prototype.doSomething = function(options) {
+  addNaClEventListener.call(this, options.requestId, function(event) {
+    if (checkEventMessage.call(this, event, "valid_result_name", options.onError)) {
+      var results = event.values;
+      // Do something...
+      options.onSuccess({...});
+    }
+  });
+  postMessageToNaClmodule.call(this, "command_name", options.requestId, [args1, ...]);
+};
+```
+
+The request parameter at senging a message to the NaCl module is JSON object like the following format:
+
+```json
+{
+  "command": "command_name",
+  "request": "request_id",
+  "args: [
+    args1, ...
+  ]
+}
+```
+
+Currently, the request_id value is always zero.
+
+#### Function and Message mapping
+
+Each function of the SftpClient and each command name sent to the NaCl module are mapped as like the following:
+
+| Function          | Command Name   | Expected Result Name |
+| ----------------- | -------------- | -------------------- |
+| connect()         | "connect"      | "fingerprint"        |
+| authenticate()    | "authenticate" | "authenticated"      |
+| close()           | "close"        | "shutdown"           |
+| getMetadata()     | "file"         | "metadataList"       |
+| readDirectory()   | "dir"          | "metadataList"       |
+| readFile()        | "read"         | "readFile"           |
+| createDirectory() | "mkdir"        | "mkdirSuccessful"    |
+| deleteFile()      | "delete"       | "deleteSuccessful"   |
+| moveEntry()       | "rename"       | "renameSuccessful"   |
+| createFile()      | "create"       | "createSuccessful"   |
+| truncate()        | "truncate"     | "truncateSuccessful" |
+| writeFile()       | "write"        | "writeSuccessful"    |
+| destroy()         | "destroy"      | None.                |
+
+
 
 ### [/app/scripts/metadata_cache.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/metadata_cache.js)
 
