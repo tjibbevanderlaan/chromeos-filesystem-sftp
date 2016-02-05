@@ -103,23 +103,25 @@ This script file is an implementation for [chrome.fileSystemProvider](https://de
 
 This script defines a SftpFS class. The SftpFS instance is created by the background.js. This script never communicate to SFTP server. Instead, this script delegates them to the sftp_client.js script. That is, this script has a responsibility of handling FSP events and proxying them to the sftp_client.js script.
 
-* mount() - SftpClient#setup(), SftpClient#connect()
-* allowToConnect() - SftpClient#authenticate()
-* denyToConnect() - SftpClient#destroy()
-* onUnmountRequested() - SftpClient#destroy()
-* onNaClModuleCrashed() - SftpClient#destroy()
-* onReadDirectoryRequested() - SftpClient#readDirectory()
-* onGetMetadataRequested() - SftpClient#getMetadata()
-* onOpenFileRequested() - SftpClient not called.
-* onReadFileRequested() - SftpClient#readFile()
-* onCloseFileRequested() - SftpClient not called.
-* onCreateDirectoryRequested() - SftpClient#createDirectory()
-* onDeleteEntryRequested() - SftpClient#deleteEntry()
-* onMoveEntryRequested() - SftpClient#moveEntry()
-* onCopyEntryRequested() - Currently, this event is not supported.
-* onWriteFileRequested() - SftpClient#writeFile()
-* onTruncateRequested() - SftpClient#truncate()
-* onCreateFileRequested() - SftpClient#createFile()
+| SftpFS Function              | SftpClient Function                     |
+| ---------------------------- | --------------------------------------- |
+| mount()                      | setup(), connect()                      |
+| allowToConnect()             | authenticate()                          |
+| denyToConnect()              | destroy()                               |
+| onUnmountRequested()         | destroy()                               |
+| onNaClModuleCrashed()        | destroy()                               |
+| onReadDirectoryRequested()   | readDirectory()                         |
+| onGetMetadataRequested()     | getMetadata()                           |
+| onOpenFileRequested()        | SftpClient not called.                  |
+| onReadFileRequested()        | readFile()                              |
+| onCloseFileRequested()       | SftpClient not called.                  |
+| onCreateDirectoryRequested() | createDirectory()                       |
+| onDeleteEntryRequested()     | deleteEntry()                           |
+| onMoveEntryRequested()       | moveEntry()                             |
+| onCopyEntryRequested()       | Currently, this event is not supported. |
+| onWriteFileRequested()       | writeFile()                             |
+| onTruncateRequested()        | truncate()                              |
+| onCreateFileRequested()      | createFile()                            |
 
 If users reboot ChromeOS and do such operations, the connection to the SFTP server will be disconnected. That is, after that, if the user starts the ChromeOS again, this software must reconnect to the SFTP server. First, the SftpClient instance is created after the connection is established. That is, if the SftpClient instance which has the information the user wants to connect to not exists in the sftpClientMap_, this software should connect to the SFTP server and should complete to do the mounting process. Each event handler checks this at first (See: createEventHandler() function). If sftpClient not found, the resume() function is called. The resume() function retrieve the client credential which was stored at the previous connecting, and reconnect to the SFTP server with the credential.
 
