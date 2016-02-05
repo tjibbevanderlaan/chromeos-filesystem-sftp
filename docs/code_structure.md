@@ -217,8 +217,6 @@ Each function of the SftpClient and each command name sent to the NaCl module ar
 | writeFile()       | "write"        | "writeSuccessful"    |
 | destroy()         | "destroy"      | None.                |
 
-
-
 ### [/app/scripts/metadata_cache.js](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/scripts/metadata_cache.js)
 
 This script provides an ability to keep metadata objects. As the result, whole performance is increased because of reducing a network communication. Each metadata object is stored per each directory. That is, the cache key is a directory path.
@@ -253,7 +251,9 @@ chrome.fileSystemProvider.on***Requested.addListener(
 
 ## Native Client Library Module
 
-TBD
+JavaScript files described above don't have an ability to communicate to the SFTP server. Instead, the NaCl module has the ability. Especially, the NaCl module uses libssh2 C library to communicate to the SFTP server via SFTP protocol.
+
+![code_structure_2.png](https://raw.githubusercontent.com/yoichiro/chromeos-filesystem-sftp/master/docs/code_structure_2.png)
 
 ### [/app/nacl_src/Makefile](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/Makefile)
 
