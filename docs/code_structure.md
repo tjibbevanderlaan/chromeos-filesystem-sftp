@@ -281,7 +281,43 @@ When compiling for x86_32 binary, the NaCl SDK previous version had a bug. Thus,
 
 ### [/app/nacl_src/sftp.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp.h),[sftp.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp.cc)
 
-TBD
+The sftp.h and sftp.cc files have a responsibility to handle messages from JavaScript layer and to send the result to the JavaScript layer.
+
+#### Handling messages from JavaScript layer
+
+The sftp.h and sftp.cc files define two classes: "SftpModule" and "SftpInstance" required by the NaCl class library. The SftpModule class inherits [pp::Module](https://developer.chrome.com/native-client/pepper_stable/cpp/classpp_1_1_module) class. This class have an ability to create SftpInstance instance. This is simple.
+
+The SftpInstance class inherits [pp::Instance](https://developer.chrome.com/native-client/pepper_stable/cpp/classpp_1_1_instance) class. In this constructor, there are tow initializing processes:
+
+* To use [nacl_io](https://developer.chrome.com/native-client/devguide/coding/nacl_io), calls nacl_io_init_ppapi() function.
+* To authenticate with Private Key via libssh2, mounts "/sftp" memory filesystem. Because, libssh2 tries to load the private key from a file.
+
+This class really has an ability to treat Pepper API. Especially, this class provides [HandleMessage()](https://developer.chrome.com/native-client/pepper_stable/cpp/classpp_1_1_instance#a5dce8c8b36b1df7cfcc12e42397a35e8) function to handle messages from JavaScript layer. When the JavaScript layer sends a message to NaCl module, the HandleMessage() function called, and the message is passed as the argument.
+
+```cpp
+void SftpInstance::HandleMessage(const pp::Var &var_message)
+{
+  pp::VarDictionary dict(var_message);
+  std::string command = dtct.Get("command").AsString();
+  int request_id = GetIntegerValueFromString(dict.Get("request").AsString());
+  pp::VarArray args(dict.Get("args"));
+
+  SftpThread *sftp_thread = ...;
+
+  if (command == "connect") {
+    std::string server_hostname = args.Get(0).AsString();
+    int server_port = GetIntegerValueFromString(args.Get(1).AsString());
+    sftp_thread->ConnectAndHandshake(server_hostname, server_port);
+  } else if ... {
+    ...
+}
+```
+
+Actually, the message is [pp::VarDictionary](https://developer.chrome.com/native-client/pepper_stable/cpp/classpp_1_1_var_dictionary). Each message has "command", "request" and "args" values. The args value is [pp::VarArray](https://developer.chrome.com/native-client/pepper_stable/cpp/classpp_1_1_var_array). In the HandleMessage() function, this SftpInstance instance calls the related function of the SftpThread instance. That is, this HandleMessage() function is a message router.
+
+#### Sending a response to JavaScript layer
+
+
 
 ### [/app/nacl_src/sftp_thread.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_thread.h),[sftp_thread.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_thread.cc)
 
