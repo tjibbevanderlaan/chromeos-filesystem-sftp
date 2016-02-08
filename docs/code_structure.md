@@ -259,7 +259,25 @@ JavaScript files described above don't have an ability to communicate to the SFT
 
 ### [/app/nacl_src/Makefile](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/Makefile)
 
-This Makefile file is the extended file from common.mk file included in the NaCl SDK.
+This Makefile file is the extended file from common.mk file included in the NaCl SDK. Currently, this NaCl module is bult with clang-newlib only. Therefore, this Makefile defines the VALID_TOOLCHAINS variable as like the following:
+
+```Makefile
+VALID_TOOLCHAINS := clang-newlib
+```
+
+This NaCl module was written by C++. Especially, C++11 was applied. That is, CFLAGS variable is:
+
+```Makefile
+CFLAGS = -Wall -std=gnu++11
+```
+
+Also, this software is using "libssh2", "NaCl IO", "Pepper API" and "Pthread". Therefore, This Makefile defines the LIBS variable as the following:
+
+```Makefile
+LIBS = ssh2 crypto nacl_io ppapi_cpp ppapi pthread
+```
+
+When compiling for x86_32 binary, the NaCl SDK previous version had a bug. Thus, this Makefile specifies the LDFLAGS variable at the x86_32.
 
 ### [/app/nacl_src/sftp.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp.h),[sftp.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp.cc)
 
