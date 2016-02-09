@@ -317,7 +317,54 @@ Actually, the message is [pp::VarDictionary](https://developer.chrome.com/native
 
 #### Sending a response to JavaScript layer
 
+The NaCl module has to send the response to the JavaScript layer. This SftpInstance class implements SftpEventListener interface class defined by sftp_event_listener.h file. Each request is sent to each command class. The command class sends the response to the SftpInstance instance via the SftpEventListener interface.
 
+```cpp
+void FooCommand::Execute()
+{
+  std::string response = ... // Do something
+  SftpEventListener *listener = GetListener();
+  listener->OnFooFinished(GetRequestID(), response);
+}
+```
+
+The listener above is the SftpInstance instance. Actually, each command is executed on a thread which is not the main thread. Basically, the response should be sent from the main thread. Therefore, each function of the SftpEventListener calls the function of the main thread to send the response to the JavaScript layer.
+
+```cpp
+void SftpInstance::OnFooFinished(const int request_id,
+                                 const std::string &response)
+{
+  SendResponse(request_id,
+               std::string("result_name"),
+               std::vector<std::string>{response});
+}
+
+void SftpInstance::SendResponse(const int request_id,
+                                const std::string &message,
+                                const std::vector<std::string> &values)
+{
+  pp::CompletionCallback callback =
+    factory_.NewCallback(&SftpInstance::SendResponseAsStringArray,
+                         request_id,
+                         message,
+                         values);
+  pp_core_->CallOnMainThread(0, callback);
+}
+
+void SftpInstance::SendResponseAsStringArray(int32_t result,
+                                             const int request_id,
+                                             const std::string &message,
+                                             const std::vector<std::string> &values)
+{
+  pp::VarDictionary dict;
+  dict.Set(pp::Var("request"), ...);
+  dict.Set(pp::Var("message"), ...);
+  dict.Set(pp::Var("values"), ...);
+  PostMessage(dict);
+}
+```
+
+Especially, to call the function on the main thread, [pp::Core#CallOnMainThread](https://developer.chrome.com/native-client/pepper_stable/cpp/classpp_1_1_core#af20d1f92600f588bc74115fcbd17a1c7) is used.
 
 ### [/app/nacl_src/sftp_thread.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_thread.h),[sftp_thread.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_thread.cc)
 
