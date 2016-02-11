@@ -10,7 +10,7 @@ This document describes you code structure of this software. Mainly, I write dow
 * [/app/images](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/app/images) - This directory has some image files.
 * [/app/scripts](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/app/scripts) - There are some JavaScript files.
 * [/app/styles](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/app/styles) - There is one css style sheet definition file.
-* [/app/nacl_src](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/app/nacl_src) - This directory has some C++ code of NaCl module which is using libssh2 C library to communcate SSH2 Server with SFTP protocol.
+* [/app/nacl_src](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/app/nacl_src) - This directory has some C++ code of NaCl module which is using libssh2 C library to communicator SSH2 Server with SFTP protocol.
 * [/test](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/test) - Currently, all files are garbage...
 * [/docs](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/docs) - Currently, there is one image file which is referenced by the README.md file.
 * [/psd](https://github.com/yoichiro/chromeos-filesystem-sftp/tree/master/psd) - There are some image files.
@@ -41,9 +41,9 @@ This software is using [bower](http://bower.io/) to manage packages. This softwa
 
 ### [/app/window.html](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/window.html)
 
-This HTML file provides a screen to fill in a connection information. The connection information form consists of server hostname, the port number, user name, authentication type, user password and etc. When users pushes the "KEEP" button, the connection information the user filled in is stored the shared storage with chrome.storage.sync API. All stored information are dislayed on the left pane.
+This HTML file provides a screen to fill in a connection information. The connection information form consists of server host-name, the port number, user name, authentication type, user password and etc. When users pushes the "KEEP" button, the connection information the user filled in is stored the shared storage with chrome.storage.sync API. All stored information are displayed on the left pane.
 
-This window.html file has two dialogs. One is to dislay and confirm fingerprints. This software has an ability to keep each fingerprints which a connected server was returned. Users always can know all fingerprints on this dialog. Another one is to configure a setting. If the user wants to store the entered password, the user can turn on the setting on this dialog.
+This window.html file has two dialogs. One is to display and confirm fingerprints. This software has an ability to keep each fingerprints which a connected server was returned. Users always can know all fingerprints on this dialog. Another one is to configure a setting. If the user wants to store the entered password, the user can turn on the setting on this dialog.
 
 This HTML elements consists of Polymer components. Each click event is handled by the function defined by /app/scripts/window.js file.
 
@@ -65,22 +65,22 @@ Each event handler is assigned by the assignEventHandlers() function.
 
 #### Mount button click event
 
-When this event fired, the onClickedBtnMount() function is called. The window.js file doesn't have any process to mount the SFTP server. Instead, this event handler delegates the actual process to the background page represented by the background.js file. For instance, the onClickedBtnMount() function sends a message to the background page. The message has key/value pairs: type:"mount" and other information to login which was filled in each field by the user.
+When this event fired, the onClickedBtnMount() function is called. The window.js file doesn't have any process to mount the SFTP server. Instead, this event handler delegates the actual process to the background page represented by the background.js file. For instance, the onClickedBtnMount() function sends a message to the background page. The message has key/value pairs: type:"mount" and other information to log in which was filled in each field by the user.
 
 Actually, the following interactions occurs:
 
-1. The window.js sends the message which has type:"mount" and other information needed to login to the background.js.
+1. The window.js sends the message which has type:"mount" and other information needed to log in to the background.js.
 1. If this is the first time to connect to the server, or if the previous fingerprint is not same as the new fingerprint, the background.js returns type:"confirmFingerprint" message.
-1. The window.js shows the dialog to display the new fingerprint to the user. The user has two options: "Accept" and "Decline". To continue to do the login process, the user needs to choose the "Accept".
+1. The window.js shows the dialog to display the new fingerprint to the user. The user has two options: "Accept" and "Decline". To continue to do the log in process, the user needs to choose the "Accept".
 1. The window.js sends the message which has type:"accept".
-1. The background.js do login process. If it succeeded, the background.js returns the message which has "success".
+1. The background.js do log in process. If it succeeded, the background.js returns the message which has "success".
 1. If the user chooses the "Decline", the window.js sends the message which has type:"decline". The background.js does the post-cleaning.
 
 The reason why the window.js shows the fingerprint to the user is a concern of security issues. That is, the user must confirm whether the server which the user is trying to connect is correct server or not by the fingerprint.
 
 #### Keep button click event
 
-When this event fired, the onClickedBtnKeep() function is called. This function has an ability to store the entered information to login to the server to local storage with [chrome.storage.local](https://developer.chrome.com/apps/storage#property-local) API. If the same server name, port number and user name entry exists, it will be overwritten.
+When this event fired, the onClickedBtnKeep() function is called. This function has an ability to store the entered information to log in to the server to local storage with [chrome.storage.local](https://developer.chrome.com/apps/storage#property-local) API. If the same server name, port number and user name entry exists, it will be overwritten.
 
 #### Setting button click event
 
@@ -185,7 +185,7 @@ SftpClient.prototype.doSomething = function(options) {
 };
 ```
 
-The request parameter at senging a message to the NaCl module is JSON object like the following format:
+The request parameter at sending a message to the NaCl module is JSON object like the following format:
 
 ```json
 {
@@ -259,7 +259,7 @@ JavaScript files described above don't have an ability to communicate to the SFT
 
 ### [/app/nacl_src/Makefile](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/Makefile)
 
-This Makefile file is the extended file from common.mk file included in the NaCl SDK. Currently, this NaCl module is bult with clang-newlib only. Therefore, this Makefile defines the VALID_TOOLCHAINS variable as like the following:
+This Makefile file is the extended file from common.mk file included in the NaCl SDK. Currently, this NaCl module is built with clang-newlib only. Therefore, this Makefile defines the VALID_TOOLCHAINS variable as like the following:
 
 ```Makefile
 VALID_TOOLCHAINS := clang-newlib
@@ -368,7 +368,49 @@ Especially, to call the function on the main thread, [pp::Core#CallOnMainThread]
 
 ### [/app/nacl_src/sftp_thread.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_thread.h),[sftp_thread.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_thread.cc)
 
-TBD
+The sftp_thread.h and sftp_thread.cc files have a responsibility of the following:
+
+* Creating a new thread.
+* Establishing a connection and handshaking to the SFTP server.
+* Authenticating a user.
+* Delegating each request to each command class.
+
+As one important thing, we cannot use a socket communication with the nacl_io in the main thread. Therefore, another thread is necessary to use the nacl_io. The new thread is created by like the following:
+
+```cpp
+void SftpThread::DoSomething(const std::string message)
+{
+  FooCommand *command = new FooCommand(listener_,
+                                       server_sock_,
+                                       session_,
+                                       sftp_session_,
+                                       request_id_,
+                                       message);
+  pthread_t thread;
+  pthread_create(&thread,
+                 NULL,
+                 &FooCommand::Start,
+                 command);
+}
+```
+
+When we want to create a new thread to call the function in the SftpThread class, do like the following:
+
+```cpp
+void SftpThread::DoSomething(const std::string message)
+{
+  message_ = message; // Set it to the member field.
+  pthread_t thread;
+  pthread_create(&thread,
+                 NULL,
+                 &SftpThread::StartSomething,
+                 this);
+}
+```
+
+Next, when we want to mount the SFTP server, to communicate with the SFTP server, the SftpThread instance initializes the libssh2 library.
+
+
 
 ### [/app/nacl_src/sftp_event_listener.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_event_listener.h)
 
