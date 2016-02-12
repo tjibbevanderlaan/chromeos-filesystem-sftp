@@ -408,7 +408,17 @@ void SftpThread::DoSomething(const std::string message)
 }
 ```
 
-Next, when we want to mount the SFTP server, to communicate with the SFTP server, the SftpThread instance initializes the libssh2 library.
+When users request mounting, the ConnectAndHandshakeImpl() function is called. In the function, handshaking is done. For instance, there are the following processes:
+ 
+* If the session already exists, close the session.
+* Initialize libssh2 with calling [libssh2_init()](http://www.libssh2.org/libssh2_init.html).
+* Connect to the SFTP server with POSIX socket() and connect() functions.
+* Create libssh2 Session with [libssh2_session_init_ex()](http://www.libssh2.org/libssh2_session_init_ex.html).
+* Handshake the session with [libssh2_session_handshake()](http://www.libssh2.org/libssh2_session_handshake.html).
+* Get the fingerprint with [libssh2_hostkey_hash()](http://www.libssh2.org/libssh2_hostkey_hash.html).
+* Get the fingerprint algorithm with [libssh2_session_methods](http://www.libssh2.org/libssh2_session_methods.html).
+
+Then, the OnHandshakeFinished() of the SftpEventHandler interface is called from the ConnectAndHandshakeImpl() function with the fingerprint and the algorithm.
 
 
 
