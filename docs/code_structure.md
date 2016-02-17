@@ -452,7 +452,7 @@ Please see the SftpInstance section to know more detail for each function's beha
 
 ### [/app/nacl_src/communication_exception.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/communication_exception.h),[communication_exception.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/communication_exception.cc)
 
-TBD
+The communication_exception.h file defines the CommunicationException exception class. Mainly, this exception class is thrown in the case that some error occurs in each command class. In the most case, when this exception occurs, the OnErrorOccurred() function of the SftpEventListener interface is called to notify the error for the SftpInstance instance from each command instance.
 
 ### [/app/nacl_src/abstract_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/abstract_command.h),[abstract_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/abstract_command.cc)
 
