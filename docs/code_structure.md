@@ -418,7 +418,7 @@ When users request mounting, the ConnectAndHandshakeImpl() function is called. I
 * Get the fingerprint with [libssh2_hostkey_hash()](http://www.libssh2.org/libssh2_hostkey_hash.html).
 * Get the fingerprint algorithm with [libssh2_session_methods](http://www.libssh2.org/libssh2_session_methods.html).
 
-Then, the OnHandshakeFinished() of the SftpEventHandler interface is called from the ConnectAndHandshakeImpl() function with the fingerprint and the algorithm. After confirming the fingerprint by the user, this script starts the following authentication process (for instance, the AuthenticateImpl() function has the processes):
+Then, the OnHandshakeFinished() of the SftpEventListener interface is called from the ConnectAndHandshakeImpl() function with the fingerprint and the algorithm. After confirming the fingerprint by the user, this script starts the following authentication process (for instance, the AuthenticateImpl() function has the processes):
 
 * Get the authentication type list from the SFTP server with [libssh2_userauth_list()](http://www.libssh2.org/libssh2_userauth_list.html).
 * Check whether the authentication type which the user specified is included in the server's authentication type list. If not exists, an exception is thrown.
@@ -428,11 +428,27 @@ Then, the OnHandshakeFinished() of the SftpEventHandler interface is called from
 * After the authentication, turn on the non-blocking mode for the libssh2 with [libssh2_session_set_blocking()](http://www.libssh2.org/libssh2_session_set_blocking.html).
 * Create the libssh2 SFTP Session with [libssh2_sftp_init()](http://www.libssh2.org/libssh2_sftp_init.html).
 
-After the processes above, the OnAuthenticationFinished() function of the SftpEventHandler interface is called from the AuthenticateImpl() function.
+After the processes above, the OnAuthenticationFinished() function of the SftpEventListener interface is called from the AuthenticateImpl() function.
 
 ### [/app/nacl_src/sftp_event_listener.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/sftp_event_listener.h)
 
-TBD
+The sftp_event_listener.h file defines the SftpEventListener class. Actually, this SftpEventListener class is an abstract class. Therefore, all functions don't have any implementations. Instead, each function is implemented by the SftpInstance class.
+
+Each function is called by each command class. These mappings are:
+
+| Command class        | SftpEventListener function |
+| -------------------- | -------------------------- |
+| CreateFileCommand    | OnCreateFileFinished()     |
+| DeleteEntryCommand   | OnDeleteEntryFinished()    |
+| GetMetadataCommand   | OnMetadataListFetched()    |
+| MakeDirectoryCommand | OnMakeDirectoryFinished()  |
+| ReadDirectoryCommand | OnMetadataListFetched()    |
+| ReadFileCommand      | OnReadFile()               |
+| RenameEntryCommand   | OnRenameEntryFinished()    |
+| TruncateFileCommand  | OnTruncateFileFinished()   |
+| WriteFileCommand     | OnWriteFileFinished        |
+
+Please see the SftpInstance section to know more detail for each function's behavior.
 
 ### [/app/nacl_src/communication_exception.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/communication_exception.h),[communication_exception.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/communication_exception.cc)
 
