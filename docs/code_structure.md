@@ -456,7 +456,13 @@ The communication_exception.h file defines the CommunicationException exception 
 
 ### [/app/nacl_src/abstract_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/abstract_command.h),[abstract_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/abstract_command.cc)
 
-TBD
+The abstract_command.h file defines the AbstractCommand class. This class is a super class for all concrete command classes. This AbstractCommand class provides some features below for sub-classes:
+
+* WaitSocket() - Detect the direction of the SFTP session with [libssh2_session_block_directions()](http://www.libssh2.org/libssh2_session_block_directions.html), and do select() for the detected file descriptor.
+* OpenFile() - Open the specified file, and return the SFTP_HANDLE value. For instance, [libssh2_sftp_open()](http://www.libssh2.org/libssh2_sftp_open.html) is used to open the file.
+* CloseSftpHandle() - Close the SFTP_HANDLE value with [libssh2_sftp_close_handle()](http://www.libssh2.org/libssh2_sftp_close_handle.html).
+
+Also, some values. For example, the session value, SftpEventListener pointer value and etc.
 
 ### Command classes
 
