@@ -466,7 +466,25 @@ Also, some values. For example, the session value, SftpEventListener pointer val
 
 ### Command classes
 
-TBD
+Each behavior defines each command class. Their command instances are created by the SftpThread instance. The mapping of the command name sent from the JavaScript layer and the command class is:
+
+| Command Name   | SftpThread Function | Command Class        |
+| -------------- | ------------------- | -------------------- |
+| "file"         | GetMetadata()       | GetMetadataCommand   |
+| "dir"          | ReadDirectory()     | ReadDirectoryCommand |
+| "read"         | ReadFile()          | ReadFileCommand      |
+| "mkdir"        | MakeDirectory()     | MakeDirectoryCommand |
+| "delete"       | DeleteEntry()       | DeleteEntryCommand   |
+| "rename"       | RenameEntry()       | RenameEntryCommand   |
+| "create"       | CreateFile()        | CreateFileCommand    |
+| "truncate"     | TruncateFile()      | TruncateFileCommand  |
+| "write"        | WriteFile()         | WriteFileCommand     |
+
+All command classes inherit the AbstractCommand class. Also, All command classes have Start() and Execute() functions. That is, an entry point of each command is the Start() function, and the Execute() function is called from the new thread.
+
+
+ 
+ 
 
 ## Other
 
