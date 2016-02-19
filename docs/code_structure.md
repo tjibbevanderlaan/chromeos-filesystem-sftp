@@ -528,6 +528,24 @@ The make_directory_command.h file defines MakeDirectoryCommand class. This class
 
 * Call the [libssh2_sftp_mkdir()](http://www.libssh2.org/libssh2_sftp_mkdir.html) function to create a new directory. At the time, these flags are specified: LIBSSH2_SFTP_S_IRWXU, LIBSSH2_SFTP_S_IRGRP, LIBSSH2_SFTP_S_IXGRP, LIBSSH2_SFTP_S_IROTH, LIBSSH2_SFTP_S_IXOTH.
 
+#### [/app/nacl_src/read_directory_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/read_directory_command.h),[read_directory_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/read_directory_command.cc)
+
+The read_directory_command.h file defines ReadDirectoryCommand class. This class has the following behavior:
+
+* Open the specified directory with [libssh2_sftp_opendir()](http://www.libssh2.org/libssh2_sftp_opendir.html) function.
+* Read one entry information from the directory with [libssh2_sftp_readdir()](http://www.libssh2.org/libssh2_sftp_readdir.html) function.
+* Repeat calling the libsh2_sftp_readdir() function to get each entry information in the directory until the libssh2_sftp_readdir() function returns zero or negative value.
+
+Attribute values of each entry are:
+
+| Attribute Name   | Method                                                  |
+| ---------------- | ------------------------------------------------------- |
+| isDirectory      | LIBSSH2_SFTP_S_ISDIR and LIBSSH2_SFTP_S_ISREG macros.   |
+| size             | LIBSSH2_SFTP_ATTRIBUTES.fileSize value.                 |
+| modificationTime | LIBSSH2_SFTP_ATTRIBUTES.mtime value.                    |
+| name             | The 2nd argument of the libsh2_sftp_readdir() function. |
+
+
 
 ## Other
 
