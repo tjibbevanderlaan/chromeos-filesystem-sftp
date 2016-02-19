@@ -482,8 +482,13 @@ Each behavior defines each command class. Their command instances are created by
 
 All command classes inherit the AbstractCommand class. Also, All command classes have Start() and Execute() functions. That is, an entry point of each command is the Start() function, and the Execute() function is called from the new thread.
 
+Basically, command classes have some responsibilities like the following:
 
- 
+* Do required task with libssh2 functions.
+* Create a response.
+* Pass the response to the SftpEventListener function.
+
+An instance of each command class is created per receiving a request from the JavaScript layer. Therefore, needed parameters are passed to each constructor.
  
 
 ## Other
