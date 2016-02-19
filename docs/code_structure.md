@@ -522,6 +522,11 @@ Each attribute value is retrieved by:
 | modificationTime | LIBSSH2_SFTP_ATTRIBUTES.mtime value.    |
 | name             | The passed path string.                 |
 
+#### [/app/nacl_src/make_directory_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/make_directory_command.h),[make_directory_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/make_directory_command.cc)
+
+The make_directory_command.h file defines MakeDirectoryCommand class. This class has the following behavior:
+
+* Call the [libssh2_sftp_mkdir()](http://www.libssh2.org/libssh2_sftp_mkdir.html) function to create a new directory. At the time, these flags are specified: LIBSSH2_SFTP_S_IRWXU, LIBSSH2_SFTP_S_IRGRP, LIBSSH2_SFTP_S_IXGRP, LIBSSH2_SFTP_S_IROTH, LIBSSH2_SFTP_S_IXOTH.
 
 
 ## Other
