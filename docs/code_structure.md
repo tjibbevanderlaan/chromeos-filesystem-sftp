@@ -497,7 +497,14 @@ The create_file_command.h file defines CreateFileCommand class. This class has t
 * Open the specified file with [libssh2_sftp_open()](http://www.libssh2.org/libssh2_sftp_open.html). At this time, the used flags are: [LIBSSH2_FXF_CREAT, LIBSSH2_FXF_TRUNC, LIBSSH2_SFTP_S_IRUSR, LIBSSH2_SFTP_S_IWUSR, LIBSSH2_SFTP_S_IRGRP, LIBSSH2_SFTP_S_IROTH](http://www.libssh2.org/libssh2_sftp_open_ex.html). Actually, the file is created by this function call.
 * Close the SFTP_HANDLE value with CloseSftpHandle() function().
 
+#### [/app/nacl_src/delete_entry_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/delete_entry_command.h),[delete_entry_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/delete_entry_command.cc)
+     
+The delete_entry_command.h file defines DeleteEntryCommand class. This class has the following behavior:
 
+* Open the specified entry with OpenFile() function.
+* Get the entry type. That is, judge whether it is file or directory. To do this, [libssh2_sftp_fstat()](http://www.libssh2.org/libssh2_sftp_fstat.html) is used. The result is set into the LIBSSH2_SFTP_ATTRIBUTES struct. When passing the result to the LIBSSH2_SFTP_S_ISDIR macro, if the result is true, its entry is directory, otherwise, it is file.
+* If its entry is file, call the [libssh2_sftp_unlink()](http://www.libssh2.org/libssh2_sftp_unlink.html) function to delete the file.
+* If its entry is directory, call the [libssh2_sftp_rmdir()](http://www.libssh2.org/libssh2_sftp_rmdir.html) function to delete the directory and its children.
 
 ## Other
 
