@@ -506,6 +506,24 @@ The delete_entry_command.h file defines DeleteEntryCommand class. This class has
 * If its entry is file, call the [libssh2_sftp_unlink()](http://www.libssh2.org/libssh2_sftp_unlink.html) function to delete the file.
 * If its entry is directory, call the [libssh2_sftp_rmdir()](http://www.libssh2.org/libssh2_sftp_rmdir.html) function to delete the directory and its children.
 
+#### [/app/nacl_src/get_metadata_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/get_metadata_command.h),[get_metadata_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/get_metadata_command.cc)
+     
+The get_metadata_command.h file defines GetMetadataCommand class. This class has the following behavior:
+
+* Open the specified file to get the SFTP_HANDLE value.
+* Get the information of the file with [libssh2_sftp_fstat()](http://www.libssh2.org/libssh2_sftp_fstat.html) function.
+
+Each attribute value is retrieved by:
+
+| Attribute Name   | Method                                  |
+| ---------------- | --------------------------------------- |
+| isDirectory      | LIBSSH2_SFTP_S_ISDIR macro.             |
+| size             | LIBSSH2_SFTP_ATTRIBUTES.fileSize value. |
+| modificationTime | LIBSSH2_SFTP_ATTRIBUTES.mtime value.    |
+| name             | The passed path string.                 |
+
+
+
 ## Other
 
 ### [/app/manifest.json](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/manifest.json)
