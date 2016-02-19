@@ -489,7 +489,15 @@ Basically, command classes have some responsibilities like the following:
 * Pass the response to the SftpEventListener function.
 
 An instance of each command class is created per receiving a request from the JavaScript layer. Therefore, needed parameters are passed to each constructor.
- 
+
+#### [/app/nacl_src/create_file_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/create_file_command.h),[create_file_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/create_file_command.cc)
+
+The create_file_command.h file defines CreateFileCommand class. This class has the following behavior:
+
+* Open the specified file with [libssh2_sftp_open()](http://www.libssh2.org/libssh2_sftp_open.html). At this time, the used flags are: [LIBSSH2_FXF_CREAT, LIBSSH2_FXF_TRUNC, LIBSSH2_SFTP_S_IRUSR, LIBSSH2_SFTP_S_IWUSR, LIBSSH2_SFTP_S_IRGRP, LIBSSH2_SFTP_S_IROTH](http://www.libssh2.org/libssh2_sftp_open_ex.html). Actually, the file is created by this function call.
+* Close the SFTP_HANDLE value with CloseSftpHandle() function().
+
+
 
 ## Other
 
