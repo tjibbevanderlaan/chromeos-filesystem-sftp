@@ -554,7 +554,33 @@ The read_file_command.h file defines ReadFileCommand class. This class has the f
 * Read bytes from the file with [libssh2_sftp_read()](http://www.libssh2.org/libssh2_sftp_read.html). Actually, the max read byte length is 32KB at one time. The read bytes is sent to the JavaScript layer by calling the OnReadFile() function of the SftpEventListener.
 * Repeat reading the bytes from the file until the end of the file or reached to the specified read length. Last, close the SFTP_HANDLE_value with CloseSftpHandle() function.
 
+#### [/app/nacl_src/rename_entry_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/rename_entry_command.h),[rename_entry_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/rename_entry_command.cc)
 
+The rename_entry_command.h file defines RenameEntryCommand class. This class has the following behavior:
+
+* Rename the specified entry with [libssh2_sftp_rename()](http://www.libssh2.org/libssh2_sftp_rename.html) function.
+
+#### [/app/nacl_src/truncate_file_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/truncate_file_command.h),[truncate_file_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/truncate_file_command.cc)
+
+The truncate_file_command.h file defines TruncateFileCommand class. This class has the following behavior:
+
+* Open the specified file with the OpenFile() function.
+* Get the size of the file with [libssh2_sftp_fstat()](http://www.libssh2.org/libssh2_sftp_fstat.html). Actually, it is the LIBSSH2_SFTP_ATTRIBUTES.fileSize value.
+* Read the bytes of the file with [libssh2_sftp_read()](http://www.libssh2.org/libssh2_sftp_read.html) function. If the specified length is less than the actual file size, the read file size is the length. Otherwise, all bytes is read.
+* Close the SFTP_HANDLE value with CloseSftpHandle() function.
+* Reopen the file with OpenFile() function. At this time, these flasg are specified: LIBSSH2_FXF_WRITE, LIBSSH2_FXF_CREAT, LIBSSH2_FXF_TRUNC, LIBSSH2_SFTP_S_IRUSR, LIBSSH2_SFTP_S_IWUSR, LIBSSH2_SFTP_S_IRGRP, LIBSSH2_SFTP_S_IROTH.
+* Write the bytes which was already read against the new opened SFTP_HANDLE value with [libssh2_sftp_write()](http://www.libssh2.org/libssh2_sftp_write.html) function.
+* If the specified length is more than the original file size, append zero-values which the length is (the specified length - original size) with the libssh2_sftp_write() function.
+* Close the SFTP_HANDLE value with CloseSftpHandle() function.
+
+#### [/app/nacl_src/write_file_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/write_file_command.h),[write_file_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/write_file_command.cc)
+
+The write_file_command.h file defines WriteFileCommand class. This class has the following behavior:
+
+* Open the specified file with the OpenFile() function.
+* Move to the start position with [libssh2_sftp_seek64()](http://www.libssh2.org/libssh2_sftp_seek64.html) function.
+* Write the bytes with [libssh2_sftp_write()](http://www.libssh2.org/libssh2_sftp_write.html) function.
+* Close the SFTP_HANDLE value with CloseSftpHandle() function.
 
 ## Other
 
