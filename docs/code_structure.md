@@ -510,7 +510,7 @@ The delete_entry_command.h file defines DeleteEntryCommand class. This class has
      
 The get_metadata_command.h file defines GetMetadataCommand class. This class has the following behavior:
 
-* Open the specified file to get the SFTP_HANDLE value.
+* Open the specified file to get the SFTP_HANDLE value with OpenFile() function.
 * Get the information of the file with [libssh2_sftp_fstat()](http://www.libssh2.org/libssh2_sftp_fstat.html) function.
 
 Each attribute value is retrieved by:
@@ -544,6 +544,15 @@ Attribute values of each entry are:
 | size             | LIBSSH2_SFTP_ATTRIBUTES.fileSize value.                 |
 | modificationTime | LIBSSH2_SFTP_ATTRIBUTES.mtime value.                    |
 | name             | The 2nd argument of the libsh2_sftp_readdir() function. |
+
+#### [/app/nacl_src/read_file_command.h](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/read_file_command.h),[read_file_command.cc](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/app/nacl_src/read_file_command.cc)
+
+The read_file_command.h file defines ReadFileCommand class. This class has the following behavior:
+
+* Open the specified file to get the SFTP_HANDLE value with OpenFile() function.
+* Move the position to start reading the file with [libssh2_sftp_seek64()](http://www.libssh2.org/libssh2_sftp_seek64.html).
+* Read bytes from the file with [libssh2_sftp_read()](http://www.libssh2.org/libssh2_sftp_read.html). Actually, the max read byte length is 32KB at one time. The read bytes is sent to the JavaScript layer by calling the OnReadFile() function of the SftpEventListener.
+* Repeat reading the bytes from the file until the end of the file or reached to the specified read length. Last, close the SFTP_HANDLE_value with CloseSftpHandle() function.
 
 
 
