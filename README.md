@@ -109,4 +109,4 @@ $ grunt make
 ## License
 
 All files are licensed under the BSD license. See the LICENSE file for details.
-All original source code is Copyright 2015 Yoichiro Tanaka.
+All original source code is Copyright 2015-2016 Yoichiro Tanaka.
