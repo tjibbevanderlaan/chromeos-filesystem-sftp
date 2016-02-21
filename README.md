@@ -10,6 +10,10 @@ SFTP File System provides you an ability to access to a SFTP server directly fro
 
 <img src="https://raw.githubusercontent.com/yoichiro/chromeos-filesystem-sftp/master/docs/screenshot-1.png">
 
+## For Developers
+
+Please visit [Code Structure](https://github.com/yoichiro/chromeos-filesystem-sftp/blob/master/docs/code_structure.md) document, if you want to know the detail of this software.
+
 ## How to build
 
 Before building this, you have to install nacl-sdk and libssh2 from naclports.
