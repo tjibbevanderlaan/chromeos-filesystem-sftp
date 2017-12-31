@@ -5,101 +5,186 @@
 <head>
   <meta charset="UTF-8" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title data-message="mountHeader"></title>
 
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 
-  <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
-  <link rel="import" href="bower_components/paper-toast/paper-toast.html">
-  <link rel="import" href="bower_components/paper-button/paper-button.html">
-  <link rel="import" href="bower_components/paper-input/paper-input.html">
-  <link rel="import" href="bower_components/paper-radio-button/paper-radio-button.html">
-  <link rel="import" href="bower_components/paper-radio-group/paper-radio-group.html">
-  <link rel="import" href="bower_components/paper-input/paper-autogrow-textarea.html">
-  <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
-  <link rel="import" href="bower_components/paper-dialog/paper-action-dialog.html">
-  <link rel="import" href="bower_components/core-menu/core-menu.html">
-  <link rel="import" href="bower_components/paper-item/paper-item.html">
-  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
-  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
-
+  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
   <link rel="stylesheet" href="styles/style.css">
 </head>
 
-<body unresolved>
+<body>
   <paper-toast data-message="mountAttempt" id="toast-mount-attempt"></paper-toast>
   <paper-toast data-message="mountFail" id="toast-mount-fail"></paper-toast>
   <paper-toast data-message="mountSuccess" id="toast-mount-success"></paper-toast>
 
-  <div class="list" layout vertical>
-    <core-menu id="credentials" flex>
-    </core-menu>
-    <core-toolbar>
-      <paper-icon-button icon="settings" id="btnSettings"></paper-icon-button>
-    </core-toolbar>
-  </div>
+  <div class="container-fluid">
 
-  <div class="container">
-    <div layout horizontal class="header">
-      <img src="/images/48.png" id="logo" />
-      <h2 data-message="mountHeader"></h2>
+    <div class="list">
+      <div id="credentials">
+      </div>
+      <div class="toolbar">
+        <div id="btnSettings" class="glyphicon glyphicon-cog" aria-hidden="true"></div>
+      </div>
     </div>
 
-    <form>
-      <div layout horizontal class="fieldContainer">
-        <paper-input floatinglabel type="text" id="serverName" data-message="serverName"></paper-input>
-        <paper-input-decorator data-message="serverPort" floatingLabel>
-          <input is="core-input" id="serverPort" type="number" value="22">
-        </paper-input-decorator>
+    <div class="main">
+      <div class="row header">
+        <div class="col-xs-1">
+          <img src="/images/48.png" id="logo" />
+        </div>
+        <div class="col-xs-11">
+          <h2 data-message="mountHeader"></h2>
+        </div>
       </div>
-      <paper-radio-group id="authType" selected="password">
-        <paper-radio-button id="authTypePassword" name="password" data-message="authTypePassword"></paper-radio-button>
-        <paper-radio-button id="authTypeKeyboardInteractive" name="keyboard-interactive" data-message="authTypeKeyboardInteractive"></paper-radio-button>
-        <paper-radio-button id="authTypePublickey" name="publickey" data-message="authTypePublicKey"></paper-radio-button>
-      </paper-radio-group>
-      <div layout horizontal class="fieldContainer">
-        <paper-input floatinglabel type="text" id="username" data-message="username"></paper-input>
-        <paper-input-decorator data-message="password" floatingLabel>
-          <input is="core-input" id="password" type="password">
-        </paper-input-decorator>
-      </div>
-      <paper-input-decorator id="privatekeyDecorator" data-message="privateKey" floatingLabel disabled>
-        <paper-autogrow-textarea rows="3" maxRows="3">
-          <textarea id="privatekey" disabled></textarea>
-        </paper-autogrow-textarea>
-      </paper-input-decorator>
-      <paper-input floatinglabel type="text" id="mountPath" data-message="mountPath"></paper-input>
-      <div horizontal layout>
-        <paper-button raised id="btnMount" data-message="mount"></paper-button>
-        <paper-button raised id="btnKeep" data-message="keep"></paper-button>
-      </div>
-    </form>
+
+      <form id="mainForm">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label data-message="serverName"></label>
+              <input type="text" id="serverName" data-message="serverName" class="form-control" />
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label data-message="serverPort"></label>
+              <input type="number" id="serverPort" data-message="serverPort" class="form-control" value="22" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <label>Authentication Type</label>
+            <div class="radio">
+              <label class="radio-inline">
+                <input type="radio" name="authType" id="authTypePassword" value="password" checked> password
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="authType" id="authTypeKeyboardInteractive" value="keyboard-interactive"> keyboard-interactive
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="authType" id="authTypePublickey" value="publickey"> publickey
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label data-message="username"></label>
+              <input type="text" id="username" data-message="username" class="form-control" />
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label data-message="password"></label>
+              <input type="password" id="password" data-message="password" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label data-message="privateKey"></label>
+              <textarea id="privatekey" class="form-control" rows="3" data-message="privateKey" disabled></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label data-message="mountPath"></label>
+              <input type="text" id="mountPath" data-message="mountPath" class="form-control" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row buttons">
+          <div class="col-xs-6">
+            <button id="btnMount" class="btn btn-primary center-block" data-message="mount"></button>
+          </div>
+          <div class="col-xs-6">
+            <button id="btnKeep" class="btn btn-default center-block" data-message="keep"></button>
+          </div>
+        </div>
+      </form>
+    </div>
+
   </div>
 
-  <paper-action-dialog id="confirmFingerprintDialog" heading="Confirm fingerprint"
-      backdrop autoCloseDisabled layered="false" transition="core-transition-top">
-    <p>Current: <span id="algorithm"></span> - <span id="fingerprint"></span></p>
-    <p id="prev">Previous: <span id="prevAlgorithm"></span> - <span id="prevFingerprint"></span></p>
-    <paper-button affirmative id="btnDecline">Decline</paper-button>
-    <paper-button affirmative id="btnAccept">Accept</paper-button>
-    <input type="hidden" id="requestId" />
-    <input type="hidden" id="fileSystemId" />
-  </paper-action-dialog>
-
-  <paper-action-dialog id="settingsDialog" heading="Settings"
-      backdrop autoCloseDisabled layered="false" transition="core-transition-top">
-    <form>
-      <div layout horizontal>
-        <h3>Keep password</h3>
-        <paper-radio-group id="keepPassword">
-          <paper-radio-button id="keepPasswordYes" name="keepPasswordYes" data-message="keepPasswordYes"></paper-radio-button>
-          <paper-radio-button id="keepPasswordNo" name="keepPasswordNo" data-message="keepPasswordNo"></paper-radio-button>
-        </paper-radio-group>
+  <div class="modal fade" tabindex="-1" role="dialog" id="confirmFingerprintDialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-3">
+                  <label>Current</label>
+                </div>
+                <div class="col-xs-9">
+                  <p class="form-control-static">
+                    <span id="algorithm"></span> - <span id="fingerprint"></span>
+                  </p>
+                </div>
+              </div>
+              <div class="row" id="prev">
+                <div class="col-xs-3">
+                  <label>Previous</label>
+                </div>
+                <div class="col-xs-9">
+                  <p class="form-control-static">
+                    <span id="prevAlgorithm"></span> - <span id="prevFingerprint"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="btnDecline">Decline</button>
+          <button type="button" class="btn btn-primary" id="btnAccept">Accept</button>
+          <input type="hidden" id="requestId" />
+          <input type="hidden" id="fileSystemId" />
+        </div>
       </div>
-      <paper-button affirmative>Close</paper-button>
-    </form>
-  </paper-action-dialog>
+    </div>
+  </div>
 
+  <div class="modal fade" tabindex="-1" role="dialog" id="settingsDialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-4">
+                  <label>Keep Password</label>
+                </div>
+                <div class="col-xs-8">
+                  <div class="radio-inline">
+                    <input type="radio" id="keepPasswordYes" name="keepPassword" /> Yes
+                  </div>
+                  <div class="radio-inline">
+                    <input type="radio" id="keepPasswordNo" name="keepPassword" /> No
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script type="text/javascript" src="bower_components/jquery.toaster/jquery.toaster.js"></script>
   <script type="text/javascript" src="scripts/window.js"></script>
 
 </body>

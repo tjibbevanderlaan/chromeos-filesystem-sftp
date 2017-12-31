@@ -43,11 +43,11 @@
             onClickedBtnAccept(e);
         });
         var authTypePassword = document.querySelector("#authTypePassword");
-        authTypePassword.addEventListener("core-change", onChangeAuthType);
+        authTypePassword.addEventListener("click", onChangeAuthType);
         var authTypeKeyboardInteractive = document.querySelector("#authTypeKeyboardInteractive");
-        authTypeKeyboardInteractive.addEventListener("core-change", onChangeAuthType);
+        authTypeKeyboardInteractive.addEventListener("click", onChangeAuthType);
         var authTypePublickey = document.querySelector("#authTypePublickey");
-        authTypePublickey.addEventListener("core-change", onChangeAuthType);
+        authTypePublickey.addEventListener("click", onChangeAuthType);
         var password = document.querySelector("#password");
         password.addEventListener("change", function(e) {
             if (document.activeElement === this) {
@@ -60,23 +60,19 @@
             onClickedBtnSettings(e);
         });
         var keepPasswordYes = document.querySelector("#keepPasswordYes");
-        keepPasswordYes.addEventListener("core-change", onChangeKeepPassword);
+        keepPasswordYes.addEventListener("click", onChangeKeepPassword);
         var keepPasswordNo = document.querySelector("#keepPasswordNo");
-        keepPasswordNo.addEventListener("core-change", onChangeKeepPassword);
+        keepPasswordNo.addEventListener("click", onChangeKeepPassword);
     };
 
     var onChangeAuthType = function(evt) {
         console.log("onChangeAuthType");
-        evt.preventDefault();
         var publickey = document.querySelector("#authTypePublickey").checked;
-        var privatekeyDecorator = document.querySelector("#privatekeyDecorator");
         var privatekey = document.querySelector("#privatekey");
         if (publickey) {
             privatekey.removeAttribute("disabled");
-            privatekeyDecorator.removeAttribute("disabled");
         } else {
             privatekey.setAttribute("disabled", "true");
-            privatekeyDecorator.setAttribute("disabled", "true");
         }
     };
 
@@ -85,12 +81,13 @@
         var btnMount = document.querySelector("#btnMount");
         evt.preventDefault();
         btnMount.setAttribute("disabled", "true");
-        document.getElementById("toast-mount-attempt").show();
+        $.toaster({message: chrome.i18n.getMessage("mountAttempt")});
+        var authType = document.forms.mainForm.authType.value;
         var request = {
             type: "mount",
             serverName: document.querySelector("#serverName").value,
             serverPort: document.querySelector("#serverPort").value,
-            authType: document.querySelector("#authType").selected,
+            authType: authType,
             username: document.querySelector("#username").value,
             password: document.querySelector("#password").value,
             privateKey: document.querySelector("#privatekey").value,
@@ -98,7 +95,7 @@
         };
         chrome.runtime.sendMessage(request, function(response) {
             console.log(response);
-            if (response.type === "confirmFingerprint") {
+            if (response && response.type === "confirmFingerprint") {
                 var fingerprint = response.fingerprint;
                 var serverName = document.querySelector("#serverName").value;
                 var serverPort = document.querySelector("#serverPort").value;
@@ -120,14 +117,18 @@
                     } else {
                         prev.style.display = "none";
                     }
-                    document.querySelector("#confirmFingerprintDialog").toggle();
+                    $("#confirmFingerprintDialog").modal("show");
                 });
             } else {
-                var toast = document.getElementById("toast-mount-fail");
-                if (response.error) {
-                    toast.setAttribute("text", response.error);
+                var msg = {
+                  title: chrome.i18n.getMessage("mountFail"),
+                  priority: "danger",
+                  message: "Something wrong"
+                };
+                if (response && response.error) {
+                  msg.message = response.error;
                 }
-                toast.show();
+                $.toaster(msg);
                 btnMount.removeAttribute("disabled");
             }
         });
@@ -140,24 +141,28 @@
             fileSystemId: fileSystemId
         };
         chrome.runtime.sendMessage(request, function(response) {
-            if (response.success) {
+            if (response && response.success) {
                 storeFingerprint(
                     document.querySelector("#serverName").value,
                     document.querySelector("#serverPort").value,
                     document.querySelector("#algorithm").textContent,
                     document.querySelector("#fingerprint").textContent,
                     function() {
-                        document.getElementById("toast-mount-success").show();
+                        $.toaster({message: chrome.i18n.getMessage("mountSuccess")});
                         window.setTimeout(function() {
                             window.close();
                         }, 2000);
                     });
             } else {
-                var toast = document.getElementById("toast-mount-fail");
-                if (response.error) {
-                    toast.setAttribute("text", response.error);
+                var msg = {
+                  title: chrome.i18n.getMessage("mountFail"),
+                  priority: "danger",
+                  message: "Something wrong"
+                };
+                if (response && response.error) {
+                  msg.message = response.error;
                 }
-                toast.show();
+                $.toaster(msg);
                 var btnMount = document.querySelector("#btnMount");
                 btnMount.removeAttribute("disabled");
             }
@@ -199,20 +204,17 @@
             var textNode = null;
 
             switch(element.tagName.toLowerCase()) {
-            case "paper-button":
+            case "button":
                 textNode = document.createTextNode(messageText);
                 element.appendChild(textNode);
                 break;
-            case "paper-input":
-            case "paper-input-decorator":
-            case "paper-radio-button":
-                element.setAttribute("label", messageText);
-                break;
-            case "paper-toast":
-                element.setAttribute("text", messageText);
+            case "input":
+            case "textarea":
+                element.setAttribute("placeholder", messageText);
                 break;
             case "h2":
             case "title":
+            case "label":
                 textNode = document.createTextNode(messageText);
                 element.appendChild(textNode);
                 break;
@@ -222,13 +224,14 @@
 
     var onClickedBtnKeep = function(evt) {
         console.log("onClickedBtnKeep");
+        evt.preventDefault();
         chrome.storage.local.get("settings", function(items) {
             var settings = items.settings || {};
             var keepPassword = settings.keepPassword || "keepPasswordNo";
             keepPassword = (keepPassword === "keepPasswordYes");
+            var authType = document.forms.mainForm.authType.value;
             var serverName = document.querySelector("#serverName").value;
             var serverPort = document.querySelector("#serverPort").value;
-            var authType = document.querySelector("#authType").selected;
             var username = document.querySelector("#username").value;
             var privateKey = document.querySelector("#privatekey").value;
             var mountPath = document.querySelector("#mountPath").value;
@@ -272,43 +275,45 @@
     var appendCredentialToScreen = function(credential) {
         var credentials = document.querySelector("#credentials");
         var div = document.createElement("div");
-        div.setAttribute("horizontal", "true");
-        div.setAttribute("layout", "true");
-        div.setAttribute("center", "true");
-        var item = document.createElement("paper-item");
-        item.textContent = createKey(credential.serverName, credential.serverPort, credential.username);
-        item.addEventListener("click", (function(credential) {
-            return function(evt) {
-                setCredentialToForm(credential);
-            };
+        div.setAttribute("class", "credential");
+        var credentialInfo = document.createElement("div");
+        credentialInfo.setAttribute("class", "pull-left credential-info");
+        credentialInfo.textContent = createKey(credential.serverName, credential.serverPort, credential.username);
+        credentialInfo.addEventListener("click", (function(credential) {
+          return function(evt) {
+            setCredentialToForm(credential);
+          };
         })(credential));
-        div.appendChild(item);
-        var btnClose = document.createElement("paper-icon-button");
-        btnClose.setAttribute("icon", "close");
-        btnClose.setAttribute("title", "Delete");
+        div.appendChild(credentialInfo);
+        var divBtn = document.createElement("div");
+        divBtn.setAttribute("class", "pull-right");
+        var btnClose = document.createElement("div");
+        btnClose.setAttribute("class", "glyphicon glyphicon-remove btn-credential-remove");
+        btnClose.setAttribute("aria-hidden", "true");
         btnClose.addEventListener("click", (function(credential) {
-            return function(evt) {
-                setCredentialToForm(credential);
-                chrome.storage.local.get("keptCredentials", function(items) {
-                    var credentials = items.keptCredentials || {};
-                    var key = createKey(credential.serverName, credential.serverPort, credential.username);
-                    delete credentials[key];
-                    chrome.storage.local.set({
-                        keptCredentials: credentials
-                    }, function() {
-                        loadKeptCredentials();
-                    });
-                });
-            };
+          return function(evt) {
+            setCredentialToForm(credential);
+            chrome.storage.local.get("keptCredentials", function(items) {
+              var credentials = items.keptCredentials || {};
+              var key = createKey(credential.serverName, credential.serverPort, credential.username);
+              delete credentials[key];
+              chrome.storage.local.set({
+                keptCredentials: credentials
+              }, function() {
+                loadKeptCredentials();
+              });
+            });
+          };
         })(credential));
-        div.appendChild(btnClose);
+        divBtn.appendChild(btnClose);
+        div.appendChild(divBtn);
         credentials.appendChild(div);
     };
 
     var setCredentialToForm = function(credential) {
         document.querySelector("#serverName").value = credential.serverName;
         document.querySelector("#serverPort").value = credential.serverPort;
-        document.querySelector("#authType").selected = credential.authType;
+        document.forms.mainForm.authType.value = credential.authType;
         document.querySelector("#username").value = credential.username;
         document.querySelector("#privatekey").value = credential.privateKey;
         document.querySelector("#mountPath").value = credential.mountPath;
@@ -318,6 +323,7 @@
         } else {
             document.querySelector("#password").value = "";
         }
+        onChangeAuthType();
         document.querySelector("#password").focus();
     };
 
@@ -330,18 +336,22 @@
             var settings = items.settings || {};
             var keepPassword = settings.keepPassword || "keepPasswordNo";
             if (keepPassword === "keepPasswordYes") {
-                document.querySelector("#keepPassword").selected = "keepPasswordYes";
+              document.querySelector("#keepPasswordYes").checked = true;
             } else {
-                document.querySelector("#keepPassword").selected = "keepPasswordNo";
+              document.querySelector("#keepPasswordNo").checked = true;
             }
-            document.querySelector("#settingsDialog").toggle();
+            $("#settingsDialog").modal("show");
         });
     };
 
     var onChangeKeepPassword = function(evt) {
         chrome.storage.local.get("settings", function(items) {
             var settings = items.settings || {};
-            settings.keepPassword = document.querySelector("#keepPassword").selected;
+            if (document.querySelector("#keepPasswordYes").checked) {
+              settings.keepPassword = "keepPasswordYes";
+            } else {
+              settings.keepPassword = "keepPasswordNo";
+            }
             chrome.storage.local.set({settings: settings}, function() {
                 console.log("Saving settings done.");
             });
