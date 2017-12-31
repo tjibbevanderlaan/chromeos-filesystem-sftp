@@ -140,7 +140,11 @@ module.exports = function (grunt) {
                         'images/{,*/}*.png',
                         'styles/{,*/}*.*',
                         '_locales/{,*/}*.json',
-                        'clang-newlib/Release/*.{nexe,nmf}'
+                        'clang-newlib/Release/*.{nexe,nmf}',
+                        'scripts/{,*/}*.js',
+                        'bower_components/bootstrap/dist/{,*/}/*.*',
+                        'bower_components/jquery/dist/{,*/}/*.js',
+                        'window.html'
                     ]
                 }]
             }
@@ -246,7 +250,7 @@ module.exports = function (grunt) {
         'concat',
         'chromeManifest:dist',
         'copy',
-        'vulcanize',
+        // 'vulcanize',
         'compress'
     ]);
 
