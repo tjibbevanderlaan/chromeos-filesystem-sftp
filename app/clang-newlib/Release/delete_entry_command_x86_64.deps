@@ -1,0 +1,33 @@
+# Updated by fix_deps.py
+../clang-newlib/Release/delete_entry_command_x86_64.o: \
+  delete_entry_command.cc delete_entry_command.h \
+  communication_exception.h sftp_event_listener.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/var.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_var.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_bool.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_macros.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_stdint.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/pass_ref.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/resource.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_resource.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/instance_handle.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_instance.h \
+  /Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/var_array_buffer.h \
+  abstract_command.h
+:
+delete_entry_command.cc:
+delete_entry_command.h:
+communication_exception.h:
+sftp_event_listener.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/var.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_var.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_bool.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_macros.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_stdint.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/pass_ref.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/resource.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_resource.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/instance_handle.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/c/pp_instance.h:
+/Users/yoichiro/Dropbox/libs/nacl_sdk/pepper_43/include/ppapi/cpp/var_array_buffer.h:
+abstract_command.h:
