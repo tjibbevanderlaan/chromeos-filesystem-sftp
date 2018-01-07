@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/yoichiro/chromeos-filesystem-sftp.svg?style=svg)](https://circleci.com/gh/yoichiro/chromeos-filesystem-sftp)
+
 [![Code Climate](https://codeclimate.com/github/yoichiro/chromeos-filesystem-sftp/badges/gpa.svg)](https://codeclimate.com/github/yoichiro/chromeos-filesystem-sftp)
 
 # SFTP File System
