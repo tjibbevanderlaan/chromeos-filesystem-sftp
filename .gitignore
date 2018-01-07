@@ -8,5 +8,4 @@ test/bower_components
 package
 bower_components
 app/newlib
-app/clang-newlib
 .DS_Store
