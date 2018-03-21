@@ -1,0 +1,19 @@
+{
+  parser: "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "max-len": [1, 120, 2, {ignoreComments: true}],
+    "prop-types": [2]
+  },
+  "env" : {
+  	"browser": true,
+  	"node": true
+  },
+  "globals" : {
+  	"chrome": true,
+  	"console": true
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"]
+}

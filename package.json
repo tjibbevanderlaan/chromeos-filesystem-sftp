@@ -1,34 +1,49 @@
 {
-  "name": "chromeos-filesystem-sftp",
-  "version": "0.0.0",
-  "dependencies": {},
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-bower-task": "^0.4.0",
-    "grunt-chrome-manifest": "~0.2.0",
-    "grunt-concurrent": "~0.5.0",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-compress": "~0.9.1",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-connect": "~0.7.1",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-cssmin": "~0.9.0",
-    "grunt-contrib-htmlmin": "~0.3.0",
-    "grunt-contrib-imagemin": "~0.7.1",
-    "grunt-contrib-jshint": "~0.9.2",
-    "grunt-contrib-uglify": "~0.4.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-mocha": "~0.4.10",
-    "grunt-newer": "~0.6.0",
-    "grunt-shell": "^1.1.1",
-    "grunt-svgmin": "~0.4.0",
-    "grunt-usemin": "~2.1.0",
-    "grunt-vulcanize": "^0.6.4",
-    "jshint-stylish": "~0.1.5",
-    "load-grunt-tasks": "~0.2.0",
-    "time-grunt": "^0.3.2"
-  },
-  "engines": {
-    "node": ">=0.8.0"
-  }
+    "name": "chromeos-filesystem-sftp",
+    "description": "ChromeOS app to access a SFTP server directly from the Files app",
+    "version": "0.20.0",
+    "scripts": {
+        "build": "node_modules/.bin/webpack --config webpack-production.config.js --progress --colors"
+    },
+    "author": {
+        "name": "Yoichiro Tanaka",
+        "url": "https://github.com/yoichiro"
+    },
+    "contributors": [{
+        "name": "Tjibbe van der Laan",
+        "email": "info@tjibbevanderlaan.nl",
+        "url": "https://github.com/tjibbevanderlaan"
+    }],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp.git"
+    },
+    "homepage": "https://github.com/yoichiro/chromeos-filesystem-sftp",
+    "keywords": ["sftp", "chromeos"],
+    "bugs": {
+        "url": "https://github.com/yoichiro/chromeos-filesystem-sftp/issues"
+    },
+    "license": "BSD-3-Clause",
+    "dependencies": {
+        "material-ui": "^1.0.0-beta.34",
+        "material-ui-icons": "^1.0.0-beta.17",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "react-mark-ii": "^2.2.0"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-eslint": "^8.2.2",
+        "babel-loader": "^7.1.4",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-react": "^6.24.1",
+        "clean-webpack-plugin": "^0.1.19",
+        "copy-webpack-plugin": "^4.5.1",
+        "eslint": "^4.18.2",
+        "eslint-loader": "^2.0.0",
+        "eslint-plugin-react": "^7.7.0",
+        "html-webpack-plugin": "^3.0.6",
+        "webpack": "^4.1.1",
+        "write-file-webpack-plugin": "^4.2.0"
+    }
 }
