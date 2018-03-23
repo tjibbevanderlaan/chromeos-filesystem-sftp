@@ -2,21 +2,21 @@
 
 ### A ChromeOS app which provides the ability to access a SFTP server, directly from the Files app
 
+![alt text](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/react/docs/screenshot-1.png "File share SFTP app preview")
+
 ## Content
 1. [Description](#description)
 2. [Installation](#installation)
 3. [Development](#development)
-⋅⋅1. [Getting started](#getting-started)
-⋅⋅2. [Compile Native Client code](#compile-native-client-code)
-⋅⋅3. [Compile the project](#compile-the-project)
-⋅⋅4. [Start the app](#start-the-app)
+ 1. [Getting started](#getting-started)
+ 2. [Compile Native Client code](#compile-native-client-code)
+ 3. [Compile the project](#compile-the-project)
+ 4. [Start the app](#start-the-app)
 4. [Issues](#issues)
 5. [License](#license)
 
 ## Description
 *File share (SFTP)* is forked from [yoichiro/chromeos-filesystem-sftp](https://github.com/yoichiro/chromeos-filesystem-sftp/) and provides the ability to access a SFTP server directly from the ChromeOS Files app. The fork has improved the design of the user-interface, to provide a more native look-and-feel. To do so, the build systems have been moved from [bower](https://bower.io/), [grunt](https://gruntjs.com/) to [npm](https://www.npmjs.com), [webpack](https://webpack.js.org/) to make use of [React](https://reactjs.org/) and the [Material-UI components](https://material-ui-next.com/).
-
-![alt text](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/docs/screenshot-1.png  "File share (SFTP) app preview")
 
 ## Development
 *File share (SFTP)* is a [Chrome App](https://developer.chrome.com/apps/about_apps), therefore explicitly build for ChromeOS systems. Chrome Apps can be created with common web technologies such as  HTML5, CSS, and JavaScript to deliver an experience comparable of a native application. To extent the power of these technologies, Chrome delivers a [Native Client SDK](https://developer.chrome.com/native-client/sdk/download) to compile C and C++ code in the browser efficiently and securely, independent of the user’s operating system. *File share (SFTP)* makes use of [libssh2](https://www.libssh2.org/) which has been ported to the [Native Client](https://developer.chrome.com/native-client) environment to establish a file share connection over SSH (i.e. SFTP; SSH File Transfer Protocol). The compiled code is part of the app, and communicates with the web technologies back and forth.
@@ -81,13 +81,13 @@ To compile the Native Client code (i.e. [/src/nativeclient_src](https://github.c
 	```
 
 #### Make the project's Native Client code
-8. Change directory to the project, and run the compile command:
+9. Change directory to the project, and run the compile command:
 	```bash
 	cd ~/chromeos-filesystem-sftp
 	cd src/nacl_src
 	make CONFIG=Release
 	```	
-9. The compiled code is created in the directory `/src/clang-newlib`.
+10. The compiled code is created in the directory `/src/clang-newlib`.
 
 ### Compile the project
 1. Install all building system and front-end dependencies, with the following command:
@@ -114,10 +114,10 @@ You can find more information on <https://developer.chrome.com/apps/first_app#lo
 ## Issues
 While the app is working, there are still some features which could be improved.
 
-1. Unfortunately, I've could not manage to configure 'hot reload' during developments. Because the app is a Chrome App, and not a Chrome Extension, some I stumbled to some Content Security Policy (CSP) errors. 
-2. I've would like to improve the quality of error messages (in case authentication failed for example).
-3. User credentials are stored in the `chrome.app.storage`. While there not accessible by other apps, it seems not the most secure solution.
-4. Automatic testing is not yet incorporated.
+* Unfortunately, I've could not manage to configure 'hot reload' during developments. Because the app is a Chrome App, and not a Chrome Extension, some I stumbled to some Content Security Policy (CSP) errors. 
+* I've would like to improve the quality of error messages (in case authentication failed for example).
+* User credentials are stored in the `chrome.app.storage`. While there not accessible by other apps, it seems not the most secure solution.
+* Automatic testing is not yet incorporated.
 
 
 ## License
