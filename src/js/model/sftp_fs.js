@@ -22,7 +22,7 @@
             options.serverName, options.serverPort,
             options.authType, options.username,
             options.password, options.privateKey,
-            options.mountPath);
+            options.mountPath, options.displayName);
         this.sftpClientMap_[fileSystemId] = sftpClient;
         // createTaskQueue.call(this, fileSystemId);
         sftpClient.setup();
@@ -51,7 +51,7 @@
                     sftpClient.getServerName(), sftpClient.getServerPort(),
                     sftpClient.getAuthType(),
                     sftpClient.getUsername(), sftpClient.getPassword(), sftpClient.getPrivateKey(),
-                    sftpClient.getMountPath(),
+                    sftpClient.getMountPath(), sftpClient.getDisplayName(),
                     function() {
                         onSuccess();
                     }.bind(this));
@@ -81,6 +81,7 @@
                     password: credential.password,
                     privateKey: credential.privateKey,
                     mountPath: credential.mountPath,
+                    displayName: credential.displayName,
                     onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
                         // TODO Check the fingerprint.
                         this.allowToConnect(
@@ -122,7 +123,7 @@
                     type: "basic",
                     title: "SFTP File System",
                     message: "The NaCl module crashed. Unmounted.",
-                    iconUrl: "/images/48.png"
+                    iconUrl: "/icons/48.png"
                 }, function(notificationId) {
                 }.bind(this));
             }.bind(this));
@@ -440,22 +441,23 @@
 
     // Private functions
 
-    var doMount = function(serverName, serverPort, authType, username, password, privateKey, mountPath, callback) {
+    var doMount = function(serverName, serverPort, authType, username, password, privateKey, mountPath, displayName, callback) {
         this.checkAlreadyMounted(serverName, serverPort, username, function(exists) {
             if (!exists) {
                 var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
-                var displayName = serverName;
-                if (Number(serverPort) !== 22) {
-                    displayName += ":" + serverPort;
-                }
-                displayName += " (" + username + ")";
+                if(displayName.length === 0) displayName = serverName;
+                // var displayName = serverName;
+                // if (Number(serverPort) !== 22) {
+                //     displayName += ":" + serverPort;
+                // }
+                // displayName += " (" + username + ")";
                 chrome.fileSystemProvider.mount({
                     fileSystemId: fileSystemId,
                     displayName: displayName,
                     writable: true
                 }, function() {
                     registerMountedCredential(
-                        serverName, serverPort, authType, username, password, privateKey, mountPath,
+                        serverName, serverPort, authType, username, password, privateKey, mountPath, displayName,
                         function() {
                             callback();
                         }.bind(this));
@@ -499,7 +501,7 @@
     };
 
     var registerMountedCredential = function(
-            serverName, serverPort, authType, username, password, privateKey, mountPath, callback) {
+            serverName, serverPort, authType, username, password, privateKey, mountPath, displayName, callback) {
         var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
         chrome.storage.local.get("mountedCredentials", function(items) {
             var mountedCredentials = items.mountedCredentials || {};
@@ -510,7 +512,8 @@
                 username: username,
                 password: password,
                 privateKey: privateKey,
-                mountPath: mountPath
+                mountPath: mountPath,
+                displayName: displayName
             };
             chrome.storage.local.set({
                 mountedCredentials: mountedCredentials
@@ -560,7 +563,7 @@
                             type: "basic",
                             title: "SFTP File System",
                             message: "Resuming connection failed. Unmount.",
-                            iconUrl: "/images/48.png"
+                            iconUrl: "/icons/48.png"
                         }, function(notificationId) {
                         }.bind(this));
                         getMountedCredential.call(this, fileSystemId, function(credential) {

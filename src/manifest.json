@@ -5,6 +5,25 @@
     "version": "1.7.12",
     "manifest_version": 2,
     "default_locale": "en",
+    "icons": {
+        "32": "icons/32.png",
+        "48": "icons/48.png",
+        "64": "icons/64.png",
+        "96": "icons/96.png",
+        "128": "icons/128.png",
+        "256": "icons/256.png"
+    },
+    "app": {
+        "background": {
+            "scripts": [
+                "model/task_queue.js",
+                "model/metadata_cache.js",
+                "model/sftp_fs.js",
+                "model/sftp_client.js",
+                "background.js"
+            ]
+        }
+    },
     "permissions": [
         "fileSystemProvider",
         "storage",
@@ -16,30 +35,9 @@
             ]
         }
     ],
-    "icons": {
-        "16": "images/16.png",
-        "32": "images/32.png",
-        "48": "images/48.png",
-        "128": "images/128.png"
-    },
-    "app": {
-        "background": {
-            "scripts": [
-                "bower_components/cryptojslib/components/core-min.js",
-                "bower_components/cryptojslib/components/enc-base64-min.js",
-                "bower_components/cryptojslib/components/lib-typedarrays-min.js",
-                "scripts/task_queue.js",
-                "scripts/metadata_cache.js",
-                "scripts/sftp_fs.js",
-                "scripts/sftp_client.js",
-                "scripts/background.js",
-                "scripts/chromereload.js"
-            ]
-        }
-    },
     "file_system_provider_capabilities": {
         "source": "network",
         "multiple_mounts": true
     },
-    "minimum_chrome_version": "42"
+    "minimum_chrome_version": "49"
 }

@@ -6,7 +6,7 @@
 
     var SftpClient = function(
             sftpFS, serverName, serverPort, authType,
-            username, password, privateKey, mountPath) {
+            username, password, privateKey, mountPath, displayName) {
         this.serverName_ = serverName;
         this.serverPort_ = serverPort;
         this.authType_ = authType;
@@ -14,6 +14,7 @@
         this.password_ = password;
         this.privateKey_ = privateKey;
         this.mountPath_ = mountPath;
+        this.displayName_ = displayName;
 
         if (this.mountPath_) {
             if (this.mountPath_.length > 1) {
@@ -63,6 +64,10 @@
 
     SftpClient.prototype.getMountPath = function() {
         return this.mountPath_;
+    };
+
+    SftpClient.prototype.getDisplayName = function () {
+        return this.displayName_;
     };
 
     SftpClient.prototype.setup = function() {
@@ -354,7 +359,7 @@
             type: "basic",
             title: "SFTP File System",
             message: message,
-            iconUrl: "/images/48.png"
+            iconUrl: "/icons/48.png"
         }, function(notificationId) {
         }.bind(this));
     };

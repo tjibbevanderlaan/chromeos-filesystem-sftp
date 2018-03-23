@@ -1,0 +1,162 @@
+{
+  "appName": {
+    "message": "Deel bestanden (SFTP)",
+    "description": "Naam van de applicatie."
+  },
+  "appDescription": {
+    "message": "Maak bestanden vanaf een SFTP server toegankelijk in de Bestanden app.",
+    "description": "Beschrijving van de applicatie."
+  },
+  "shortName": {
+    "message": "SFTP",
+    "description": "Korte naam van de applicatie."
+  },
+  "mount": {
+    "message": "Verbinden",
+    "description": "Label voor de knop om de verbinding te initieren."
+  },
+  "favorite": {
+    "message": "Markeren als favoriet",
+    "description": "Label voor de knop om een verbinding als favoriet te markeren."
+  },
+  "noFavorites": {
+    "message": "Er zijn geen favorieten opgeslagen",
+    "description": "Beschrijving om aan te duiden dat er nog geen favorieten zijn opgeslagen."
+  },
+  "mountSuccess": {
+    "message": "Succesvol verbonden",
+    "description": "Popup notificatie van een succesvol geinitieerde verbinding."
+  },
+  "mountDeclined": {
+    "message": "Verbinding geannuleerd",
+    "description": "Popup notificatie van een geannuleerde verbinding."
+  },
+  "mountFail": {
+    "message": "Poging tot verbinden is mislukt",
+    "description": "Popup notificatie van een mislukte poging tot verbinden."
+  },
+  "mountFailTimeout": {
+    "message": "Poging tot verbinden is mislukt. Controleer de internetverbinding.",
+    "description": "Notificatie om te informeren dat de tijd is verstreken om een succesvolle verbinding tot stand te brengen."
+  },
+  "mountFailInternalError": {
+    "message": "Poging tot verbinden is mislukt vanwege een interne fout. Probeer de applicatie opnieuw te installeren.",
+    "description": "Noticifactie van een interne fout in de applicatie."
+  },
+  "mountFailAlreadyMounted": {
+    "message": "De verbinding is al tot stand gebracht.",
+    "description": "Notificatie van het scenario waar de verbinding als tot stand is gebracht."
+  },
+  "serverName": {
+    "message": "Servernaam",
+    "description": "Hostnaam of IP-adres van de server"
+  },
+  "serverNameDescription": {
+    "message": "IP-adres of hostnaam van de server (bijv. 192.168.2.1)",
+    "description": "Beschrijving van het formulierveld van de servernaam."
+  },
+  "serverPort": {
+    "message": "Poort",
+    "description": "Verbindingspoort van de server"
+  },
+  "mountPath": {
+    "message": "Koppelingslocatie",
+    "description": "Locatie op de server waar de verbinding wordt gekoppeld."
+  },
+  "mountPathDescription": {
+    "message": "Locatie op de server vanaf waar de verbinding tot stand wordt gebracht",
+    "description": "Beschrijving van het formulierveld van de koppelingslocatamie."
+  },
+  "displayName": {
+    "message": "Weergavenaam",
+    "description": "Naam van de verbinding, zoals weergegeven in Bestanden."
+  },
+  "displayNameDescription": {
+    "message": "Naam van de verbinding zoals weergegeven in Bestanden",
+    "description": "Beschrijving van het formulierveld weergavenaam."
+  },
+  "authType": {
+    "message": "Authenticatie type",
+    "description": "Titel van het formulierveld authenticatie type."
+  },
+  "authTypeDescription": {
+    "message": "Methode van de server om de verbinding te verifiëren",
+    "description" : "Beschrijving van het authenticatie type formulierveld."
+  },
+  "authTypePassword": {
+    "message": "Wachtwoord",
+    "description": "Label van het authenticatie type: wachtwoord"
+  },
+  "authTypeKeyboardInteractive": {
+    "message": "Toetsenbord",
+    "description": "Label van het authenticatie type: toetsenbord"
+  },
+  "authTypePublicKey": {
+    "message": "Publieke sleutel",
+    "description": "Label van het authenticatie type: publieke sleutel"
+  },
+  "username": {
+    "message": "Gebruikersnaam",
+    "description": "Label van het formulierveld gebruikersnaam."
+  },
+  "usernameDescription" : {
+    "message": "Gebruikersgegevens ter verificatie van de verbinding",
+    "description": "Beschrijving van de verificatie formulieren."
+  },
+  "password": {
+    "message": "Wachtwoord",
+    "description": "Label van het wachtwoord formulierveld."
+  },
+  "privateKey": {
+    "message": "Geheime sleutel",
+    "description": "Label van het sleutel formulierveld."
+  },
+  "favorites": {
+    "message": "Favorieten",
+    "description": "Titel van de sectie favorieten."
+  },
+  "settings": {
+    "message": "Instellingen",
+    "description": "Titel van de sectie instellingen."
+  },
+  "storeCredentials": {
+    "message": "Gebruikersgegevens onthouden",
+    "description": "Formulierveld om gebruikersgegevens wel of niet te onthouden."
+  },
+  "decline": {
+    "message": "Weigeren",
+    "description": "Label van de knop om de voorwaarde in het venster te weigeren."
+  },
+  "confirm": {
+    "message": "Accepteren",
+    "description": "Label van de knop om de voorwaarde in het venster te accepteren."
+  },
+  "confirmServerAuthenticityTitle": {
+    "message": "Bevestig echtheid van de server",
+    "description": "Titel van het bevestig-echtheid-venster."
+  },
+  "confirmServerAuthenticityDescription": {
+    "message": "Controleer onderstaande sleutel om de echtheid van de server te bepalen. Kies  __Accepteren__ om de server als legitiem te beschouwen en de verbinding tot stand te brengen. Klik op __Weigeren__ indien de sleutel niet overeenkomt.",
+    "description": "Omschrijving van een onbekende sleutel-server combinatie."
+  },
+  "verifyServerAuthenticityTitle": {
+    "message": "Verifieer echtheid van de server",
+    "description": "Titel van het server-verificatie-venster."
+  },
+  "verifyServerAuthenticityDescription": {
+    "message": "De ontvangen sleutel  komt niet overeen met de opgeslagen sleutel. Dit betekent dat de serverbeheerder de sleutel heeft aangepast of dat een malafide server verbinding probeert te maken. Het is ten zeerste aan te raden om de sleutel te controleren, alvorens verbinding te maken. Kies __Weigeren__ als je niet zeker bent.",
+    "description": "Omschrijving van een gewijzigde sleutel-server combinatie."
+  },
+  "host": {
+    "message": "Host server",
+    "description": "Titel van de host, gebruikt in de details van het authenticatie venster."
+  },
+  "algorithm": {
+    "message": "Versleutelingsmethode",
+    "description": "Titel van sleuteltype, gebruikt in de details van het authenticatie venster."
+  }, 
+  "fingerprint": {
+    "message": "Sleutel",
+    "description": "Titel van de sleutel, gebruikt in de details van het authenticatie venster.."
+  }
+}

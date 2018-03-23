@@ -8,9 +8,12 @@
         chrome.app.window.create("window.html", {
             outerBounds: {
                 width: 800,
-                height: 550
+                height: 580
             },
-            resizable: false
+            resizable: true,
+            frame: {
+                color: "#003c8f"
+            }
         });
     };
 
@@ -20,12 +23,16 @@
         chrome.fileSystemProvider.onMountRequested.addListener(openWindow);
     }
 
+   window.hasWindow = function () {
+        return chrome.app.window.current();
+    }
+
     var doMount = function(request, sendResponse) {
         sftp_fs_.checkAlreadyMounted(request.serverName, request.serverPort, request.username, function(exists) {
             if (exists) {
                 sendResponse({
                     type: "error",
-                    error: "Already mounted"
+                    error: "mountFailAlreadyMounted"
                 });
             } else {
                 var options = {
@@ -36,6 +43,7 @@
                     password: request.password,
                     privateKey: request.privateKey,
                     mountPath: request.mountPath,
+                    displayName: request.displayName,
                     onHandshake: function(algorithm, fingerprint, requestId, fileSystemId) {
                         sendResponse({
                             type: "confirmFingerprint",
@@ -58,6 +66,7 @@
     };
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+        console.log('triggered in background.js');
         console.log(request);
         switch(request.type) {
         case "mount":
@@ -107,5 +116,6 @@
         }
         return true;
     });
+
 
 })();

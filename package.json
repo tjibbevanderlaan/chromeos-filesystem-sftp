@@ -1,47 +1,60 @@
 {
-    "name": "chromeos-filesystem-sftp",
-    "description": "ChromeOS app to access a SFTP server directly from the Files app",
-    "version": "0.20.0",
-    "scripts": {
-        "build": "node_modules/.bin/webpack --config webpack.config.js --progress --colors"
-    },
-    "author": {
-        "name": "Yoichiro Tanaka",
-        "url": "https://github.com/yoichiro"
-    },
-    "contributors": [{
-        "name": "Tjibbe van der Laan",
-        "email": "info@tjibbevanderlaan.nl",
-        "url": "https://github.com/tjibbevanderlaan"
-    }],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp.git"
-    },
-    "homepage": "https://github.com/yoichiro/chromeos-filesystem-sftp",
-    "keywords": ["sftp", "chromeos"],
-    "bugs": {
-        "url": "https://github.com/yoichiro/chromeos-filesystem-sftp/issues"
-    },
-    "license": "BSD-3-Clause",
-    "dependencies": {
-        "material-ui": "^1.0.0-beta.34",
-        "material-ui-icons": "^1.0.0-beta.17",
-        "react": "^16.2.0",
-        "react-dom": "^16.2.0",
-        "react-mark-ii": "^2.2.0"
-    },
-    "devDependencies": {
-        "babel-core": "^6.26.0",
-        "babel-eslint": "^8.2.2",
-        "babel-loader": "^7.1.4",
-        "babel-preset-env": "^1.6.1",
-        "babel-preset-react": "^6.24.1",
-        "clean-webpack-plugin": "^0.1.19",
-        "copy-webpack-plugin": "^4.5.1",
-        "eslint": "^4.18.2",
-        "eslint-loader": "^2.0.0",
-        "eslint-plugin-react": "^7.7.0",
-        "webpack": "^4.1.1",
-    }
+   "name":"chromeos-filesystem-sftp",
+   "description":"ChromeOS app to access a SFTP server directly from the Files app",
+   "version":"0.20.0",
+   "scripts":{
+      "build":"node_modules/.bin/webpack --config webpack.config.js --progress --colors"
+   },
+   "author":{
+      "name":"Yoichiro Tanaka",
+      "url":"https://github.com/yoichiro"
+   },
+   "contributors":[
+      {
+         "name":"Tjibbe van der Laan",
+         "email":"info@tjibbevanderlaan.nl",
+         "url":"https://github.com/tjibbevanderlaan"
+      }
+   ],
+   "repository":{
+      "type":"git",
+      "url":"https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp.git"
+   },
+   "homepage":"https://github.com/yoichiro/chromeos-filesystem-sftp",
+   "keywords":[
+      "sftp",
+      "chromeos",
+      "native client",
+      "libssh2",
+      "webpack",
+      "react"
+   ],
+   "bugs":{
+      "url":"https://github.com/yoichiro/chromeos-filesystem-sftp/issues"
+   },
+   "license":"BSD-3-Clause",
+   "dependencies":{
+      "material-ui":"^1.0.0-beta.34",
+      "material-ui-icons":"^1.0.0-beta.17",
+      "react":"^16.2.0",
+      "react-dom":"^16.2.0",
+      "react-mark-ii":"^2.2.0"
+   },
+   "devDependencies":{
+      "babel-core":"^6.26.0",
+      "babel-eslint":"^8.2.2",
+      "babel-loader":"^7.1.4",
+      "babel-preset-env":"^1.6.1",
+      "babel-preset-react":"^6.24.1",
+      "clean-webpack-plugin":"^0.1.19",
+      "copy-webpack-plugin":"^4.5.1",
+      "eslint":"^4.18.2",
+      "eslint-loader":"^2.0.0",
+      "eslint-plugin-react":"^7.7.0",
+      "webpack":"^4.1.1"
+   },
+   "engines":{
+      "node":">=6.13.1",
+      "npm":">=3.10.10"
+   }
 }
