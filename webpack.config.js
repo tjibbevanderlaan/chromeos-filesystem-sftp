@@ -7,7 +7,7 @@ const buildPath = path.resolve(__dirname, 'dist');
 const config = {
   entry: {
     main: [
-      './src/app/app.js',
+      './src/js/controller/app.js',
     ],
   },
   // Render source-map file for final build
@@ -31,8 +31,8 @@ const config = {
       { from: '_locales', to: '_locales' },
       { from: 'icons', to: 'icons' },
       { from: 'clang-newlib', to: 'clang-newlib'},
-      { from: 'app/controller/background.js', to: 'background.js'},
-      { from: 'app/model', to: 'model'},
+      { from: 'js/controller/background.js', to: 'background.js'},
+      { from: 'js/model', to: 'model'},
       { from: 'manifest.json', to: 'manifest.json'},
       { from: 'window.html', to: 'window.html'}
     ], {context: path.resolve(__dirname, 'src')}),
