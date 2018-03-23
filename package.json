@@ -3,7 +3,7 @@
     "description": "ChromeOS app to access a SFTP server directly from the Files app",
     "version": "0.20.0",
     "scripts": {
-        "build": "node_modules/.bin/webpack --config webpack-production.config.js --progress --colors"
+        "build": "node_modules/.bin/webpack --config webpack.config.js --progress --colors"
     },
     "author": {
         "name": "Yoichiro Tanaka",
@@ -42,8 +42,6 @@
         "eslint": "^4.18.2",
         "eslint-loader": "^2.0.0",
         "eslint-plugin-react": "^7.7.0",
-        "html-webpack-plugin": "^3.0.6",
         "webpack": "^4.1.1",
-        "write-file-webpack-plugin": "^4.2.0"
     }
 }

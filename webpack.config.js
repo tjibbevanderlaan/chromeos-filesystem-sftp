@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const buildPath = path.resolve(__dirname, 'dist')
+const buildPath = path.resolve(__dirname, 'dist');
 
 const config = {
   entry: {
@@ -23,6 +24,8 @@ const config = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
+    // Clean build folder
+    new CleanWebpackPlugin([buildPath]),
     // Transfer Files
     new CopyWebpackPlugin([
       { from: '_locales', to: '_locales' },
