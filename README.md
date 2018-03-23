@@ -2,16 +2,16 @@
 
 ### A ChromeOS app which provides the ability to access a SFTP server, directly from the Files app
 
-![alt text](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/react/docs/screenshot-1.png "File share SFTP app preview")
+<img src="https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/react/docs/screenshot-1.png" title="File share SFTP app preview" width="500" />
 
 ## Content
 1. [Description](#description)
 2. [Installation](#installation)
 3. [Development](#development)
- 1. [Getting started](#getting-started)
- 2. [Compile Native Client code](#compile-native-client-code)
- 3. [Compile the project](#compile-the-project)
- 4. [Start the app](#start-the-app)
+	1. [Getting started](#getting-started)
+	2. [Compile Native Client code](#compile-native-client-code)
+	3. [Compile the project](#compile-the-project)
+	4. [Start the app](#start-the-app)
 4. [Issues](#issues)
 5. [License](#license)
 
