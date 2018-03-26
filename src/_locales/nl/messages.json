@@ -32,7 +32,7 @@
     "description": "Popup notificatie van een geannuleerde verbinding."
   },
   "mountFail": {
-    "message": "Poging tot verbinden is mislukt",
+    "message": "Poging tot verbinden is mislukt.",
     "description": "Popup notificatie van een mislukte poging tot verbinden."
   },
   "mountFailTimeout": {

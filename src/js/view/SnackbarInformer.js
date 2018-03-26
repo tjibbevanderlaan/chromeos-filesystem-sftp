@@ -15,7 +15,7 @@ const styles = theme => ({
 
 class SnackbarInformer extends React.Component {
   render() {
-    const {classes, show=false, handleClose, undoAction, message=""} = this.props;
+    const {classes, show=false, onClose, undoAction, message=""} = this.props;
 
     const actions = [
       <IconButton
@@ -23,7 +23,7 @@ class SnackbarInformer extends React.Component {
         aria-label="Close"
         color="inherit"
         className={classes.close}
-        onClick={handleClose}
+        onClick={onClose}
       >
       <CloseIcon />
     </IconButton>];
@@ -43,7 +43,7 @@ class SnackbarInformer extends React.Component {
         }}
         open={show}
         autoHideDuration={6000}
-        onClose={handleClose}
+        onClose={onClose}
         SnackbarContentProps={{
           'aria-describedby': 'message-id',
         }}
@@ -59,7 +59,7 @@ SnackbarInformer.propTypes = {
   message: PropTypes.string,
   undoAction: PropTypes.func,
   show: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(SnackbarInformer);

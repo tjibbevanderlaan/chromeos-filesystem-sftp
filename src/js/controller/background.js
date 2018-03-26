@@ -8,7 +8,8 @@
         chrome.app.window.create("window.html", {
             outerBounds: {
                 width: 800,
-                height: 580
+                height: 580,
+                minWidth: 340
             },
             resizable: true,
             frame: {

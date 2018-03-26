@@ -22,7 +22,7 @@ const styles = theme => ({
 class ConfirmForm extends React.Component {
 
   render() {
-    const {classes, spacing=24, canMakeFavorite=false, canMount=false, isTryingToMount=false, icon=""} = this.props;
+    const {classes, spacing=24, canMakeFavorite=false, canMount=false, isTryingToMount=false, icon="", refMount} = this.props;
 
     return (
       <Grid container justify="flex-end" spacing={spacing}>
@@ -38,6 +38,7 @@ class ConfirmForm extends React.Component {
         <Grid item>
           <div className={classes.wrapper}>
             <Button 
+              buttonRef={refMount}
               variant="raised" 
               size="large" 
               color="primary" 
@@ -63,7 +64,8 @@ ConfirmForm.propTypes = {
   isTryingToMount: PropTypes.bool,
   icon: PropTypes.element,
   onMount: PropTypes.func.isRequired,
-  onAddFavorite: PropTypes.func.isRequired
+  onAddFavorite: PropTypes.func.isRequired,
+  refMount: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(ConfirmForm);

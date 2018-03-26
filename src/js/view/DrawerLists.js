@@ -91,11 +91,10 @@ class FavoritesList extends React.Component {
             <List 
               component="nav"
               subheader={<ListSubheader component="div">{chrome.i18n.getMessage("settings")}</ListSubheader>}>
-              <ListItem dense disabled>
+              <ListItem dense>
                 <ListItemText primary={chrome.i18n.getMessage("storeCredentials")} />
                 <ListItemSecondaryAction>
                   <Switch
-                    disabled={true}
                     onClick={onToggleKeepCredentials}
                     checked={keepCredentials}
                   />
