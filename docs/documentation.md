@@ -19,9 +19,9 @@ This document is originally written by Yoichiro Tanaka and adapted to the modifi
 * [/src/_locales/en](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/_locales/en) - A message resource file for English.
 * [/src/_locales/nl](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/_locales/nl) - A message resource file for Dutch.
 * [/src/icons](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/images) - This directory contains app icons.
-* [/src/js/controller](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/controller) - Two JavaScript files which controls the user-interface -[window.js](#window.js)- and which controls the filesystem - [background.js](#background.js). The two controllers communicate with each other by [Message Passing](https://developer.chrome.com/apps/messaging) (part of the Chrome App environment). 
+* [/src/js/controller](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/controller) - Two JavaScript files which controls the user-interface -[window.js](#windowjs)- and which controls the filesystem - [background.js](#backgroundjs). The two controllers communicate with each other by [Message Passing](https://developer.chrome.com/apps/messaging) (part of the Chrome App environment). 
 * [/src/js/model](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/model) - Multiple JavaScript files which facilitate all filesystem handlings between the Chrome Filesystem API and the Native Client libssh2 sandbox.
-* [/src/js/view](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/view) - Multiple ES6-JavaScript files which describe React Components. These React Componentes are building blocks of the user-interface. The file [AppContent.js](#AppContent.js) combines all components.
+* [/src/js/view](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/view) - Multiple ES6-JavaScript files which describe React Components. These React Componentes are building blocks of the user-interface. The file [AppContent.js](#appcontentjs) combines all components.
 * [/src/js/utils](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/utils) - JavaScript files, used in the original source code, but no longer used in this fork.
 * [/src/nacl_src](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/nacl_src) - This directory has some C++ code of NaCl module which is using libssh2 C library to communicator SSH2 Server with SFTP protocol.
 * [/test](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/test) - Currently, all files are garbage...
@@ -66,7 +66,7 @@ When users pushes the 'Mark as favorite' button, the connection information the 
 
 Additionally, to verify or confirm the fingerprint of the to-be-connected server, `window.html` displays a dialog.
 
-The React JavaScript library provides the UI-component in `window.html` and are based on the several JSX-files listed in `src/js/view/`. The [AppContent.js](#AppContent.js) file integrates all components and creates event handlers between components. Furthermore, [AppContent.js](#AppContent.js) (part of [window.js](#window.js)) communicates with [background.js](#background.js) and the local `chrome.storage` to retrieve settings and favorites.
+The React JavaScript library provides the UI-component in `window.html` and are based on the several JSX-files listed in `src/js/view/`. The [AppContent.js](#AppContentjs) file integrates all components and creates event handlers between components. Furthermore, [AppContent.js](#appcontentjs) (part of [window.js](#windowjs)) communicates with [background.js](#backgroundjs) and the local `chrome.storage` to retrieve settings and favorites.
 
 #### [/src/manifest.json](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/manifest.json)
 
@@ -96,23 +96,23 @@ The app logic is split into a [model](#Model), [view](#View), and [controller](#
 |  [rename_entry_command.h, rename_entry_command.cc](#rename_entry_command.h,-rename_entry_command.cc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
 |  [truncate_file_command.h, truncate_file_command.cc](#truncate_file_command.h,-truncate_file_command.cc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
 |  [write_file_command.h, write_file_command.cc](#write_file_command.h,-write_file_command.cc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [background.js](#background.js) | Background | Controller | Browser JavaScript | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/) | /dist/background.js |
-|  [window.js](#window.js) | Window | Controller | React JavaScript (JSX) | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/) | /dist/window.js |
-|  [AppContent.js](#AppContent.js) | AppContent | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [AppIcon.js](#AppIcon.js) | AppIcon | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [AuthForm.js](#AuthForm.js) | AuthForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [ConfirmDialog.js](#ConfirmDialog.js) | ConfirmDialog | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [ConfirmForm.js](#ConfirmForm.js) | ConfirmForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [DrawerLists.js](#DrawerLists.js) | DrawerLists | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [FavoritesItem.js](#FavoritesItem.js) | FavoritesItem | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [ServerForm.js](#ServerForm.js) | ServerForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [SnackbarInformer.js](#SnackbarInformer.js) | SnackbarInformer | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [background.js](#backgroundjs) | Background | Controller | Browser JavaScript | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/) | /dist/background.js |
+|  [window.js](#windowjs) | Window | Controller | React JavaScript (JSX) | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/) | /dist/window.js |
+|  [AppContent.js](#appcontentjs) | AppContent | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [AppIcon.js](#appiconjs) | AppIcon | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [AuthForm.js](#authformjs) | AuthForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [ConfirmDialog.js](#confirmdialogjs) | ConfirmDialog | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [ConfirmForm.js](#confirmformjs) | ConfirmForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [DrawerLists.js](#drawerlistsjs) | DrawerLists | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [FavoritesItem.js](#favoritesitemjs) | FavoritesItem | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [ServerForm.js](#serverformjs) | ServerForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [SnackbarInformer.js](#snackbarinformerjs) | SnackbarInformer | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
 
 
 
 ### Model
 
-The model is responsible for the server connection and integrates the connection with the `chrome.fileSystemProvider` API. The abstract relations between these scripts are visualized below. The SftpFS class communicates with the controller [background.js](#background.js).
+The model is responsible for the server connection and integrates the connection with the `chrome.fileSystemProvider` API. The abstract relations between these scripts are visualized below. The SftpFS class communicates with the controller [background.js](#backgroundjs).
 
 ![code_structure_1.pngCreating NaCl module instance
 ](https://raw.githubusercontent.com/tjibbevanderlaan/chromeos-filesystem-sftp/react/docs/code_structure_1.png)
@@ -126,7 +126,7 @@ This script file is an implementation for [chrome.fileSystemProvider](https://de
 * Caching fetched meta data. For instance, Each meta data fetched is stored into [/src/js/model/metadata_cache.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/metadata_cache.js). This script improves a performance using the cache mechanism.
 * This software has an ability to mount multiple accounts of SFTP server at the same time. Each connection is represented by SftpClient class defined in [/src/js/model/sftp_client.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/sftp_client.js). This script manages multiple SftpClient instances in the sftpClientMap_ instance value. Each SftpClient instance has a file system ID, and is stored into the map object. The file system ID is generated by the createFIleSystemID() function.
 
-This script defines a SftpFS class. The SftpFS instance is created by the [background.js](#background.js). This script never communicate to SFTP server. Instead, this script delegates them to the sftp_client.js script. That is, this script has a responsibility of handling FSP events and proxying them to the sftp_client.js script.
+This script defines a SftpFS class. The SftpFS instance is created by the [background.js](#backgroundjs). This script never communicate to SFTP server. Instead, this script delegates them to the sftp_client.js script. That is, this script has a responsibility of handling FSP events and proxying them to the sftp_client.js script.
 
 | SftpFS Function              | SftpClient Function                     |
 | ---------------------------- | --------------------------------------- |
@@ -612,13 +612,13 @@ The write_file_command.h file defines WriteFileCommand class. This class has the
 
 #### [background.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/background.js)
 
-This is a background page script. Mainly, this script has a responsibility of launching the window when users want to mount the SFTP server. Also, this script has an ability to receive the message from the [window.js](#window.js) script. When the message received, this script delegates the request of mounting the SFTP server to the [/src/js/model/sftp_fs.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/sftp_fs.js) script. Especially, this script has one SftpFS instance.
+This is a background page script. Mainly, this script has a responsibility of launching the window when users want to mount the SFTP server. Also, this script has an ability to receive the message from the [window.js](#windowjs) script. When the message received, this script delegates the request of mounting the SFTP server to the [/src/js/model/sftp_fs.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/sftp_fs.js) script. Especially, this script has one SftpFS instance.
 
 This script can know what users want to mount the SFTP server by handling [chrome.fileSystemProvider.onMountRequested](https://developer.chrome.com/extensions/fileSystemProvider#event-onMountRequested) event. When this event fired, this script opens the window.html.
 
 #### [window.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/window.js)
 
-The [window.js](#window.js) file is the root of ReactJS-based UI, and specifies the document node of `window.html` in which the UI will be rendered. The file renders [AppContent.js](#AppContent.js) as the only component; in this file, the communication between [background.js](#background.js) (with help of [Messaging Passing](https://developer.chrome.com/apps/messaging)) and the chrome API takes place.
+The [window.js](#windowjs) file is the root of ReactJS-based UI, and specifies the document node of `window.html` in which the UI will be rendered. The file renders [AppContent.js](#appcontentjs) as the only component; in this file, the communication between [background.js](#backgroundjs) (with help of [Messaging Passing](https://developer.chrome.com/apps/messaging)) and the chrome API takes place.
 
 
 
@@ -630,7 +630,7 @@ The view is the user-interface is build with [ReactJS](https://reactjs.org/). Fu
 
 #### [AppContent.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/AppContent.js)
 
-AppContent combines all React Components to one user-interface, communicates with the chrome API to load and store favorites and settings, and communicates with [background.js](#background.js) to initiate new mount connections.
+AppContent combines all React Components to one user-interface, communicates with the chrome API to load and store favorites and settings, and communicates with [background.js](#backgroundjs) to initiate new mount connections.
 
 The AppContent manages a list of states, which defines various behaviours of the interface. A description of states and functions is given.
 
@@ -652,7 +652,7 @@ The AppContent manages a list of states, which defines various behaviours of the
 |  `keepCredentials` | `Boolean` | Whether the credentials (pass,privateKey) or stored in `chrome.local.storage` |
 |  `favorites` | `Array` | List of favorite-objects, which contains mount details (servername, port, mountpath, displayname, username, authtype, password, privateKey) |
 |  `isReadyToMakeFavorite` | `Boolean` | Whether the button 'Mark as favorite' is enabled. This is only in the cases, when the current input fields are not already stored as favorite. |
-|  `isTryingToMount` | `Boolean` | Is true when [background.js](#background.js) is trying to mount, based on the current values of the fields |
+|  `isTryingToMount` | `Boolean` | Is true when [background.js](#backgroundjs) is trying to mount, based on the current values of the fields |
 |  `isMounted` | `Boolean` | Is true, when the current values of the fields have succesfully lead to a mount in the Files app |
 |  `showStatus` | `Boolean` | Whether the statusbar is shown or not |
 |  `statusMessage` | `String` | The message, displayed in the status bar |
@@ -660,42 +660,43 @@ The AppContent manages a list of states, which defines various behaviours of the
 |  `dialogTitle` | `String` | Title of the dialog |
 |  `dialogMessage` | `String` | Message displayed in the dialog |
 |  `dialogDetails` | `Array` | List of detail objects (each containing a key and value pair). When this optional array is not empty, the details are shown in the dialog to support the message. |
-|  `responseCache` | `Object` | AppContent communicates with [background.js](#background.js) with help of Messaging Passing. Responses are temporary stored in this field. |
+|  `responseCache` | `Object` | AppContent communicates with [background.js](#backgroundjs) with help of Messaging Passing. Responses are temporary stored in this field. |
 
 #### Functions
-|  **Name** | **Arguments** | **Description** |  |
-|  ------ | ------ | ------ | ------ |
-|  ***Initializing React*** |  |  |  |
-|  componentDidMount |  | componentDidMount is an event handler and invoked by React as soon the component is load. E.g. a React-type of 'onload'. The function invokes loadLocalStoredMountFavorites and loadLocalStoredSettings to get mount favorites and keepcredential-settings from the local storage of chrome. |  |
-|  ***Changing input fields*** |  |  |  |
-|  handleChange | name (string), value (string) | handleChange validates any value of any input element, and stores the value in the corresponding state. The function is triggered by all fields, when the field changes. |  |
-|  handleBlur | name (string), value (string) | handleBlur validates serverPort and displayName as soon the user has selected outside these input fields. Portnumber may not be negative, may not be empty, and my not be not-a-number. The (custom) display name may not be empty; otherwise, default values will be used.<br/> |  |
-|   |  |  |  |
-|  isFormReadyTo | opts (object) | isFormReadyTo verifies whether all fields are filled to mount the share or make the share favorite |  |
-|  setDefaultDisplayName |  | setDefaultDisplayName sets the display name to a newly created default display name, based on the latest (not yet updated) states, gives as the first argument. |  |
-|  createDefaultDisplayName | opts (object) | createDefaultDisplayName creates a default display name. The display name is the reference to the SFTP mount, as shown in ChromeOS Files. The markup of the default display name is '<servername>:<serverport> (<username>)' |  |
-|  ***Mounting a connection instance*** |  |  |  |
-|  onMountButtonClick |  | onMountButtonClick is invoked when the user clicks on the mount button. The function creates a mount-request based on the input fields which will be send to [background.js](#background.js) with help of Message Passing. Background.js will invoke SftpFs on his turn. |  |
-|  handleInitialMountResponse | response (object) | handleInitialMountResponese handles the feedback received from background.js by the Message Passing protocol, based on the initial mount request (created in onMountButtonClick). When [background.js](#background.js) could parse our request succesfully, a fingerprint of the host-server will be returned which need to be validated by the user (if not already trusted by the user). |  |
-|  handleConfirmFingerprint |  | handleConfirmFingerprint is invoked by the confirmation given by the user in the dialog, and trusts the fingerprint of the server, which will continue the initiation of the connection.<br/>. |  |
-|  handleDeclineFingerprint |  | handleDeclineFingerprint is invoked by the decline-button of the dialog, and cancles the mount initiation. |  |
-|  handleConnectionResponse | response (object) | handleConnectionResponse handles the response which is received, after the server's fingerprint of the server is confirmed (automatically or by the dialog confimration of the user). The response can be succesfull, and means a connected mount. When unsuccesfull, a failure will be shown as a status pop-up.  |  |
-|  ***Save and load data from chrome.storage.local*** |  |  |  |
-|  loadKeepCredentialSetting |  | loadKeepCredentialSetting loads the setting whether the user wants to save credentials are not |  |
-|  loadTrustedFingerprints |  | loadTrustedFingerprints loads all locally stored fingerprints, which are trusted (by the user). When the user connected to a specific server, and its fingerprint is confirmed at that time, this fingerprint will be saved. The fingerprints are stored as an Object within the Chrome App environment (chrome.storage.local). |  |
-|  getLocalStoredTrustedFingerprint | serverName (string), serverPort (string) | getLocalStoredTrustedFingerprint gets a specific fingerprint for a specific server and of serverport combination. The function derives all fingerprints with of help the function 'loadTrustedFingerprints'.  |  |
-|  storeTrusedFingerprints | serverName (string), serverPort (string), algorithm (string), fingerprint (string) | storeTrustedFingerprint saves a specific fingerprint for a specific server-serverport combination , in the local storage of the Chrome App environment (chrome.storage.local). |  |
-|  loadLocalStoredMountFavorites |  | loadLocalStoredMountFavorites loads all locally stored connection favorites. These favorites are stored in an Array, named 'mountFavorites', within the Chrome App environment (chrome.storage.local). The functions loads the Array within the favorites state of the app. |  |
-|  storeAsFavorite |  | storeAsFavorite saves the current completed form fields as a 'favorite' within the favorites-state-array and the chrome.storage.local environment. These favorites can be shown and requested from the drawer. |  |
-|  createKey | reference (string) | reateKey generates a unique identifier. The function is used to add a unique id for each saved favorite. |  |
-|  showFavorite | favorite (object) | showFavorite shows the data of the favorite mount in the according input fields |  |
-|  removeFavorite | favorite (object) | removeFavorite removes an saved favorite from the list of favorites  |  |
-|  ***Miscellaneous events*** |  |  |  |
-|  onToggleDrawer |  | onToggleDrawer updates the state to open or close the drawer (the menu with favorites, invoked by the three dots button) |  |
-|  onToggleCustomDisplayname |  | onToggleCustomDisplayname turns the use of a custom display name on or off. The function is invoked by the checkbox in the display name form field. |  |
-|  onAddFavorite |  | Invoked by the favorite-button, which inits storeAsFavorite and open the drawer. |  |
-|  onShowFavorite |  | onShowFavorite is invoked when the user clicks an favorite listitem, which triggers showFavorite subsequently. |  |
-|  onRemoveFavorite |  | onRemoveFavorite is invoked when the user clicks the delete-button on a list-item |  |
-|  onToggleKeepCredentials |  | onToggleKeepCredentials is invoked by the keep-credentials-setting switch in the Drawers list. The function toggles the keepCredentials state, and updates the state in `chrome.storage.local`. In case the user does not want to keep credentials, credentials from previous favorites are removed.  |  |
-|  onShowStatus | message (string) | Shows the status bar with a given message |  |
-|  onCloseStatus |  | onCloseStatus is invoked, when the users clicks on the close-button in the status bar. It will hide the status bar. |  |
+Range Only
+
+|  **Name** | **Arguments** | **Description** |
+|  ------ | ------ | ------ |
+|  ***Initializing React*** |  |  |
+|  componentDidMount |  | componentDidMount is an event handler and invoked by React as soon the component is load. E.g. a React-type of 'onload'. The function invokes loadLocalStoredMountFavorites and loadLocalStoredSettings to get mount favorites and keepcredential-settings from the local storage of chrome. |
+|  ***Changing input fields*** |  |  |
+|  handleChange | name (string), value (string) | handleChange validates any value of any input element, and stores the value in the corresponding state. The function is triggered by all fields, when the field changes. |
+|  handleBlur | name (string), value (string) | handleBlur validates serverPort and displayName as soon the user has selected outside these input fields. Portnumber may not be negative, may not be empty, and my not be not-a-number. The (custom) display name may not be empty; otherwise, default values will be used. |
+|  isFormReadyTo | opts (object) | isFormReadyTo verifies whether all fields are filled to mount the share or make the share favorite |
+|  setDefaultDisplayName |  | setDefaultDisplayName sets the display name to a newly created default display name, based on the latest (not yet updated) states, gives as the first argument. |
+|  createDefaultDisplayName | opts (object) | createDefaultDisplayName creates a default display name. The display name is the reference to the SFTP mount, as shown in ChromeOS Files. |
+|  ***Mounting a connection instance*** |  |  |
+|  onMountButtonClick |  | onMountButtonClick is invoked when the user clicks on the mount button. The function creates a mount-request based on the input fields which will be send to [background.js](#backgroundjs)with help of Message Passing. Background.js will invoke SftpFs on his turn. |
+|  handleInitialMountResponse | response (object) | handleInitialMountResponese handles the feedback received from 'background.js' by the Message Passing protocol, based on the initial mount request (created in onMountButtonClick). When 'background.js' could parse our request succesfully, a fingerprint of the host-server will be returned which need to be validated by the user (if not already trusted by the user). |
+|  handleConfirmFingerprint |  | handleConfirmFingerprint is invoked by the confirmation given by the user in the dialog, and trusts the fingerprint of the server, which will continue the initiation of the connection. |
+|  handleDeclineFingerprint |  | handleDeclineFingerprint is invoked by the decline-button of the dialog, and cancles the mount initiation. |
+|  handleConnectionResponse | response (object) | handleConnectionResponse handles the response which is received, after the server's fingerprint of the server is confirmed (automatically or by the dialog confimration of the user). The response can be succesfull, and means a connected mount. When unsuccesfull, a failure will be shown as a status pop-up.  |
+|  ***Save and load data from chrome.storage.local*** |  |  |
+|  loadKeepCredentialSetting |  | loadKeepCredentialSetting loads the setting whether the user wants to save credentials are not |
+|  loadTrustedFingerprints |  | loadTrustedFingerprints loads all locally stored fingerprints, which are trusted (by the user). When the user connected to a specific server, and its fingerprint is confirmed at that time, this fingerprint will be saved. The fingerprints are stored as an Object within the Chrome App environment (chrome.storage.local). |
+|  getLocalStoredTrustedFingerprint | serverName (string), serverPort (string) | getLocalStoredTrustedFingerprint gets a specific fingerprint for a specific server and of serverport combination. The function derives all fingerprints with of help the function 'loadTrustedFingerprints'.  |
+|  storeTrusedFingerprints | serverName (string), serverPort (string), algorithm (string), fingerprint (string) | storeTrustedFingerprint saves a specific fingerprint for a specific server-serverport combination , in the local storage of the Chrome App environment (chrome.storage.local). |
+|  loadLocalStoredMountFavorites |  | loadLocalStoredMountFavorites loads all locally stored connection favorites. These favorites are stored in an Array, named 'mountFavorites', within the Chrome App environment (chrome.storage.local). The functions loads the Array within the favorites state of the app. |
+|  storeAsFavorite |  | storeAsFavorite saves the current completed form fields as a 'favorite' within the favorites-state-array and the chrome.storage.local environment. These favorites can be shown and requested from the drawer. |
+|  createKey | reference (string) | createKey generates a unique identifier. The function is used to add a unique id for each saved favorite. |
+|  showFavorite | favorite (object) | showFavorite shows the data of the favorite mount in the according input fields |
+|  removeFavorite | favorite (object) | removeFavorite removes an saved favorite from the list of favorites  |
+|  ***Miscellaneous events*** |  |  |
+|  onToggleDrawer |  | onToggleDrawer updates the state to open or close the drawer (the menu with favorites, invoked by the three dots button) |
+|  onToggleCustomDisplayname |  | onToggleCustomDisplayname turns the use of a custom display name on or off. The function is invoked by the checkbox in the display name form field. |
+|  onAddFavorite |  | Invoked by the favorite-button, which inits storeAsFavorite and open the drawer. |
+|  onShowFavorite |  | onShowFavorite is invoked when the user clicks an favorite listitem, which triggers showFavorite subsequently. |
+|  onRemoveFavorite |  | onRemoveFavorite is invoked when the user clicks the delete-button on a list-item |
+|  onToggleKeepCredentials |  | onToggleKeepCredentials is invoked by the keep-credentials-setting switch in the Drawers list. The function toggles the keepCredentials state, and updates the state in `chrome.storage.local`. In case the user does not want to keep credentials, credentials from previous favorites are removed.  |
+|  onShowStatus | message (string) | Shows the status bar with a given message |
+|  onCloseStatus |  | onCloseStatus is invoked, when the users clicks on the close-button in the status bar. It will hide the status bar. |
