@@ -72,7 +72,7 @@ void WriteFileCommand::WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
     }
     fprintf(stderr, "WriteFileCommand::WriteFile rc=%d\n", rc);
     if (rc < 0) {
-      THROW_COMMUNICATION_EXCEPTION("Writing file failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_writeFileFailed", rc);
     }
     w_pos += rc;
     remain -= rc;

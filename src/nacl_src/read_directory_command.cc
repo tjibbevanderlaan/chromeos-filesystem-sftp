@@ -58,7 +58,7 @@ LIBSSH2_SFTP_HANDLE* ReadDirectoryCommand::OpenDirectory(const std::string path)
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(GetServerSock(), GetSession());
       } else {
-        THROW_COMMUNICATION_EXCEPTION("Unable to open dir with SFTP", last_error_no);
+        THROW_COMMUNICATION_EXCEPTION("sftpThreadError_openDirectoryFailed", last_error_no);
       }
     }
   } while (!sftp_handle);

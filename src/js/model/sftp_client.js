@@ -355,13 +355,8 @@
     };
 
     var showNotification = function(message) {
-        chrome.notifications.create(message, {
-            type: "basic",
-            title: "SFTP File System",
-            message: message,
-            iconUrl: "/icons/48.png"
-        }, function(notificationId) {
-        }.bind(this));
+        var notificationId = message.replace(/\s/g, "");
+        this.sftpFS_.notifier(notificationId, message, "basic");
     };
 
     var getNameFromPath = function(path) {

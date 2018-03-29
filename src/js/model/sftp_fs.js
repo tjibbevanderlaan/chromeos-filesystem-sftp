@@ -9,6 +9,7 @@
         this.taskQueue_ = {};
         this.opened_files_ = {};
         this.metadataCache_ = {};
+        this.notifier = defaultNotification;
         assignEventHandlers.call(this);
     };
 
@@ -119,13 +120,7 @@
         if (Number(exitStatus) !== 0) {
             // doUnmount.call(this, sftpClient, 999999, function() {
             doUnmount.call(this, sftpClient, 0, function() {
-                chrome.notifications.create("crash", {
-                    type: "basic",
-                    title: "SFTP File System",
-                    message: "The NaCl module crashed. Unmounted.",
-                    iconUrl: "/icons/48.png"
-                }, function(notificationId) {
-                }.bind(this));
+                this.notifier("crash", "sftpThreadError_resumeConnectionFailed", sftpClient.getDisplayName());
             }.bind(this));
         }
     };
@@ -439,6 +434,10 @@
         }.bind(this));
     };
 
+    SftpFS.prototype.setCustomNotifier = function(notifyFunction) {
+        this.notifier = notifyFunction;
+    };
+
     // Private functions
 
     var doMount = function(serverName, serverPort, authType, username, password, privateKey, mountPath, displayName, callback) {
@@ -559,13 +558,8 @@
                         callback(options, successCallback, errorCallback);
                     }.bind(this), function(reason) {
                         console.log("resume failed: " + reason);
-                        chrome.notifications.create("connection_fail", {
-                            type: "basic",
-                            title: "SFTP File System",
-                            message: "Resuming connection failed. Unmount.",
-                            iconUrl: "/icons/48.png"
-                        }, function(notificationId) {
-                        }.bind(this));
+                        this.notifier("connection_fail", "sftpThreadError_resumeConnectionFailed", sftpClient.getDisplayName());
+
                         getMountedCredential.call(this, fileSystemId, function(credential) {
                             if (credential) {
                                 _doUnmount.call(
@@ -742,6 +736,16 @@
     var deleteMetadataCache = function(fileSystemId) {
         console.log("deleteMetadataCache: " + fileSystemId);
         delete this.metadataCache_[fileSystemId];
+    };
+
+    var defaultNotification = function(notificationId, message, type) {
+        console.log("defaultNotification " + message);
+        chrome.notifications.create(notificationId, {
+            type: type || "basic",
+            title: chrome.i18n.getMessage("appName"),
+            message: message || "",
+            iconUrl: "/icons/48.png"
+        });
     };
 
     // Export

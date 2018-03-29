@@ -329,7 +329,7 @@ void SftpThread::InitializeLibssh2() throw(CommunicationException)
   rc = libssh2_init(0);
   fprintf(stderr, "SftpThread::InitializeLibssh2 rc=%d\n", rc);
   if (rc != 0) {
-    THROW_COMMUNICATION_EXCEPTION("libssh2 initialization failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_initFailed", rc);
   }
 }
 
@@ -341,7 +341,7 @@ int SftpThread::ConnectToSshServer(const std::string &hostname, const int port)
   hostent = gethostbyname(hostname.c_str());
   if (hostent == NULL) {
     fprintf(stderr, "SftpThread::ConnectToSshServer hostent is NULL\n");
-    THROW_COMMUNICATION_EXCEPTION("hostent is NULL", errno);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_hostentIsNull", errno);
   }
   int sock;
   sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -356,7 +356,7 @@ int SftpThread::ConnectToSshServer(const std::string &hostname, const int port)
   rc = connect(sock, (struct sockaddr*)(&sin), sizeof(struct sockaddr_in));
   fprintf(stderr, "SftpThread::ConnectToSshServer rc=%d\n", rc);
   if (rc != 0) {
-    THROW_COMMUNICATION_EXCEPTION("connect() failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_connectFailed", rc);
   }
   return sock;
 }
@@ -368,7 +368,7 @@ LIBSSH2_SESSION* SftpThread::InitializeSession() throw(CommunicationException)
   session = libssh2_session_init_ex(NULL, NULL, NULL, this);
   if (!session) {
     fprintf(stderr, "SftpThread::InitializeSession Initializing session failed\n");
-    THROW_COMMUNICATION_EXCEPTION("libssh2_session_init() failed", 0);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_sshInitSessionFailed", 0);
   }
   fprintf(stderr, "SftpThread::InitializeSession Initialized session \n");
   return session;
@@ -382,7 +382,7 @@ void SftpThread::HandshakeSession(LIBSSH2_SESSION *session, int sock)
   while ((rc = libssh2_session_handshake(session, sock)) == LIBSSH2_ERROR_EAGAIN);
   fprintf(stderr, "SftpThread::HandshakeSession rc=%d\n", rc);
   if (rc) {
-    THROW_COMMUNICATION_EXCEPTION("Error when starting up SSH session", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_sshSessionHandshakeFailed", rc);
   }
 }
 
@@ -448,22 +448,22 @@ void SftpThread::AuthenticateUser() throw(CommunicationException)
     if (strstr(user_auth_list, auth_type_.c_str())) {
       AuthenticateByPassword(session_, username_, password_);
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Authentication type 'password' is not supported", 0);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_unsupportedAuthTypePassword", 0);
     }
   } else if (auth_type_ == "keyboard-interactive") {
     if (strstr(user_auth_list, auth_type_.c_str())) {
       AuthenticateByKeyboardInteractive(session_, username_, password_);
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Authentication type 'keyboard-interactive' is not supported", 0);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_unsupportedAuthTypeKeyboardInteractive", 0);
     }
   } else if (auth_type_ == "publickey") {
     if (strstr(user_auth_list, auth_type_.c_str())) {
       AuthenticateByPublicKey(session_, username_, password_, private_key_);
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Authentication type 'publickey' is not supported", 0);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_unsupportedAuthTypePublicKey", 0);
     }
   } else {
-    THROW_COMMUNICATION_EXCEPTION("Unknown user authentication type", 0);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_unknownAuthType", 0);
   }
 }
 
@@ -479,7 +479,7 @@ void SftpThread::AuthenticateByPassword(LIBSSH2_SESSION *session,
                                         password.c_str())) == LIBSSH2_ERROR_EAGAIN);
   fprintf(stderr, "SftpThread::AuthenticateByPassword rc=%d\n", rc);
   if (rc) {
-    THROW_COMMUNICATION_EXCEPTION("Authentication by password failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_failedAuthenticationPassword", rc);
   }
 }
 
@@ -496,7 +496,7 @@ void SftpThread::AuthenticateByKeyboardInteractive(LIBSSH2_SESSION *session,
                                                     callback)) == LIBSSH2_ERROR_EAGAIN);
   fprintf(stderr, "SftpThread::AuthenticateByKeyboardInteractive rc=%d\n", rc);
   if (rc) {
-    THROW_COMMUNICATION_EXCEPTION("Authentication by keyboard-interactive failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_failedAuthenticationKeyboardInteractive", rc);
   }
 }
 
@@ -542,7 +542,7 @@ void SftpThread::AuthenticateByPublicKey(LIBSSH2_SESSION *session,
     fclose(f);
   } else {
     fclose(f);
-    THROW_COMMUNICATION_EXCEPTION("Storing private key failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_storingPrivateKeyFailed", rc);
   }
 
   while((rc = libssh2_userauth_publickey_fromfile(session,
@@ -577,7 +577,7 @@ LIBSSH2_SFTP* SftpThread::OpenSftpSession(LIBSSH2_SESSION *session) throw(Commun
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(server_sock_, session);
       } else {
-        THROW_COMMUNICATION_EXCEPTION("Unable to init SFTP session", last_error_no);
+        THROW_COMMUNICATION_EXCEPTION("sftpThreadError_sftpSessionInitFailed", last_error_no);
       }
     }
   } while (!sftp_session);
@@ -623,7 +623,7 @@ void SftpThread::CloseSession(LIBSSH2_SESSION *session)
     } while (rc == LIBSSH2_ERROR_EAGAIN);
     fprintf(stderr, "SftpThread::CloseSession 1 rc=%d\n", rc);
     if (rc < 0) {
-      THROW_COMMUNICATION_EXCEPTION("Disconnecting SSH2 session failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_sshCloseSessionFailed", rc);
     }
     do {
       rc = libssh2_session_free(session);
@@ -633,7 +633,7 @@ void SftpThread::CloseSession(LIBSSH2_SESSION *session)
     } while (rc == LIBSSH2_ERROR_EAGAIN);
     fprintf(stderr, "SftpThread::CloseSession 2 rc=%d\n", rc);
     if (rc < 0) {
-      THROW_COMMUNICATION_EXCEPTION("Free SSH2 session failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_sshCloseSessionFailedClearResources", rc);
     }
   }
 }
@@ -651,7 +651,7 @@ void SftpThread::CloseSftpSession(LIBSSH2_SFTP *sftp_session)
     } while (rc == LIBSSH2_ERROR_EAGAIN);
     fprintf(stderr, "SftpThread::CloseSftpSession rc=%d\n", rc);
     if (rc < 0) {
-      THROW_COMMUNICATION_EXCEPTION("Closing SFTP session failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_sftpCloseFailed", rc);
     }
   }
 }

@@ -57,6 +57,6 @@ void RenameEntryCommand::RenameEntry(const std::string &source_path,
   } while (rc == LIBSSH2_ERROR_EAGAIN);
   fprintf(stderr, "RenameEntryCommand::RenameEntry rc=%d\n", rc);
   if (rc < 0) {
-    THROW_COMMUNICATION_EXCEPTION("Renaming entry failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_renameFileFailed", rc);
   }
 }

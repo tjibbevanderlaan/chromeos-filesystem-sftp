@@ -85,7 +85,7 @@ LIBSSH2_SFTP_HANDLE* AbstractCommand::OpenFile(const std::string path,
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(server_sock_, session_);
       } else {
-        THROW_COMMUNICATION_EXCEPTION("Unable to open file with SFTP", last_error_no);
+        THROW_COMMUNICATION_EXCEPTION("sftpThreadError_openFileFailed", last_error_no);
       }
     }
   } while (!sftp_handle);

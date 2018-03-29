@@ -6,6 +6,7 @@
 
     var openWindow = function() {
         chrome.app.window.create("window.html", {
+            id: "window",
             outerBounds: {
                 width: 800,
                 height: 580,
@@ -24,9 +25,21 @@
         chrome.fileSystemProvider.onMountRequested.addListener(openWindow);
     }
 
-   window.hasWindow = function () {
-        return chrome.app.window.current();
-    }
+
+    // Show only ChromeOS notifications in case the UI-window is closed.
+    // Otherwise, the UI-window will dislay the notification
+    sftp_fs_.setCustomNotifier(function(notificationId, message, details, type) {
+        if (!chrome.app.window.get("window")) {
+            var msg = markupErrorMessage(message, details);
+            chrome.notifications.create(notificationId, {
+                type: type || "basic",
+                title: msg,
+                message: msg,
+                iconUrl: "/icons/48.png"
+            });
+        }
+    });
+
 
     var doMount = function(request, sendResponse) {
         sftp_fs_.checkAlreadyMounted(request.serverName, request.serverPort, request.username, function(exists) {
@@ -67,56 +80,74 @@
     };
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-        console.log('triggered in background.js');
-        console.log(request);
-        switch(request.type) {
-        case "mount":
-            doMount(request, sendResponse);
-            break;
-        case "accept":
-            sftp_fs_.allowToConnect(
-                request.requestId,
-                request.fileSystemId,
-                function() {
-                    sendResponse({
-                        type: "mounted",
-                        success: true
+        switch (request.type) {
+            case "mount":
+                doMount(request, sendResponse);
+                break;
+            case "accept":
+                sftp_fs_.allowToConnect(
+                    request.requestId,
+                    request.fileSystemId,
+                    function() {
+                        sendResponse({
+                            type: "mounted",
+                            success: true
+                        });
+                    },
+                    function(reason) {
+                        sendResponse({
+                            type: "error",
+                            success: false,
+                            error: reason
+                        });
                     });
-                },
-                function(reason) {
-                    sendResponse({
-                        type: "error",
-                        success: false,
-                        error: reason
+                break;
+            case "decline":
+                sftp_fs_.denyToConnect(
+                    request.requestId,
+                    request.fileSystemId,
+                    function() {
+                        sendResponse({
+                            type: "declined"
+                        });
                     });
+                break;
+            default:
+                var message;
+                if (request.type) {
+                    message = "Invalid request type: " + request.type + ".";
+                } else {
+                    message = "No request type provided.";
+                }
+                sendResponse({
+                    type: "error",
+                    success: false,
+                    message: message
                 });
-            break;
-        case "decline":
-            sftp_fs_.denyToConnect(
-                request.requestId,
-                request.fileSystemId,
-                function() {
-                    sendResponse({
-                        type: "declined"
-                    });
-                });
-            break;
-        default:
-            var message;
-            if (request.type) {
-                message = "Invalid request type: " + request.type + ".";
-            } else {
-                message = "No request type provided.";
-            }
-            sendResponse({
-                type: "error",
-                success: false,
-                message: message
-            });
-            break;
+                break;
         }
         return true;
     });
 
+
+    var markupErrorMessage = function(errmsg, details) {
+        let res = /[^a-z]+\d$/i.exec(errmsg);
+        if (res && res[0]) {
+            let msg = getLocale(errmsg.substr(0, res.index)) + " - ";
+            let rcList = res[0].trim().split(/\s+/);
+            for (var i = 0; i < rcList.length; i++) {
+                msg += "(" + rcList[i] + ") ";
+            }
+            return msg;
+        } else {
+            return getLocale(errmsg);
+        }
+
+        function getLocale(msg) {
+            const loc = chrome.i18n.getMessage(msg, details);
+            if (loc !== "") return loc;
+            return msg;
+        }
+    }
 
 })();

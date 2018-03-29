@@ -99,7 +99,7 @@ void ReadFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
         }
       }
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Reading file failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_readFileFailed", rc);
     }
   } while (1);
   fprintf(stderr, "ReadFileCommand::ReadFileLengthOf End\n");

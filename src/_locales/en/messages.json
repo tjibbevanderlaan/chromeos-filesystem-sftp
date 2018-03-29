@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "File share (SFTP)",
+    "message": "Shared network folder (SFTP)",
     "description": "Name of the application"
   },
   "appDescription": {
@@ -10,6 +10,10 @@
   "shortName": {
     "message": "SFTP",
     "description": "Short name of the application"
+  },
+  "mountHeader": {
+    "message": "Add network folder (SFTP)",
+    "description": "Header describing the server mount form."
   },
   "mount": {
     "message": "Mount",
@@ -158,5 +162,139 @@
   "fingerprint": {
     "message": "Fingerprint",
     "description": "Title of the fingerprint key itself, utsed in details of the dialog."
+  },
+  "sftpThreadError_initFailed": {
+    "message": "Initialization of communcation module failed",
+    "description": "libssh2 initialization failed"
+  },
+  "sftpThreadError_hostentIsNull" : {
+    "message": "Server is not accessible",
+    "description": "hostent is NULL"
+  }, 
+  "sftpThreadError_connectFailed" : {
+    "message": "Connecting failed",
+    "description": "connect() failed"
+  },
+  "sftpThreadError_resumeConnectionFailed": {
+    "message": "Resuming *$connection$* failed. Unmount.",
+    "description": "Resuming a connection did not succeeded.",
+    "placeholders": {
+      "connection": {
+        "content": "$1",
+        "example": "NetworkDrive (tjvanderlaan)"
+      }
+    }
+  },
+  "sftpThreadError_sshInitSessionFailed" : {
+    "message": "Initialization of SSH2 session failed",
+    "description": "libssh2_session_init() failed"
+  },
+  "sftpThreadError_sshSessionHandshakeFailed" : {
+    "message": "Finishing SSH2 session failed",
+    "description": "Error when starting up SSH session"
+  },
+  "sftpThreadError_unsupportedAuthTypePassword" : {
+    "message": "Authentication type *password* is not supported",
+    "description": "Authentication type 'password' is not supported"
+  },
+  "sftpThreadError_unsupportedAuthTypeKeyboardInteractive" : {
+    "message": "Authentication type *keyboard-interactive* is not supported",
+    "description": "Authentication type 'keyboard-interactive' is not supported"
+  },
+  "sftpThreadError_unsupportedAuthTypePublicKey": {
+    "message": "Authentication type *publickey* is not supported",
+    "description": "Authentication type 'publickey' is not supported"
+  },
+  "sftpThreadError_unknownAuthType" : {
+    "message": "Unknown user authentication type",
+    "description": "Unknown user authentication type"
+  },
+  "sftpThreadError_failedAuthenticationPassword" : {
+    "message": "Authentication by *password* failed",
+    "description": "Authentication by password failed"
+  },
+  "sftpThreadError_failedAuthenticationKeyboardInteractive" : {
+    "message": "Authentication by *keyboard-interactive* failed",
+    "description": "Authentication by keyboard-interactive failed"
+  },
+  "sftpThreadError_failedAuthenticationPublicKey": {
+    "message": "Authentication by *public key* failed",
+    "description": "Authentication by public key failed"
+  },
+  "sftpThreadError_storingPrivateKeyFailed": {
+    "message": "Storing private key failed",
+    "description": "Storing private key failed"
+  },
+  "sftpThreadError_sftpSessionInitFailed": {
+    "message": "Unable to init SFTP session",
+    "description": "Unable to init SFTP session"
+  },
+  "sftpThreadError_sshCloseSessionFailed": {
+    "message": "Disconnecting SSH2 session failed",
+    "description": "Disconnecting SSH2 session failed"
+  },
+  "sftpThreadError_sshCloseSessionFailedClearResources": {
+    "message": "Detaching SSH2 session failed",
+    "description": "Free SSH2 session failed"
+  },
+  "sftpThreadError_sftpCloseFailed": {
+    "message": "Closing SFTP session failed",
+    "description": "Closing SFTP session failed"
+  },
+  "sftpThreadError_openFileFailed": {
+    "message": "Unable to open file",
+    "description": "Unable to open file with SFTP"
+  },
+  "sftpThreadError_createFileFailed": {
+    "message": "Unable to create file",
+    "description": "Unable to create file with SFTP"
+  },
+  "sftpThreadError_deleteFileFailed": {
+    "message": "Deleting file failed",
+    "description": "Deleting file failed"
+  },
+  "sftpThreadError_deleteDirectoryFailed": {
+    "message": "Deleting directory failed",
+    "description": "Deleting directory failed"
+  },
+  "sftpThreadError_creatingDirectoryFailed": {
+    "message": "Creating directory failed",
+    "description": "Creating directory failed"
+  },
+  "sftpThreadError_fetchingEntryTypeFailed": {
+    "message": "Fetching entry type failed",
+    "description": "Fetching entry type failed"
+  },
+  "sftpThreadError_checkingEntryTypeFailed": {
+    "message": "Checking entry type failed",
+    "description": "Checking entry type failed"
+  },
+  "sftpThreadError_gettingMetaDataFailed": {
+    "message": "Getting metadata failed",
+    "description": "Getting metadata failed"
+  },
+  "sftpThreadError_openDirectoryFailed": {
+    "message": "Unable to open directory",
+    "description": "Unable to open dir with SFTP"
+  },
+  "sftpThreadError_readFileFailed" : {
+    "message": "Reading file failed",
+    "description": "Reading file failed"
+  },
+  "sftpThreadError_writeFileFailed": {
+    "message": "Writing file failed",
+    "description": "Writing file failed"
+  },
+  "sftpThreadError_renameFileFailed" : {
+    "message": "Renaming entry failed",
+    "description": "Renaming entry failed"
+  },
+  "sftpThreadError_fileSizeNotFound": {
+    "message": "File size could not be found",
+    "description": "Filesize not found"
+  },
+  "sftpThreadError_gettingFileSizeFailed": {
+    "message": "Unable to retrieve file size",
+    "description": "Getting filesize failed"
   }
 }

@@ -86,13 +86,6 @@ const styles = theme => ({
     },
     marginRight: -drawerWidth,
   },
-  // contentShift: {
-  //   transition: theme.transitions.create('margin', {
-  //     easing: theme.transitions.easing.easeOut,
-  //     duration: theme.transitions.duration.enteringScreen,
-  //   }),
-  //   marginRight: 0,
-  // },
   contentItem: {
     flex: 1,
     marginBottom: theme.spacing.unit*2,
@@ -270,6 +263,7 @@ class AppContent extends React.Component {
       }
     } else {
       result.makeFavorite = true;
+      result.mount = true;
     }
 
     return result;
@@ -403,8 +397,9 @@ class AppContent extends React.Component {
             }
           });
         } else if(response.type === "error") {
-            let message = chrome.i18n.getMessage("mountFail");
-            if(response.error) message += " " + chrome.i18n.getMessage(response.error);
+            let message = this.markupErrorMessage(response.error);
+            if(message.length === 0) message = chrome.i18n.getMessage("mountFail");
+            // if(response.error) message += " " + chrome.i18n.getMessage(response.error);
 
             this.setState({
               isTryingToMount: false, 
@@ -500,12 +495,14 @@ class AppContent extends React.Component {
         // Close the app window, after 2 seconds
         timer = setTimeout(() => window.close(), 2000);
       } else {
+        // let msg = chrome.i18n.getMessage(response.error);
+        // if(msg.length === 0) msg = chrome.i18n.getMessage("mountFail");
 
         // Display status pop-pu to show that initiation of connection has failed
         this.setState({
           responseCache: {},
           isTryingToMount: false,
-          statusMessage: chrome.i18n.getMessage("mountFail"),
+          statusMessage: this.markupErrorMessage(response.error),
           showStatus: true,
           showDialog: false
         });
@@ -801,6 +798,27 @@ class AppContent extends React.Component {
     this.setState({showStatus: false});
   };
 
+
+  markupErrorMessage = (errmsg) => {
+    let res = /[^a-z]+\d$/i.exec(errmsg);
+    if(res && res[0]) {
+      let msg = getLocale(errmsg.substr(0, res.index)) + " - ";
+      let rcList = res[0].trim().split(/\s+/);
+      rcList.forEach(function(value) {
+        msg += "`" + value + "` ";
+      });
+      return msg;
+    } else {
+      return getLocale(errmsg);
+    }
+
+    function getLocale(msg) {
+      const loc = chrome.i18n.getMessage(msg);
+      if(loc !== "") return loc;
+      return msg;
+    }
+  }
+
   // Render function of the AppContent component
   render() {
     const { classes } = this.props;
@@ -821,7 +839,7 @@ class AppContent extends React.Component {
           <Toolbar>
             <AppIcon className={classes.appIcon} />
             <Typography variant="title" className={classes.flex} color="inherit" noWrap>
-             {chrome.i18n.getMessage("appName")}
+             {chrome.i18n.getMessage("mountHeader")}
             </Typography>
 
             <IconButton

@@ -55,7 +55,7 @@ void MakeDirectoryCommand::Mkdir(const std::string &path) throw(CommunicationExc
     } else if (rc == 0) {
       break;
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Making directory failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_creatingDirectoryFailed", rc);
     }
   } while (rc == LIBSSH2_ERROR_EAGAIN);
   fprintf(stderr, "MakeDirectoryCommand::Mkdir End\n");

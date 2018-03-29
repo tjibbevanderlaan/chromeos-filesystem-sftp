@@ -62,7 +62,7 @@ void DeleteEntryCommand::DeleteFile(const std::string &path) throw(Communication
   } while (rc == LIBSSH2_ERROR_EAGAIN);
   fprintf(stderr, "DeleteEntryCommand::DeleteFile rc=%d\n", rc);
   if (rc < 0) {
-    THROW_COMMUNICATION_EXCEPTION("Deleting file failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_deleteFileFailed", rc);
   }
 }
 
@@ -79,7 +79,7 @@ void DeleteEntryCommand::DeleteDirectory(const std::string &path)
   } while (rc == LIBSSH2_ERROR_EAGAIN);
   fprintf(stderr, "DeleteEntryCommand::DeleteDirectory rc=%d\n", rc);
   if (rc < 0) {
-    THROW_COMMUNICATION_EXCEPTION("Deleting directory failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_deleteDirectoryFailed", rc);
   }
 }
 
@@ -104,9 +104,9 @@ bool DeleteEntryCommand::IsFile(LIBSSH2_SFTP_HANDLE *sftp_handle)
         return true;
       }
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Checking entry type failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_checkingEntryTypeFailed", rc);
     }
   } else {
-    THROW_COMMUNICATION_EXCEPTION("Fetching entry type failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_fetchingEntryTypeFailed", rc);
   }
 }

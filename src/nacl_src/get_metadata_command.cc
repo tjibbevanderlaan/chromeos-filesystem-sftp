@@ -77,7 +77,7 @@ void GetMetadataCommand::FetchEntry(LIBSSH2_SFTP_HANDLE *sftp_handle, const std:
     metadata.Set(pp::Var("name"), pp::Var(path));
     GetListener()->OnMetadataListFetched(GetRequestID(), std::vector<pp::Var>{metadata});
   } else {
-    THROW_COMMUNICATION_EXCEPTION("Getting metadata failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_gettingMetaDataFailed", rc);
   }
   fprintf(stderr, "GetMetadataCommand::FetchEntry End\n");
 }

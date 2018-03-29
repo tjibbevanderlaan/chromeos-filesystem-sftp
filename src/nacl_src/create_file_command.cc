@@ -59,7 +59,7 @@ void CreateFileCommand::CreateFile(const std::string &path)
       if (last_error_no == LIBSSH2_ERROR_EAGAIN) {
         WaitSocket(GetServerSock(), GetSession());
       } else {
-        THROW_COMMUNICATION_EXCEPTION("Unable to create file with SFTP", last_error_no);
+        THROW_COMMUNICATION_EXCEPTION("sftpThreadError_createFileFailed", last_error_no);
       }
     }
   } while (!sftp_handle);

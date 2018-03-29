@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "Deel bestanden (SFTP)",
+    "message": "Gedeelde netwerkmap (SFTP)",
     "description": "Naam van de applicatie."
   },
   "appDescription": {
@@ -10,6 +10,10 @@
   "shortName": {
     "message": "SFTP",
     "description": "Korte naam van de applicatie."
+  },
+  "mountHeader": {
+    "message": "Netwerkmap (SFTP) koppelen",
+    "description": "Beschrijving van het formulier voor het maken van een koppeling."
   },
   "mount": {
     "message": "Verbinden",
@@ -64,7 +68,7 @@
     "description": "Locatie op de server waar de verbinding wordt gekoppeld."
   },
   "mountPathDescription": {
-    "message": "Locatie op de server vanaf waar de verbinding tot stand wordt gebracht",
+    "message": "Locatie op de server waar vanaf de verbinding tot stand wordt gebracht",
     "description": "Beschrijving van het formulierveld van de koppelingslocatamie."
   },
   "displayName": {
@@ -144,7 +148,7 @@
     "description": "Titel van het server-verificatie-venster."
   },
   "verifyServerAuthenticityDescription": {
-    "message": "De ontvangen sleutel  komt niet overeen met de opgeslagen sleutel. Dit betekent dat de serverbeheerder de sleutel heeft aangepast of dat een malafide server verbinding probeert te maken. Het is ten zeerste aan te raden om de sleutel te controleren, alvorens verbinding te maken. Kies __Weigeren__ als je niet zeker bent.",
+    "message": "De ontvangen sleutel komt niet overeen met de opgeslagen sleutel. Dit betekent dat de serverbeheerder de sleutel heeft aangepast of dat een malafide server verbinding probeert te maken. Het is ten zeerste aan te raden om de sleutel te controleren, alvorens verbinding te maken. Kies __Weigeren__ als je niet zeker bent.",
     "description": "Omschrijving van een gewijzigde sleutel-server combinatie."
   },
   "host": {
@@ -157,6 +161,109 @@
   }, 
   "fingerprint": {
     "message": "Sleutel",
-    "description": "Titel van de sleutel, gebruikt in de details van het authenticatie venster.."
+    "description": "Titel van de sleutel, gebruikt in de details van het authenticatie venster."
+  },
+  "sftpThreadError_initFailed": {
+    "message": "Initialiseren van communicatiemodule mislukt"
+  },
+  "sftpThreadError_hostentIsNull" : {
+    "message": "De server is niet bereikbaar"
+  }, 
+  "sftpThreadError_connectFailed" : {
+    "message": "Verbinden is mislukt"
+  },
+  "sftpThreadError_resumeConnectionFailed": {
+    "message": "Opnieuw verbinden van *$connection$* mislukt",
+    "description": "Hervatten van een verbinding is niet gelukt",
+    "placeholders": {
+      "connection": {
+        "content": "$1",
+        "example": "NetworkDrive (tjvanderlaan)"
+      }
+    }
+  },
+  "sftpThreadError_sshInitSessionFailed" : {
+    "message": "Initialiseren van een SSH2-sessie is mislukt"
+  },
+  "sftpThreaderror_sshSessionHandshakeFailed" : {
+    "message": "Voltooien van een SSH2-sessie is mislukt"
+  },
+  "sftpThreadError_unsupportedAuthTypePassword" : {
+    "message": "Authenticatie type *wachtwoord* wordt niet ondersteund door de server"
+  },
+  "sftpThreadError_unsupportedAuthTypeKeyboardInteractive" : {
+    "message": "Authenticatie type *toetsenbord* wordt niet ondersteund door de server"
+  },
+  "sftpThreadError_unsupportedAuthTypePublicKey": {
+    "message": "Authenticatie type *publieke sleutel* wordt niet ondersteund door de server"
+  },
+  "sftpThreadError_unknownAuthType" : {
+    "message": "Authenticatie type is onbekend"
+  },
+  "sftpThreadError_failedAuthenticationPassword" : {
+    "message": "Server authorisatie middels het *wachtwoord* is mislukt"
+  },
+  "sftpThreadError_failedAuthenticationKeyboardInteractive" : {
+    "message": "Server authorisatie middels het *toetsenbord* is mislukt"
+  },
+  "sftpThreadError_failedAuthenticationPublicKey": {
+    "message": "Server authorisatie middels de *publieke sleutel* is mislukt"
+  },
+  "sftpThreadError_storingPrivateKeyFailed": {
+    "message": "Het opslaan van de geheime sleutel is mislukt"
+  },
+  "sftpThreadError_sftpSessionInitFailed": {
+    "message": "Initialiseren van de SFTP-sessie is mislukt"
+  },
+  "sftpThreadError_sshCloseSessionFailed": {
+    "message": "Poging tot het verbreken van de SSH2-sessie is mislukt"
+  },
+  "sftpThreadError_sshCloseSessionFailedClearResources": {
+    "message": "Vrijmaken van de SSH2-sessie is mislukt" 
+  },
+  "sftpThreadError_sftpCloseFailed": {
+    "message": "Poging tot het verbreken van de SFTP-sessie is mislukt"
+  },
+  "sftpThreadError_openFileFailed": {
+    "message": "Het bestand kan niet worden geopend"
+  },
+  "sftpThreadError_createFileFailed": {
+    "message": "Het bestand kan niet aangemaakt worden"
+  },
+  "sftpThreadError_deleteFileFailed": {
+    "message": "Het bestand kan niet worden verwijderd"
+  },
+  "sftpThreadError_deleteDirectoryFailed": {
+    "message": "De map kan niet worden verwijderd"
+  },
+  "sftpThreadError_creatingDirectoryFailed": {
+    "message": "Het aanmaken van de map is mislukt"
+  },
+  "sftpThreadError_fetchingEntryTypeFailed": {
+    "message": "Het ophalen van gegevens is mislukt"
+  },
+  "sftpThreadError_checkingEntryTypeFailed": {
+    "message": "Het controleren van gegevens is mislukt"
+  },
+  "sftpThreadError_gettingMetaDataFailed": {
+    "message": "Het ophalen van eigenschappen is mislukt"
+  },
+  "sftpThreadError_openDirectoryFailed": {
+    "message": "Poging tot het openen van de map is mislukt"
+  },
+  "sftpThreadError_readFileFailed" : {
+    "message": "Het bestand kan niet worden gelezen"
+  },
+  "sftpThreadError_writeFileFailed": {
+    "message": "Het schrijven naar het bestand is mislukt"
+  },
+  "sftpThreadError_renameFileFailed" : {
+    "message": "Het wijzigen van de bestandsnaam is mislukt"
+  },
+  "sftpThreadError_fileSizeNotFound": {
+    "message": "De bestandsgrootte is onbekend"
+  },
+  "sftpThreadError_gettingFileSizeFailed": {
+    "message": "Het ophalen van de bestandsgrootte is mislukt"
   }
 }

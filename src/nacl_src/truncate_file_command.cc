@@ -82,10 +82,10 @@ libssh2_uint64_t TruncateFileCommand::GetFileSize(LIBSSH2_SFTP_HANDLE *sftp_hand
     if (attrs.flags & LIBSSH2_SFTP_ATTR_SIZE) {
       return attrs.filesize;
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Filesize not found", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_fileSizeNotFound", rc);
     }
   } else {
-    THROW_COMMUNICATION_EXCEPTION("Getting filesize failed", rc);
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_gettingFileSizeFailed", rc);
   }
 }
 
@@ -126,7 +126,7 @@ void TruncateFileCommand::ReadFileLengthOf(LIBSSH2_SFTP_HANDLE *sftp_handle,
         }
       }
     } else {
-      THROW_COMMUNICATION_EXCEPTION("Reading file failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_readFileFailed", rc);
     }
   } while (1);
   fprintf(stderr, "TruncateFileCommand::ReadFileLengthOf End\n");
@@ -147,7 +147,7 @@ void TruncateFileCommand::WriteFile(LIBSSH2_SFTP_HANDLE *sftp_handle,
     }
     fprintf(stderr, "TruncateFileCommand::WriteFile rc=%d\n", rc);
     if (rc < 0) {
-      THROW_COMMUNICATION_EXCEPTION("Writing file failed", rc);
+      THROW_COMMUNICATION_EXCEPTION("sftpThreadError_writeFileFailed", rc);
     }
     w_pos += rc;
     remain -= rc;
