@@ -21,7 +21,7 @@
 ## Development
 *Shared network folder (SFTP)* is a [Chrome App](https://developer.chrome.com/apps/about_apps), therefore explicitly build for ChromeOS systems. Chrome Apps can be created with common web technologies such as  HTML5, CSS, and JavaScript to deliver an experience comparable of a native application. To extent the power of these technologies, Chrome delivers a [Native Client SDK](https://developer.chrome.com/native-client/sdk/download) to compile C and C++ code in the browser efficiently and securely, independent of the user’s operating system. *Shared network folder (SFTP)* makes use of [libssh2](https://www.libssh2.org/) which has been ported to the [Native Client](https://developer.chrome.com/native-client) environment to establish a file share connection over SSH (i.e. SFTP; SSH File Transfer Protocol). The compiled code is part of the app, and communicates with the web technologies back and forth.
 
-Please visit the [documentation](https://github.com/tjibbevanderlaaan/chromeos-filesystem-sftp/blob/react/docs/documentation.md), to get more insights of the app structure.
+Please visit the [documentation](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/docs/documentation.md), to get more insights of the app structure.
 
 ### Getting started
 To build the app, you need a 1) build system to compile the app's Native Client code, and a 2) front-end build system to build the app itself.
