@@ -3,6 +3,7 @@ const path = require('path');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const buildPath = path.resolve(__dirname, 'dist');
+const ConcatPlugin = require('webpack-concat-plugin');
 
 const config = {
   entry: {
@@ -31,11 +32,17 @@ const config = {
       { from: '_locales', to: '_locales' },
       { from: 'icons', to: 'icons' },
       { from: 'clang-newlib', to: 'clang-newlib'},
-      { from: 'js/controller/background.js', to: 'background.js'},
-      { from: 'js/model', to: 'model'},
+      // { from: 'js/controller/background.js', to: 'background.js'},
+      // { from: 'js/model', to: 'model'},
       { from: 'manifest.json', to: 'manifest.json'},
       { from: 'window.html', to: 'window.html'}
     ], {context: path.resolve(__dirname, 'src')}),
+    new ConcatPlugin({
+      uglify: true,
+      sourceMap: false,
+      fileName: 'background.js',
+      filesToConcat: ['./src/js/model/**', './src/js/controller/background.js']
+    })
   ],
   module: {
     rules: [

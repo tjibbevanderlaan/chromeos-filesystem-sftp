@@ -2,7 +2,7 @@
     "name": "__MSG_appName__",
     "description": "__MSG_appDescription__",
     "short_name": "__MSG_shortName__",
-    "version": "1.7.12",
+    "version": "1.8.0",
     "manifest_version": 2,
     "default_locale": "en",
     "icons": {
@@ -16,10 +16,6 @@
     "app": {
         "background": {
             "scripts": [
-                "model/task_queue.js",
-                "model/metadata_cache.js",
-                "model/sftp_fs.js",
-                "model/sftp_client.js",
                 "background.js"
             ]
         }

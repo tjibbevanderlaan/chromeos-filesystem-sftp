@@ -1,8 +1,8 @@
-# File share (SFTP)
+# Shared network folder (SFTP)
 
 ### A ChromeOS app which provides the ability to access a SFTP server, directly from the Files app
 
-<img src="https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/react/docs/screenshot-1.png" title="File share SFTP app preview" width="500" />
+<img src="https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/react/docs/screenshot-1.png" title="Shared network folder SFTP app preview" width="600" />
 
 ## Content
 1. [Description](#description)
@@ -16,10 +16,10 @@
 5. [License](#license)
 
 ## Description
-*File share (SFTP)* is forked from [yoichiro/chromeos-filesystem-sftp](https://github.com/yoichiro/chromeos-filesystem-sftp/) and provides the ability to access a SFTP server directly from the ChromeOS Files app. The fork has improved the design of the user-interface, to provide a more native look-and-feel. To do so, the front-end build system have been moved from [bower](https://bower.io/), [grunt](https://gruntjs.com/) to [npm](https://www.npmjs.com), [webpack](https://webpack.js.org/) to make use of [React](https://reactjs.org/) and the [Material-UI components](https://material-ui-next.com/).
+*Shared network folder (SFTP)* is forked from [yoichiro/chromeos-filesystem-sftp](https://github.com/yoichiro/chromeos-filesystem-sftp/) and provides the ability to access a SFTP server directly from the ChromeOS Files app. The fork has improved the design of the user-interface, to provide a more native look-and-feel. To do so, the front-end build system have been moved from [bower](https://bower.io/), [grunt](https://gruntjs.com/) to [npm](https://www.npmjs.com), [webpack](https://webpack.js.org/) to make use of [React](https://reactjs.org/) and the [Material-UI components](https://material-ui-next.com/).
 
 ## Development
-*File share (SFTP)* is a [Chrome App](https://developer.chrome.com/apps/about_apps), therefore explicitly build for ChromeOS systems. Chrome Apps can be created with common web technologies such as  HTML5, CSS, and JavaScript to deliver an experience comparable of a native application. To extent the power of these technologies, Chrome delivers a [Native Client SDK](https://developer.chrome.com/native-client/sdk/download) to compile C and C++ code in the browser efficiently and securely, independent of the user’s operating system. *File share (SFTP)* makes use of [libssh2](https://www.libssh2.org/) which has been ported to the [Native Client](https://developer.chrome.com/native-client) environment to establish a file share connection over SSH (i.e. SFTP; SSH File Transfer Protocol). The compiled code is part of the app, and communicates with the web technologies back and forth.
+*Shared network folder (SFTP)* is a [Chrome App](https://developer.chrome.com/apps/about_apps), therefore explicitly build for ChromeOS systems. Chrome Apps can be created with common web technologies such as  HTML5, CSS, and JavaScript to deliver an experience comparable of a native application. To extent the power of these technologies, Chrome delivers a [Native Client SDK](https://developer.chrome.com/native-client/sdk/download) to compile C and C++ code in the browser efficiently and securely, independent of the user’s operating system. *Shared network folder (SFTP)* makes use of [libssh2](https://www.libssh2.org/) which has been ported to the [Native Client](https://developer.chrome.com/native-client) environment to establish a file share connection over SSH (i.e. SFTP; SSH File Transfer Protocol). The compiled code is part of the app, and communicates with the web technologies back and forth.
 
 Please visit the [documentation](https://github.com/tjibbevanderlaaan/chromeos-filesystem-sftp/blob/react/docs/documentation.md), to get more insights of the app structure.
 
@@ -143,12 +143,12 @@ You can find more information on <https://developer.chrome.com/apps/first_app#lo
 While the app is working, there are still some features which could be improved.
 
 * Unfortunately, I've could not manage to configure 'hot reload' for development. Because the app is a Chrome App, and not a Chrome Extension, I stumbled to some Content Security Policy (CSP) errors. 
-* I've would like to improve the quality of error messages (in case authentication failed for example).
-* User credentials are stored in the `chrome.app.storage`. While they are not accessible by other apps, it seems not the most secure solution.
+* User credentials are stored in the `chrome.storage.local`. While they are not accessible by other apps, it seems not the most secure solution.
 * Automatic testing is not yet incorporated.
 
 
 ## License
 
 All files are licensed under the BSD license. See the LICENSE file for details.
-All original source code is Copyright 2015-2016 Yoichiro Tanaka.
+Copyright 2018		Tjibbe van der Laan
+Copyright 2015-2016 Yoichiro Tanaka

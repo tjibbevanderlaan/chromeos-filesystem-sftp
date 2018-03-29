@@ -1,7 +1,7 @@
 {
   "name": "chromeos-filesystem-sftp",
   "description": "ChromeOS app to access a SFTP server directly from the Files app",
-  "version": "0.20.0",
+  "version": "1.8.0",
   "scripts": {
     "build": "node_modules/.bin/webpack --config webpack.config.js --progress --colors"
   },
@@ -20,7 +20,7 @@
     "type": "git",
     "url": "https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp.git"
   },
-  "homepage": "https://github.com/yoichiro/chromeos-filesystem-sftp",
+  "homepage": "https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp",
   "keywords": [
     "sftp",
     "chromeos",
@@ -30,7 +30,7 @@
     "react"
   ],
   "bugs": {
-    "url": "https://github.com/yoichiro/chromeos-filesystem-sftp/issues"
+    "url": "https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/issues"
   },
   "license": "BSD-3-Clause",
   "dependencies": {
@@ -52,7 +52,8 @@
     "eslint-loader": "^2.0.0",
     "eslint-plugin-react": "^7.7.0",
     "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.13"
+    "webpack-cli": "^2.0.13",
+    "webpack-concat-plugin": "^3.0.0-beta.0"
   },
   "engines": {
     "node": ">=6.13.1",
