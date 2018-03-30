@@ -117,7 +117,7 @@ class AppContent extends React.Component {
     displayName: '',    // name of mount, as displayed in Files app
 
     serverNameWarning: false, // warning visualized, in case incorrect chars are used
-    type: 'password',   // authentication type, 'password', 'publicKey' or 'keyboard'
+    type: 'password',   // authentication type, 'password', 'publickey' or 'keyboard-interactive'
     username:'',        // credentials of mount connection
     password: '',       // credentials of mount connection
     privateKey: '',     // credentials of mount connection

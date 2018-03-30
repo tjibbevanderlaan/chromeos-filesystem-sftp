@@ -93,7 +93,7 @@ class AuthForm extends React.Component {
 
     let form = null;
     if(type === 'password') form = passwordForm;
-    if(type === 'publicKey') form = privateKeyForm;
+    if(type === 'publickey') form = privateKeyForm;
 
     return (
       <Grid container spacing={this.props.spacing}>
@@ -110,8 +110,8 @@ class AuthForm extends React.Component {
               }}
             >
               <MenuItem value="password">{chrome.i18n.getMessage("authTypePassword")}</MenuItem>
-              <MenuItem value="publicKey">{chrome.i18n.getMessage("authTypePublicKey")}</MenuItem>
-              <MenuItem value="keyboard">{chrome.i18n.getMessage("authTypeKeyboardInteractive")}</MenuItem>
+              <MenuItem value="publickey">{chrome.i18n.getMessage("authTypePublicKey")}</MenuItem>
+              <MenuItem value="keyboard-interactive">{chrome.i18n.getMessage("authTypeKeyboardInteractive")}</MenuItem>
             </Select>
             <FormHelperText>
               {chrome.i18n.getMessage("authTypeDescription")}
