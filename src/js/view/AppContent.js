@@ -86,6 +86,11 @@ const styles = theme => ({
     },
     marginRight: -drawerWidth,
   },
+  contentShift: {
+    [theme.breakpoints.up('md')]: {
+      marginRight: '0px'
+    }
+  },
   contentItem: {
     flex: 1,
     marginBottom: theme.spacing.unit*2,
@@ -151,6 +156,11 @@ class AppContent extends React.Component {
   componentDidMount = () => {
     this.loadLocalStoredMountFavorites();
     this.loadKeepCredentialSetting();
+    document.getElementById("form").addEventListener("click", () => {
+      if(this.state.open) {
+        this.setState({open : false});
+      }
+    });
   };
 
 
@@ -852,7 +862,10 @@ class AppContent extends React.Component {
           </Toolbar>
         </AppBar>
 
-        <form className={classes.content} onSubmit={this.onMountButtonClick}>
+        <form 
+          id="form" 
+          className={classNames(classes.content, { [classes.contentShift]: open })} 
+          onSubmit={this.onMountButtonClick}>
           <section id="form-server" className={classes.contentItem}>
             <ServerForm 
               serverName={serverName}
