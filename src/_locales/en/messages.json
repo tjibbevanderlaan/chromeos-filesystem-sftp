@@ -99,13 +99,13 @@
     "message": "Username",
     "description": "Label of username form field."
   },
-  "usernameDescription" : {
-    "message": "Credentials of mount directory owner",
-    "description": "Description of credentials labels."
-  },
   "password": {
     "message": "Password",
     "description": "Label of password form field."
+  },
+  "passwordDescription" : {
+    "message": "Authentication password or passphrase",
+    "description": "Description of password form field."
   },
   "privateKey": {
     "message": "Private key",

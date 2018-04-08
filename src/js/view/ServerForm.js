@@ -63,6 +63,7 @@ class ServerForm extends React.Component {
             margin="dense"
             value={serverName}
             onChange={this.handleChange('serverName')}
+            onBlur={this.handleBlur('serverName')}
             inputProps={{onKeyPress:this.handleOnKeyPressServerName}}
             error={serverNameWarning}
           />

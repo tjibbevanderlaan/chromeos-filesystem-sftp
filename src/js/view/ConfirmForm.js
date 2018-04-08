@@ -16,6 +16,9 @@ const styles = theme => ({
     left: '50%',
     marginTop: -12,
     marginLeft: -12,
+  },
+  shade: {
+    backgroundColor: 'rgba(255,255,255,0.8)'
   }
 });
 
@@ -25,7 +28,7 @@ class ConfirmForm extends React.Component {
     const {classes, spacing=24, canMakeFavorite=false, canMount=false, isTryingToMount=false, icon="", refMount} = this.props;
 
     return (
-      <Grid container justify="flex-end" spacing={spacing}>
+      <Grid container classes={classes.shade} justify="flex-end" spacing={spacing}>
         <Grid item>
           <Button 
             size="small" 

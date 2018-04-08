@@ -96,10 +96,10 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit*2,
   },
   fixedBottom: {
-    flexGrow: 0,
-    flexShrink: 1,
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    position: 'absolute',
     alignSelf: 'flex-end',
-    paddingBottom: theme.spacing.unit*4
+    bottom: theme.spacing.unit*4
   }
 });
 
@@ -179,6 +179,15 @@ class AppContent extends React.Component {
     // Validate input characters for serverName and mountPath forms
     if(name === 'serverName') {
       value = value.replace(patterns.uriChars,"");
+      
+      // has user added a username in this field?
+      if(value[value.length-1] === "@") {
+        let res = /^([a-z0-9]+)@/i.exec(value);
+        if(res && res[1]) {
+          value = value.replace(res[0], "");
+          this.setState({username : res[1]});
+        }
+      }
     }
 
     // Validate if reserved characters are used in serverName
@@ -232,7 +241,19 @@ class AppContent extends React.Component {
    * @param  {String} value Value of the corresponding field
    */
   handleBlur = (name, value) => {
-    if(name === 'serverPort' && (isNaN(value) || value < -1 || value==='')) {
+    if(name === "serverName" && value.indexOf(":") > -1) {
+      // does user has entered portnumber in servername field? Swap!
+      let res = /:(\d+)$/i.exec(value);
+      if(res && res[1]) {
+        const newValue = value.replace(res[0], "");
+        const serverNameWarning = patterns.nameChars.test(newValue);
+        this.setState({
+          serverName: value.replace(res[0], ""), 
+          serverPort: res[1],
+          serverNameWarning : serverNameWarning
+        });
+      }
+    } else if(name === 'serverPort' && (isNaN(value) || value < -1 || value==='')) {
       this.setState({'serverPort' : defaultPort});
     } else if(name === 'displayName' && this.state.customDisplayName && value.length === 0) {
         this.setDefaultDisplayName();
@@ -299,7 +320,7 @@ class AppContent extends React.Component {
    */
   createDefaultDisplayName = opts => {
     const { serverName, serverPort, username, type  } = opts;
-    const hasUser = (type === "password" && username.length > 0);
+    const hasUser = username.length > 0;
 
     const hasPort = (serverPort !== defaultPort) ? (":" + serverPort) : "";
 
@@ -892,7 +913,7 @@ class AppContent extends React.Component {
               spacing={gridspacing}
             />
           </section>
-          <section id="form-confirm" className={classNames(classes.contentItem, classes.fixedBottom)}>
+          <section id="form-confirm" className={classes.fixedBottom}>
             <ConfirmForm
               canMakeFavorite={isReadyToMakeFavorite}
               canMount={isReadyToMount}

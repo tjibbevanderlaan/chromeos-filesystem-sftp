@@ -9,7 +9,7 @@
             id: "window",
             outerBounds: {
                 width: 800,
-                height: 580,
+                height: 640,
                 minWidth: 340
             },
             resizable: true,
@@ -133,10 +133,10 @@
     var markupErrorMessage = function(errmsg, details) {
         let res = /[^a-z]+\d$/i.exec(errmsg);
         if (res && res[0]) {
-            let msg = getLocale(errmsg.substr(0, res.index)) + " - ";
+            let msg = getLocale(errmsg.substr(0, res.index)) + " ";
             let rcList = res[0].trim().split(/\s+/);
             for (var i = 0; i < rcList.length; i++) {
-                msg += "(" + rcList[i] + ") ";
+                msg += "[" + rcList[i] + "] ";
             }
             return msg;
         } else {

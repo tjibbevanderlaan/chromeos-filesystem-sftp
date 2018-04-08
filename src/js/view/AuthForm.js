@@ -38,67 +38,35 @@ class AuthForm extends React.Component {
     const { classes, spacing=24,
             type="password", username="", password="", privateKey="", refPassword, refPublicKey} = this.props;
 
-    const passwordForm = (
+    let pkey;
+    if(type !== "password") pkey = (
+        <TextField
+          inputRef={refPublicKey}
+          id="privateKey"
+          label={chrome.i18n.getMessage("privateKey")}
+          value={privateKey}
+          onChange={this.handleChange('privateKey')}
+          className={classes.textField}
+          fullWidth={true}
+          multiline={true}
+          rows={4}
+        />
+    );
+
+    return (
       <Grid container spacing={spacing}>
+        
         <Grid item xs={12} sm={6}>
           <TextField
             id="username"
             label={chrome.i18n.getMessage("username")}
             value={username}
             onChange={this.handleChange('username')}
-            disabled={type!=='password'}
             className={classes.textField}
-            helperText={chrome.i18n.getMessage("usernameDescription")}
             fullWidth={true}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-        <FormControl fullWidth={true}>
-          <InputLabel htmlFor="password">{chrome.i18n.getMessage("password")}</InputLabel>
-          <Input
-            inputRef={refPassword}
-            id="password"
-            type={this.state.showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={this.handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={this.handleClickShowPasssword}
-                  onMouseDown={this.handleMouseDownPassword}
-                >
-                  {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        </Grid>
-      </Grid>
-    );
-
-    const privateKeyForm = (
-      <TextField
-        inputRef={refPublicKey}
-        id="privateKey"
-        label={chrome.i18n.getMessage("privateKey")}
-        value={privateKey}
-        onChange={this.handleChange('privateKey')}
-        className={classes.textField}
-        fullWidth={true}
-        multiline={true}
-        rows={4}
-      />
-    );
-
-    let form = null;
-    if(type === 'password') form = passwordForm;
-    if(type === 'publickey') form = privateKeyForm;
-
-    return (
-      <Grid container spacing={this.props.spacing}>
-        
-        <Grid item xs={12} sm={4}>
           <FormControl fullWidth={true}>
             <InputLabel htmlFor="authmethod">{chrome.i18n.getMessage("authType")}</InputLabel>
             <Select
@@ -118,9 +86,31 @@ class AuthForm extends React.Component {
             </FormHelperText>
           </FormControl>
         </Grid>
-        
-        <Grid item xs={12} sm={8}>
-          {form}
+        <Grid item xs={12} sm={6}>
+          {pkey}
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth={true}>
+            <InputLabel htmlFor="password">{chrome.i18n.getMessage("password")}</InputLabel>
+            <Input
+              inputRef={refPassword}
+              id="password"
+              type={this.state.showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={this.handleChange('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={this.handleClickShowPasssword}
+                    onMouseDown={this.handleMouseDownPassword}
+                  >
+                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            <FormHelperText id="password-helper-text">{chrome.i18n.getMessage("passwordDescription")}</FormHelperText>
+          </FormControl>
         </Grid>
       </Grid>
     );

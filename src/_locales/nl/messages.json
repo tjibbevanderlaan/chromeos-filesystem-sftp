@@ -84,7 +84,7 @@
     "description": "Titel van het formulierveld authenticatie type."
   },
   "authTypeDescription": {
-    "message": "Methode van de server om de verbinding te verifiëren",
+    "message": "Server-specifieke methode om de verbinding te verifiëren",
     "description" : "Beschrijving van het authenticatie type formulierveld."
   },
   "authTypePassword": {
@@ -103,13 +103,13 @@
     "message": "Gebruikersnaam",
     "description": "Label van het formulierveld gebruikersnaam."
   },
-  "usernameDescription" : {
-    "message": "Gebruikersgegevens ter verificatie van de verbinding",
-    "description": "Beschrijving van de verificatie formulieren."
-  },
   "password": {
     "message": "Wachtwoord",
     "description": "Label van het wachtwoord formulierveld."
+  },
+  "passwordDescription" : {
+    "message": "Wachtwoord of wachtzin ter verificatie",
+    "description": "Beschrijving van het wachtwoord formulierveld."
   },
   "privateKey": {
     "message": "Geheime sleutel",
