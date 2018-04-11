@@ -1,0 +1,300 @@
+{
+  "appName": {
+    "message": "Shared network folder (SFTP)",
+    "description": "Name of the application"
+  },
+  "appDescription": {
+    "message": "Access a SFTP server directly from the Files app.",
+    "description": "Description of the application"
+  },
+  "shortName": {
+    "message": "SFTP",
+    "description": "Short name of the application"
+  },
+  "mountHeader": {
+    "message": "Add network folder (SFTP)",
+    "description": "Header describing the server mount form."
+  },
+  "mount": {
+    "message": "Mount",
+    "description": "Label for a button that triggers the mount action."
+  },
+  "favorite": {
+    "message": "Mark as favorite",
+    "description": "Label for a button to which triggers to save mount as favorite."
+  },
+  "mountSuccess": {
+    "message": "Mounted successfully",
+    "description": "Popup notifcation that informs the user that the system successfully mounted a new instance with the credentials they provided."
+  },
+  "mountDeclined": {
+    "message": "Connection aborted",
+    "description": "Popup notification that the connection has been aborted."
+  },
+  "mountFail": {
+    "message": "Failed to mount",
+    "description": "Popup notifcation that informs the user that the system failed to mount a new instance with the credentials they provided."
+  },
+  "mountFailTimeout": {
+    "message": "Attempt has timed out. Please verify internet connection.",
+    "description": "Notification to inform that mounting has failed due to connection timeout."
+  },
+  "mountFailInternalError": {
+    "message": "An internal error occurred. Please update the application.",
+    "description": "Notification of an error, which should not may appear (if all modules are working)."
+  },
+  "mountFailAlreadyMounted": {
+    "message": "Server is already mounted.",
+    "description": "Notification of error, in case the share is already mounted."
+  },
+  "serverName": {
+    "message": "Server name",
+    "description": "The server's host name or IP address"
+  },
+  "serverNameDescription": {
+    "message": "IP address or host name of server (e.g. 192.168.2.1)",
+    "description": "Description of the server name form field."
+  },
+  "serverPort": {
+    "message": "Port number",
+    "description": "The server's port number"
+  },
+  "mountPath": {
+    "message": "Mount path",
+    "description": "Path at the server which will be mounted as root."
+  },
+  "mountPathDescription": {
+    "message": "Location of shared directory relative to the server",
+    "description": "Description of mount path form field."
+  },
+  "displayName": {
+    "message": "Display name",
+    "description": "Name of share as shown in the Files app in ChromeOS."
+  },
+  "displayNameDescription": {
+    "message": "Name of share as displayed in Files",
+    "description": "Description of display name form field."
+  },
+  "authType": {
+    "message": "Authentication type",
+    "description": "Title of the authention type select form."
+  },
+  "authTypeDescription": {
+    "message": "Method to authenticate server connection",
+    "description" : "Descriptoin of the authentication type select form."
+  },
+  "authTypePassword": {
+    "message": "Password",
+    "description": "Label of authentication type: password"
+  },
+  "authTypeKeyboardInteractive": {
+    "message": "Keyboard-interactive",
+    "description": "Label of authentication type: keyboard-interactive"
+  },
+  "authTypePublicKey": {
+    "message": "Public Key",
+    "description": "Label of authentication type: publickey"
+  },
+  "username": {
+    "message": "Username",
+    "description": "Label of username form field."
+  },
+  "password": {
+    "message": "Password",
+    "description": "Label of password form field."
+  },
+  "passwordDescription" : {
+    "message": "Authentication password or passphrase",
+    "description": "Description of password form field."
+  },
+  "privateKey": {
+    "message": "Private key",
+    "description": "Label of privatekey form field."
+  },
+  "favorites": {
+    "message": "Favorites",
+    "description": "Title of favorites section."
+  },
+  "noFavorites": {
+    "message": "No favorites have been saved (yet)",
+    "description": "Description to inform the user that there are no favorites saved."
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Title of settings section."
+  },
+  "storeCredentials": {
+    "message": "Store credentials",
+    "description": "Form field to select whether to store credentials are not."
+  },
+  "decline": {
+    "message": "Decline",
+    "description": "Label of button to decline dialog."
+  },
+  "confirm": {
+    "message": "Confirm",
+    "description": "Label of button to confirm dialog"
+  },
+  "confirmServerAuthenticityTitle": {
+    "message": "Confirm host authenticity",
+    "description": "Title of authentication dialog."
+  },
+  "confirmServerAuthenticityDescription": {
+    "message": "Please confirm the authenticity of the host by manually verifying the fingerprint. Press __Confirm__ to add the host to the list of trusted hosts and establish the connection. Hit __Decline__ in case of a fingerprint mismatch.",
+    "description": "Dialog message in case the fingerprint of host is unknown."
+  },
+  "verifyServerAuthenticityTitle": {
+    "message": "Verify host authenticity",
+    "description": "Title of verification dialog."
+  },
+  "verifyServerAuthenticityDescription": {
+    "message": "The host key of the server differs from cache. This means that either the administrator has changed the host key, or a malicious computer pretends to be the server. Please verify whether the host key has actually been changed, before proceeding. Hit __Decline__ if your are not sure.",
+    "description": "Dialog message in case the fingerprint of host mismatches with cache."
+  }, 
+  "host": {
+    "message": "Host",
+    "description": "Title of the server host, used in details of the dialog."
+  },
+  "algorithm": {
+    "message": "Algorithm",
+    "description": "Title of the fingerprint algorithm, used in details of the dialog."
+  }, 
+  "fingerprint": {
+    "message": "Fingerprint",
+    "description": "Title of the fingerprint key itself, utsed in details of the dialog."
+  },
+  "sftpThreadError_initFailed": {
+    "message": "Initialization of communcation module failed",
+    "description": "libssh2 initialization failed"
+  },
+  "sftpThreadError_hostentIsNull" : {
+    "message": "Server is not accessible",
+    "description": "hostent is NULL"
+  }, 
+  "sftpThreadError_connectFailed" : {
+    "message": "Connecting failed",
+    "description": "connect() failed"
+  },
+  "sftpThreadError_resumeConnectionFailed": {
+    "message": "Resuming *$connection$* failed. Unmount.",
+    "description": "Resuming a connection did not succeeded.",
+    "placeholders": {
+      "connection": {
+        "content": "$1",
+        "example": "NetworkDrive (tjvanderlaan)"
+      }
+    }
+  },
+  "sftpThreadError_sshInitSessionFailed" : {
+    "message": "Initialization of SSH2 session failed",
+    "description": "libssh2_session_init() failed"
+  },
+  "sftpThreadError_sshSessionHandshakeFailed" : {
+    "message": "Finishing SSH2 session failed",
+    "description": "Error when starting up SSH session"
+  },
+  "sftpThreadError_unsupportedAuthTypePassword" : {
+    "message": "Authentication type *password* is not supported",
+    "description": "Authentication type 'password' is not supported"
+  },
+  "sftpThreadError_unsupportedAuthTypeKeyboardInteractive" : {
+    "message": "Authentication type *keyboard-interactive* is not supported",
+    "description": "Authentication type 'keyboard-interactive' is not supported"
+  },
+  "sftpThreadError_unsupportedAuthTypePublicKey": {
+    "message": "Authentication type *publickey* is not supported",
+    "description": "Authentication type 'publickey' is not supported"
+  },
+  "sftpThreadError_unknownAuthType" : {
+    "message": "Unknown user authentication type",
+    "description": "Unknown user authentication type"
+  },
+  "sftpThreadError_failedAuthenticationPassword" : {
+    "message": "Authentication by *password* failed",
+    "description": "Authentication by password failed"
+  },
+  "sftpThreadError_failedAuthenticationKeyboardInteractive" : {
+    "message": "Authentication by *keyboard-interactive* failed",
+    "description": "Authentication by keyboard-interactive failed"
+  },
+  "sftpThreadError_failedAuthenticationPublicKey": {
+    "message": "Authentication by *public key* failed",
+    "description": "Authentication by public key failed"
+  },
+  "sftpThreadError_storingPrivateKeyFailed": {
+    "message": "Storing private key failed",
+    "description": "Storing private key failed"
+  },
+  "sftpThreadError_sftpSessionInitFailed": {
+    "message": "Unable to init SFTP session",
+    "description": "Unable to init SFTP session"
+  },
+  "sftpThreadError_sshCloseSessionFailed": {
+    "message": "Disconnecting SSH2 session failed",
+    "description": "Disconnecting SSH2 session failed"
+  },
+  "sftpThreadError_sshCloseSessionFailedClearResources": {
+    "message": "Detaching SSH2 session failed",
+    "description": "Free SSH2 session failed"
+  },
+  "sftpThreadError_sftpCloseFailed": {
+    "message": "Closing SFTP session failed",
+    "description": "Closing SFTP session failed"
+  },
+  "sftpThreadError_openFileFailed": {
+    "message": "Unable to open file",
+    "description": "Unable to open file with SFTP"
+  },
+  "sftpThreadError_createFileFailed": {
+    "message": "Unable to create file",
+    "description": "Unable to create file with SFTP"
+  },
+  "sftpThreadError_deleteFileFailed": {
+    "message": "Deleting file failed",
+    "description": "Deleting file failed"
+  },
+  "sftpThreadError_deleteDirectoryFailed": {
+    "message": "Deleting directory failed",
+    "description": "Deleting directory failed"
+  },
+  "sftpThreadError_creatingDirectoryFailed": {
+    "message": "Creating directory failed",
+    "description": "Creating directory failed"
+  },
+  "sftpThreadError_fetchingEntryTypeFailed": {
+    "message": "Fetching entry type failed",
+    "description": "Fetching entry type failed"
+  },
+  "sftpThreadError_checkingEntryTypeFailed": {
+    "message": "Checking entry type failed",
+    "description": "Checking entry type failed"
+  },
+  "sftpThreadError_gettingMetaDataFailed": {
+    "message": "Getting metadata failed",
+    "description": "Getting metadata failed"
+  },
+  "sftpThreadError_openDirectoryFailed": {
+    "message": "Unable to open directory",
+    "description": "Unable to open dir with SFTP"
+  },
+  "sftpThreadError_readFileFailed" : {
+    "message": "Reading file failed",
+    "description": "Reading file failed"
+  },
+  "sftpThreadError_writeFileFailed": {
+    "message": "Writing file failed",
+    "description": "Writing file failed"
+  },
+  "sftpThreadError_renameFileFailed" : {
+    "message": "Renaming entry failed",
+    "description": "Renaming entry failed"
+  },
+  "sftpThreadError_fileSizeNotFound": {
+    "message": "File size could not be found",
+    "description": "Filesize not found"
+  },
+  "sftpThreadError_gettingFileSizeFailed": {
+    "message": "Unable to retrieve file size",
+    "description": "Getting filesize failed"
+  }
+}

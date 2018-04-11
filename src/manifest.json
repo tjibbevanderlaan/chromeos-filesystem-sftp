@@ -1,0 +1,39 @@
+{
+    "name": "__MSG_appName__",
+    "description": "__MSG_appDescription__",
+    "short_name": "__MSG_shortName__",
+    "version": "1.8.0",
+    "manifest_version": 2,
+    "default_locale": "en",
+    "icons": {
+        "32": "icons/32.png",
+        "48": "icons/48.png",
+        "64": "icons/64.png",
+        "96": "icons/96.png",
+        "128": "icons/128.png",
+        "256": "icons/256.png"
+    },
+    "app": {
+        "background": {
+            "scripts": [
+                "background.js"
+            ]
+        }
+    },
+    "permissions": [
+        "fileSystemProvider",
+        "storage",
+        "notifications",
+        {
+            "socket": [
+                "resolve-host",
+                "tcp-connect:*:*"
+            ]
+        }
+    ],
+    "file_system_provider_capabilities": {
+        "source": "network",
+        "multiple_mounts": true
+    },
+    "minimum_chrome_version": "49"
+}
