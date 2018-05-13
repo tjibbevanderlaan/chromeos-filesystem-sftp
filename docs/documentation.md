@@ -15,41 +15,41 @@ This document is originally written by Yoichiro Tanaka and adapted to the modifi
 ## Directories overview
 
 * [/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp) - Build files, Configuration files, and etc.
-* [/src](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src) - The source directory of the app. The directory contains the HTML-page of the Chrome App window (`window.html`) and the `manifest.json` required for Chrome apps and extensions.
-* [/src/_locales/en](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/_locales/en) - A message resource file for English.
-* [/src/_locales/nl](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/_locales/nl) - A message resource file for Dutch.
-* [/src/icons](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/images) - This directory contains app icons.
-* [/src/js/controller](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/controller) - Two JavaScript files which controls the user-interface -[window.js](#windowjs)- and which controls the filesystem - [background.js](#backgroundjs). The two controllers communicate with each other by [Message Passing](https://developer.chrome.com/apps/messaging) (part of the Chrome App environment). 
-* [/src/js/model](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/model) - Multiple JavaScript files which facilitate all filesystem handlings between the Chrome Filesystem API and the Native Client libssh2 sandbox.
-* [/src/js/view](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/view) - Multiple ES6-JavaScript files which describe React Components. These React Componentes are building blocks of the user-interface. The file [AppContent.js](#appcontentjs) combines all components.
-* [/src/js/utils](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/js/utils) - JavaScript files, used in the original source code, but no longer used in this fork.
-* [/src/nacl_src](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/src/nacl_src) - This directory has some C++ code of NaCl module which is using libssh2 C library to communicator SSH2 Server with SFTP protocol.
-* [/test](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/test) - Currently, all files are garbage...
-* [/docs](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/docs) - Currently, there is one image file which is referenced by the README.md file.
-* [/svg](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/react/svg) - The original vector icons.
+* [/src](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src) - The source directory of the app. The directory contains the HTML-page of the Chrome App window (`window.html`) and the `manifest.json` required for Chrome apps and extensions.
+* [/src/_locales/en](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/_locales/en) - A message resource file for English.
+* [/src/_locales/nl](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/_locales/nl) - A message resource file for Dutch.
+* [/src/icons](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/images) - This directory contains app icons.
+* [/src/js/controller](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/js/controller) - Two JavaScript files which controls the user-interface -[window.js](#windowjs)- and which controls the filesystem - [background.js](#backgroundjs). The two controllers communicate with each other by [Message Passing](https://developer.chrome.com/apps/messaging) (part of the Chrome App environment). 
+* [/src/js/model](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/js/model) - Multiple JavaScript files which facilitate all filesystem handlings between the Chrome Filesystem API and the Native Client libssh2 sandbox.
+* [/src/js/view](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/js/view) - Multiple ES6-JavaScript files which describe React Components. These React Componentes are building blocks of the user-interface. The file [AppContent.js](#appcontentjs) combines all components.
+* [/src/js/utils](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/js/utils) - JavaScript files, used in the original source code, but no longer used in this fork.
+* [/src/nacl_src](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/src/nacl_src) - This directory has some C++ code of NaCl module which is using libssh2 C library to communicator SSH2 Server with SFTP protocol.
+* [/test](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/test) - Currently, all files are garbage...
+* [/docs](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/docs) - Currently, there is one image file which is referenced by the README.md file.
+* [/svg](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/tree/master/svg) - The original vector icons.
 
 At least, if you are a programmer, first you should enter the /src/js directory and see each JavaScript files to understand this app's behaviors.
 
 ## Building system files
 
-#### [/package.json](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/package.json)
+#### [/package.json](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/package.json)
 
 The package.json gives a description of the project. The description complies to the node package manager (NPM) definition. The description lists also all building and app dependencies.
 
-#### [/webpack.config.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/webpack.config.js)
+#### [/webpack.config.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/webpack.config.js)
 
 Webpack is a building system which bundles all dependencies. The configuration file determines all building instructions. 
 
 Find more information on <https://webpack.js.org/>.
 
 
-#### [/.eslintrc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/.eslintrc)
+#### [/.eslintrc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/.eslintrc)
 
 The configuration file `.eslintrc` configurates the [ESLint](https://eslint.org/) JavaScript linter, which analyses the code for potential errors. This linter can handle both JavaScript and JSX and is therefore suitable to check React Components. ESLint is a building dependency of the project, and will be installed locally when you run `npm install`. 
 
 Get more information on <https://eslint.org/>.
 
-#### [/.babelrc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/.babelrc)
+#### [/.babelrc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/.babelrc)
 
 While all `model`-JavaScript files (see `/src/js/model/`) are written in browser-JavaScript, the `view`-JavaScript files are written in JSX (the ES6-based language, customized for React). To translate JSX to plain browser-JavaScript, the babel-loader is used. Babel is a JavaScript compiler; it translates modern JavaScript-styles to good-old browser-JavaScript. The `.babelrc`-file configurates how Babel should do this.
 
@@ -58,7 +58,7 @@ Get more information on <https://babeljs.io/>.
 
 ### Basic app files
 
-#### [/src/window.html](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/window.html)
+#### [/src/window.html](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/window.html)
 
 The HTML-file provides the user-interface window of the application. The window provides an interface to fill in connection information. The connection information form consists of server host-name, the port number, user name, authentication type, user password and etc. For more information on authentication types, you can visit the libssh2 documentation.
 
@@ -68,7 +68,7 @@ Additionally, to verify or confirm the fingerprint of the to-be-connected server
 
 The React JavaScript library provides the UI-component in `window.html` and are based on the several JSX-files listed in `src/js/view/`. The [AppContent.js](#AppContentjs) file integrates all components and creates event handlers between components. Furthermore, [AppContent.js](#appcontentjs) (part of [window.js](#windowjs)) communicates with [background.js](#backgroundjs) and the local `chrome.storage` to retrieve settings and favorites.
 
-#### [/src/manifest.json](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/manifest.json)
+#### [/src/manifest.json](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/manifest.json)
 
 This is a manifest file which is needed for Chrome Apps. More details can be found on the [Manifest File Format](https://developer.chrome.com/apps/manifest) page on the Chrome App developer site.
 
@@ -77,36 +77,36 @@ The app logic is split into a [model](#Model), [view](#View), and [controller](#
 
 |  **Name** | **Category name** | **Group** | **Type** | **Source location** | **Bundle location** |
 |  ------ | ------ | ------ | ------ | ------ | ------ |
-|  [sftp_fs.js](#sftp_fsjs) | SftpFS | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/) | /dist/background.js |
-|  [sftp_client.js](#sftp_clientjs) | SftpClient | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/) | /dist/background.js |
-|  [metadata_cache.js](#metadata_cachejs) | MetadataCache | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/) | /dist/background.js |
-|  [task_queue.js](#task_queuejs) | TaskQueue | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/) | /dist/background.js |
-|  [Makefile](#makefile) | NaCl module | Model | Bash | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | - |
-|  [sftp.h, sftp.cc](#sftph-sftpcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [sftp_thread.h, sftp_thread.cc](#sftp_threadh-sftp_threadcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [sftp_event_listener.h](#sftp_event_listenerh) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [communication_exception.h, communication_exception.cc](#communication_exceptionh-communication_exceptioncc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [abstract_command.h, abstract_command.cc](#abstract_commandh-abstract_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [create_file_command.h, create_file_command.cc](#create_file_commandh-create_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [delete_entry_command.h, delete_entry_command.cc](#delete_entry_commandh-delete_entry_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [get_metadata_command.h, get_metadata_command.cc](#get_metadata_commandh-get_metadata_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [make_directory_command.h, make_directory_command.cc](#make_directory_commandh-make_directory_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [read_directory_command.h, read_directory_command.cc](#read_directory_commandh-read_directory_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [read_file_command.h, read_file_command.cc](#read_file_commandh-read_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [rename_entry_command.h, rename_entry_command.cc](#rename_entry_commandh-rename_entry_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [truncate_file_command.h, truncate_file_command.cc](#truncate_file_commandh-truncate_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [write_file_command.h, write_file_command.cc](#write_file_commandh-write_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
-|  [background.js](#backgroundjs) | Background | Controller | Browser JavaScript | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/) | /dist/background.js |
-|  [window.js](#windowjs) | Window | Controller | React JavaScript (JSX) | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/) | /dist/window.js |
-|  [AppContent.js](#appcontentjs) | AppContent | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [AppIcon.js](#appiconjs) | AppIcon | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [AuthForm.js](#authformjs) | AuthForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [ConfirmDialog.js](#confirmdialogjs) | ConfirmDialog | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [ConfirmForm.js](#confirmformjs) | ConfirmForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [DrawerLists.js](#drawerlistsjs) | DrawerLists | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [FavoritesItem.js](#favoritesitemjs) | FavoritesItem | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [ServerForm.js](#serverformjs) | ServerForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
-|  [SnackbarInformer.js](#snackbarinformerjs) | SnackbarInformer | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/) | /dist/window.js |
+|  [sftp_fs.js](#sftp_fsjs) | SftpFS | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/) | /dist/background.js |
+|  [sftp_client.js](#sftp_clientjs) | SftpClient | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/) | /dist/background.js |
+|  [metadata_cache.js](#metadata_cachejs) | MetadataCache | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/) | /dist/background.js |
+|  [task_queue.js](#task_queuejs) | TaskQueue | Model | Browser JavaScript | [/src/js/model/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/) | /dist/background.js |
+|  [Makefile](#makefile) | NaCl module | Model | Bash | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | - |
+|  [sftp.h, sftp.cc](#sftph-sftpcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [sftp_thread.h, sftp_thread.cc](#sftp_threadh-sftp_threadcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [sftp_event_listener.h](#sftp_event_listenerh) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [communication_exception.h, communication_exception.cc](#communication_exceptionh-communication_exceptioncc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [abstract_command.h, abstract_command.cc](#abstract_commandh-abstract_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [create_file_command.h, create_file_command.cc](#create_file_commandh-create_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [delete_entry_command.h, delete_entry_command.cc](#delete_entry_commandh-delete_entry_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [get_metadata_command.h, get_metadata_command.cc](#get_metadata_commandh-get_metadata_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [make_directory_command.h, make_directory_command.cc](#make_directory_commandh-make_directory_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [read_directory_command.h, read_directory_command.cc](#read_directory_commandh-read_directory_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [read_file_command.h, read_file_command.cc](#read_file_commandh-read_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [rename_entry_command.h, rename_entry_command.cc](#rename_entry_commandh-rename_entry_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [truncate_file_command.h, truncate_file_command.cc](#truncate_file_commandh-truncate_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [write_file_command.h, write_file_command.cc](#write_file_commandh-write_file_commandcc) | NaCl module | Model | C++11 | [/src/nacl_src/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/) | /dist/clang-newlib/Release/sftp.nmf |
+|  [background.js](#backgroundjs) | Background | Controller | Browser JavaScript | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/controller/) | /dist/background.js |
+|  [window.js](#windowjs) | Window | Controller | React JavaScript (JSX) | [/src/js/controller/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/controller/) | /dist/window.js |
+|  [AppContent.js](#appcontentjs) | AppContent | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [AppIcon.js](#appiconjs) | AppIcon | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [AuthForm.js](#authformjs) | AuthForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [ConfirmDialog.js](#confirmdialogjs) | ConfirmDialog | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [ConfirmForm.js](#confirmformjs) | ConfirmForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [DrawerLists.js](#drawerlistsjs) | DrawerLists | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [FavoritesItem.js](#favoritesitemjs) | FavoritesItem | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [ServerForm.js](#serverformjs) | ServerForm | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
+|  [SnackbarInformer.js](#snackbarinformerjs) | SnackbarInformer | View | React JavaScript (JSX) | [/src/js/view/](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/) | /dist/window.js |
 
 
 
@@ -115,16 +115,16 @@ The app logic is split into a [model](#Model), [view](#View), and [controller](#
 The model is responsible for the server connection and integrates the connection with the `chrome.fileSystemProvider` API. The abstract relations between these scripts are visualized below. The SftpFS class communicates with the controller [background.js](#backgroundjs).
 
 ![code_structure_1.pngCreating NaCl module instance
-](https://raw.githubusercontent.com/tjibbevanderlaan/chromeos-filesystem-sftp/react/docs/code_structure_1.png)
+](https://raw.githubusercontent.com/tjibbevanderlaan/chromeos-filesystem-sftp/master/docs/code_structure_1.png)
 
-#### [sftp_fs.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/sftp_fs.js)
+#### [sftp_fs.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/sftp_fs.js)
 
 This script file is an implementation for [chrome.fileSystemProvider](https://developer.chrome.com/srcs/fileSystemProvider) API. That is, this script has a responsibility of the following:
 
 * When this script receives the request of mounting/unmounting, do mounting/unmounting with the chrome.fileSystemProvider.mount()/unmount() API.
 * Handling all events of the chrome.fileSystemProvider API. Each event has a name "on***Requested", and this script has functions which has the same name of each event.
-* Caching fetched meta data. For instance, Each meta data fetched is stored into [/src/js/model/metadata_cache.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/metadata_cache.js). This script improves a performance using the cache mechanism.
-* This software has an ability to mount multiple accounts of SFTP server at the same time. Each connection is represented by SftpClient class defined in [/src/js/model/sftp_client.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/sftp_client.js). This script manages multiple SftpClient instances in the sftpClientMap_ instance value. Each SftpClient instance has a file system ID, and is stored into the map object. The file system ID is generated by the createFIleSystemID() function.
+* Caching fetched meta data. For instance, Each meta data fetched is stored into [/src/js/model/metadata_cache.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/metadata_cache.js). This script improves a performance using the cache mechanism.
+* This software has an ability to mount multiple accounts of SFTP server at the same time. Each connection is represented by SftpClient class defined in [/src/js/model/sftp_client.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/sftp_client.js). This script manages multiple SftpClient instances in the sftpClientMap_ instance value. Each SftpClient instance has a file system ID, and is stored into the map object. The file system ID is generated by the createFIleSystemID() function.
 
 This script defines a SftpFS class. The SftpFS instance is created by the [background.js](#backgroundjs). This script never communicate to SFTP server. Instead, this script delegates them to the sftp_client.js script. That is, this script has a responsibility of handling FSP events and proxying them to the sftp_client.js script.
 
@@ -165,7 +165,7 @@ chrome.fileSystemProvider.on***Requested.addListener(function(options, successCa
 });
 ```
 
-#### [sftp_client.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/sftp_client.js)
+#### [sftp_client.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/sftp_client.js)
 
 This script provides an ability to communicate with NaCl module. That is, this script cannot communicate with SFTP server directly. Instead, this script delegates each request to the NaCl module via [Messaging System](https://developer.chrome.com/native-client/devguide/coding/message-system).
 
@@ -244,7 +244,7 @@ Each function of the SftpClient and each command name sent to the NaCl module ar
 | writeFile()       | "write"        | "writeSuccessful"    |
 | destroy()         | "destroy"      | None.                |
 
-#### [metadata_cache.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/metadata_cache.js)
+#### [metadata_cache.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/metadata_cache.js)
 
 This script provides an ability to keep metadata objects. As the result, whole performance is increased because of reducing a network communication. Each metadata object is stored per each directory. That is, the cache key is a directory path.
 
@@ -252,7 +252,7 @@ This script provides an ability to keep metadata objects. As the result, whole p
 * get() - Retrieve metadata object/array specified by the directory path/file path.
 * remove() - Delete the metadata object/array specified by the directory path/file path.
 
-#### [task_queue.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/task_queue.js)
+#### [task_queue.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/task_queue.js)
 
 This Class provides you an ability of a Queue Mechanism. You can register a new task, and the registered tasks will be executed sequentially.
 
@@ -280,9 +280,9 @@ chrome.fileSystemProvider.on***Requested.addListener(
 
 JavaScript files described above don't have an ability to communicate to the SFTP server. Instead, the NaCl module has the ability. Especially, the NaCl module uses libssh2 C library to communicate to the SFTP server via SFTP protocol.
 
-![code_structure_2.png](https://raw.githubusercontent.com/tjibbevanderlaan/chromeos-filesystem-sftp/react/docs/code_structure_2.png)
+![code_structure_2.png](https://raw.githubusercontent.com/tjibbevanderlaan/chromeos-filesystem-sftp/master/docs/code_structure_2.png)
 
-#### [Makefile](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/Makefile)
+#### [Makefile](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/Makefile)
 
 This Makefile file is the extended file from common.mk file included in the NaCl SDK. Currently, this NaCl module is built with clang-newlib only. Therefore, this Makefile defines the VALID_TOOLCHAINS variable as like the following:
 
@@ -304,7 +304,7 @@ LIBS = ssh2 crypto nacl_io ppapi_cpp ppapi pthread
 
 When compiling for x86_32 binary, the NaCl SDK previous version had a bug. Thus, this Makefile specifies the LDFLAGS variable at the x86_32.
 
-#### [sftp.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/sftp.h), [sftp.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/sftp.cc)
+#### [sftp.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/sftp.h), [sftp.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/sftp.cc)
 
 The sftp.h and sftp.cc files have a responsibility to handle messages from JavaScript layer and to send the result to the JavaScript layer.
 
@@ -391,7 +391,7 @@ void SftpInstance::SendResponseAsStringArray(int32_t result,
 
 Especially, to call the function on the main thread, [pp::Core#CallOnMainThread](https://developer.chrome.com/native-client/pepper_stable/cpp/classpp_1_1_core#af20d1f92600f588bc74115fcbd17a1c7) is used.
 
-#### [sftp_thread.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/sftp_thread.h), [sftp_thread.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/sftp_thread.cc)
+#### [sftp_thread.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/sftp_thread.h), [sftp_thread.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/sftp_thread.cc)
 
 The sftp_thread.h and sftp_thread.cc files have a responsibility of the following:
 
@@ -455,7 +455,7 @@ Then, the OnHandshakeFinished() of the SftpEventListener interface is called fro
 
 After the processes above, the OnAuthenticationFinished() function of the SftpEventListener interface is called from the AuthenticateImpl() function.
 
-#### [sftp_event_listener.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/sftp_event_listener.h)
+#### [sftp_event_listener.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/sftp_event_listener.h)
 
 The sftp_event_listener.h file defines the SftpEventListener class. Actually, this SftpEventListener class is an abstract class. Therefore, all functions don't have any implementations. Instead, each function is implemented by the SftpInstance class.
 
@@ -475,11 +475,11 @@ Each function is called by each command class. These mappings are:
 
 Please see the SftpInstance section to know more detail for each function's behavior.
 
-#### [communication_exception.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/communication_exception.h), [communication_exception.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/communication_exception.cc)
+#### [communication_exception.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/communication_exception.h), [communication_exception.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/communication_exception.cc)
 
 The communication_exception.h file defines the CommunicationException exception class. Mainly, this exception class is thrown in the case that some error occurs in each command class. In the most case, when this exception occurs, the OnErrorOccurred() function of the SftpEventListener interface is called to notify the error for the SftpInstance instance from each command instance.
 
-#### [abstract_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/abstract_command.h), [abstract_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/abstract_command.cc)
+#### [abstract_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/abstract_command.h), [abstract_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/abstract_command.cc)
 
 The abstract_command.h file defines the AbstractCommand class. This class is a super class for all concrete command classes. This AbstractCommand class provides some features below for sub-classes:
 
@@ -515,14 +515,14 @@ Basically, command classes have some responsibilities like the following:
 
 An instance of each command class is created per receiving a request from the JavaScript layer. Therefore, needed parameters are passed to each constructor.
 
-##### [create_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/create_file_command.h), [create_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/create_file_command.cc)
+##### [create_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/create_file_command.h), [create_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/create_file_command.cc)
 
 The create_file_command.h file defines CreateFileCommand class. This class has the following behavior:
 
 * Open the specified file with [libssh2_sftp_open()](http://www.libssh2.org/libssh2_sftp_open.html). At this time, the used flags are: [LIBSSH2_FXF_CREAT, LIBSSH2_FXF_TRUNC, LIBSSH2_SFTP_S_IRUSR, LIBSSH2_SFTP_S_IWUSR, LIBSSH2_SFTP_S_IRGRP, LIBSSH2_SFTP_S_IROTH](http://www.libssh2.org/libssh2_sftp_open_ex.html). Actually, the file is created by this function call.
 * Close the SFTP_HANDLE value with CloseSftpHandle() function().
 
-##### [delete_entry_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/delete_entry_command.h), [delete_entry_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/delete_entry_command.cc)
+##### [delete_entry_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/delete_entry_command.h), [delete_entry_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/delete_entry_command.cc)
      
 The delete_entry_command.h file defines DeleteEntryCommand class. This class has the following behavior:
 
@@ -531,7 +531,7 @@ The delete_entry_command.h file defines DeleteEntryCommand class. This class has
 * If its entry is file, call the [libssh2_sftp_unlink()](http://www.libssh2.org/libssh2_sftp_unlink.html) function to delete the file.
 * If its entry is directory, call the [libssh2_sftp_rmdir()](http://www.libssh2.org/libssh2_sftp_rmdir.html) function to delete the directory and its children.
 
-##### [get_metadata_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/get_metadata_command.h), [get_metadata_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/get_metadata_command.cc)
+##### [get_metadata_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/get_metadata_command.h), [get_metadata_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/get_metadata_command.cc)
      
 The get_metadata_command.h file defines GetMetadataCommand class. This class has the following behavior:
 
@@ -547,13 +547,13 @@ Each attribute value is retrieved by:
 | modificationTime | LIBSSH2_SFTP_ATTRIBUTES.mtime value.    |
 | name             | The passed path string.                 |
 
-##### [make_directory_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/make_directory_command.h), [make_directory_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/make_directory_command.cc)
+##### [make_directory_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/make_directory_command.h), [make_directory_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/make_directory_command.cc)
 
 The make_directory_command.h file defines MakeDirectoryCommand class. This class has the following behavior:
 
 * Call the [libssh2_sftp_mkdir()](http://www.libssh2.org/libssh2_sftp_mkdir.html) function to create a new directory. At the time, these flags are specified: LIBSSH2_SFTP_S_IRWXU, LIBSSH2_SFTP_S_IRGRP, LIBSSH2_SFTP_S_IXGRP, LIBSSH2_SFTP_S_IROTH, LIBSSH2_SFTP_S_IXOTH.
 
-##### [read_directory_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/read_directory_command.h), [read_directory_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/read_directory_command.cc)
+##### [read_directory_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/read_directory_command.h), [read_directory_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/read_directory_command.cc)
 
 The read_directory_command.h file defines ReadDirectoryCommand class. This class has the following behavior:
 
@@ -570,7 +570,7 @@ Attribute values of each entry are:
 | modificationTime | LIBSSH2_SFTP_ATTRIBUTES.mtime value.                    |
 | name             | The 2nd argument of the libsh2_sftp_readdir() function. |
 
-##### [read_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/read_file_command.h), [read_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/read_file_command.cc)
+##### [read_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/read_file_command.h), [read_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/read_file_command.cc)
 
 The read_file_command.h file defines ReadFileCommand class. This class has the following behavior:
 
@@ -579,13 +579,13 @@ The read_file_command.h file defines ReadFileCommand class. This class has the f
 * Read bytes from the file with [libssh2_sftp_read()](http://www.libssh2.org/libssh2_sftp_read.html). Actually, the max read byte length is 32KB at one time. The read bytes is sent to the JavaScript layer by calling the OnReadFile() function of the SftpEventListener.
 * Repeat reading the bytes from the file until the end of the file or reached to the specified read length. Last, close the SFTP_HANDLE_value with CloseSftpHandle() function.
 
-##### [rename_entry_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/rename_entry_command.h), [rename_entry_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/rename_entry_command.cc)
+##### [rename_entry_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/rename_entry_command.h), [rename_entry_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/rename_entry_command.cc)
 
 The rename_entry_command.h file defines RenameEntryCommand class. This class has the following behavior:
 
 * Rename the specified entry with [libssh2_sftp_rename()](http://www.libssh2.org/libssh2_sftp_rename.html) function.
 
-##### [truncate_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/truncate_file_command.h), [truncate_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/truncate_file_command.cc)
+##### [truncate_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/truncate_file_command.h), [truncate_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/truncate_file_command.cc)
 
 The truncate_file_command.h file defines TruncateFileCommand class. This class has the following behavior:
 
@@ -598,7 +598,7 @@ The truncate_file_command.h file defines TruncateFileCommand class. This class h
 * If the specified length is more than the original file size, srcend zero-values which the length is (the specified length - original size) with the libssh2_sftp_write() function.
 * Close the SFTP_HANDLE value with CloseSftpHandle() function.
 
-##### [write_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/write_file_command.h), [write_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/nacl_src/write_file_command.cc)
+##### [write_file_command.h](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/write_file_command.h), [write_file_command.cc](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/nacl_src/write_file_command.cc)
 
 The write_file_command.h file defines WriteFileCommand class. This class has the following behavior:
 
@@ -610,13 +610,13 @@ The write_file_command.h file defines WriteFileCommand class. This class has the
 
 ### Controller
 
-#### [background.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/background.js)
+#### [background.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/controller/background.js)
 
-This is a background page script. Mainly, this script has a responsibility of launching the window when users want to mount the SFTP server. Also, this script has an ability to receive the message from the [window.js](#windowjs) script. When the message received, this script delegates the request of mounting the SFTP server to the [/src/js/model/sftp_fs.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/model/sftp_fs.js) script. Especially, this script has one SftpFS instance.
+This is a background page script. Mainly, this script has a responsibility of launching the window when users want to mount the SFTP server. Also, this script has an ability to receive the message from the [window.js](#windowjs) script. When the message received, this script delegates the request of mounting the SFTP server to the [/src/js/model/sftp_fs.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/model/sftp_fs.js) script. Especially, this script has one SftpFS instance.
 
 This script can know what users want to mount the SFTP server by handling [chrome.fileSystemProvider.onMountRequested](https://developer.chrome.com/extensions/fileSystemProvider#event-onMountRequested) event. When this event fired, this script opens the window.html.
 
-#### [window.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/controller/window.js)
+#### [window.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/controller/window.js)
 
 The [window.js](#windowjs) file is the root of ReactJS-based UI, and specifies the document node of `window.html` in which the UI will be rendered. The file renders [AppContent.js](#appcontentjs) as the only component; in this file, the communication between [background.js](#backgroundjs) (with help of [Messaging Passing](https://developer.chrome.com/apps/messaging)) and the chrome API takes place.
 
@@ -626,9 +626,9 @@ The [window.js](#windowjs) file is the root of ReactJS-based UI, and specifies t
 
 The view is the user-interface is build with [ReactJS](https://reactjs.org/). Furthermore, Google-styled React Components are used - the [Material-UI-next](https://material-ui-next.com/) library - to ensure a native look and feel.  Before reading more about the components itself, please make sure that you are familiar with the concepts of React [components](https://reactjs.org/docs/components-and-props.html), [states](https://reactjs.org/docs/state-and-lifecycle.html) and [props](https://reactjs.org/docs/components-and-props.html). The structure of the components is visualized in the image below:
 
-<img src="https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/react/docs/uistructure-1.png" title="Structure of React Components" width="500" />
+<img src="https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/master/docs/uistructure-1.png" title="Structure of React Components" width="500" />
 
-#### [AppContent.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/react/src/js/view/AppContent.js)
+#### [AppContent.js](https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/blob/master/src/js/view/AppContent.js)
 
 AppContent combines all React Components to one user-interface, communicates with the chrome API to load and store favorites and settings, and communicates with [background.js](#backgroundjs) to initiate new mount connections.
 
