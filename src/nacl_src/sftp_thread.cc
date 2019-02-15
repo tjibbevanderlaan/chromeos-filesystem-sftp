@@ -56,7 +56,7 @@ void SftpThread::ConnectAndHandshake(const std::string server_hostname,
                    this);
     fprintf(stderr, "SftpThread::ConnectAndHandshake Thread started\n");
   } else {
-    listener_->OnErrorOccurred(request_id_, std::string("Thread already running"));
+    listener_->OnErrorOccurred(request_id_, 0, std::string("Thread already running"));
   }
 }
 
@@ -68,7 +68,7 @@ void SftpThread::Authenticate(const std::string auth_type,
   fprintf(stderr, "SftpThread::Authenticate\n");
   if (!thread_) {
     if (!session_) {
-      listener_->OnErrorOccurred(request_id_, std::string("Not connected and handshaked"));
+      listener_->OnErrorOccurred(request_id_, 0, std::string("Not connected and handshaked"));
       return;
     }
     auth_type_ = auth_type;
@@ -81,7 +81,7 @@ void SftpThread::Authenticate(const std::string auth_type,
                    this);
     fprintf(stderr, "SftpThread::Authenticate Thread started\n");
   } else {
-    listener_->OnErrorOccurred(request_id_, std::string("Thread already running"));
+    listener_->OnErrorOccurred(request_id_, 0, std::string("Thread already running"));
   }
 }
 
@@ -268,7 +268,7 @@ void SftpThread::Close()
                    this);
     fprintf(stderr, "SftpThread::Close Thread started\n");
   } else {
-    listener_->OnErrorOccurred(request_id_, std::string("Thread already running"));
+    listener_->OnErrorOccurred(request_id_, 0, std::string("Thread already running"));
   }
 }
 
@@ -317,7 +317,7 @@ void SftpThread::ConnectAndHandshakeImpl()
     server_sock_ = -1;
     session_ = NULL;
     thread_ = NULL;
-    listener_->OnErrorOccurred(request_id_, msg);
+    listener_->OnErrorOccurred(request_id_, e.getResultCode(), msg);
   }
   fprintf(stderr, "SftpThread::ConnectAndHandshakeImpl End\n");
 }
@@ -433,7 +433,7 @@ void SftpThread::AuthenticateImpl()
     std::string msg;
     msg = e.toString();
     thread_ = NULL;
-    listener_->OnErrorOccurred(request_id_, msg);
+    listener_->OnErrorOccurred(request_id_, e.getResultCode(), msg);
   }
   fprintf(stderr, "SftpThread::AuthenticateImpl End\n");
 }

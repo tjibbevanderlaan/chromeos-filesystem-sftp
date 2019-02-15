@@ -35,7 +35,7 @@ void CreateFileCommand::Execute()
   } catch(CommunicationException e) {
     std::string msg;
     msg = e.toString();
-    GetListener()->OnErrorOccurred(GetRequestID(), msg);
+    GetListener()->OnErrorOccurred(GetRequestID(), e.getResultCode(), msg);
   }
   fprintf(stderr, "CreateFileCommand::Execute End\n");
   delete this;

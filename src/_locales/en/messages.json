@@ -150,7 +150,7 @@
   "verifyServerAuthenticityDescription": {
     "message": "The host key of the server differs from cache. This means that either the administrator has changed the host key, or a malicious computer pretends to be the server. Please verify whether the host key has actually been changed, before proceeding. Hit __Decline__ if your are not sure.",
     "description": "Dialog message in case the fingerprint of host mismatches with cache."
-  }, 
+  },
   "host": {
     "message": "Host",
     "description": "Title of the server host, used in details of the dialog."
@@ -158,7 +158,7 @@
   "algorithm": {
     "message": "Algorithm",
     "description": "Title of the fingerprint algorithm, used in details of the dialog."
-  }, 
+  },
   "fingerprint": {
     "message": "Fingerprint",
     "description": "Title of the fingerprint key itself, utsed in details of the dialog."
@@ -170,7 +170,7 @@
   "sftpThreadError_hostentIsNull" : {
     "message": "Server is not accessible",
     "description": "hostent is NULL"
-  }, 
+  },
   "sftpThreadError_connectFailed" : {
     "message": "Connecting failed",
     "description": "connect() failed"
@@ -296,5 +296,9 @@
   "sftpThreadError_gettingFileSizeFailed": {
     "message": "Unable to retrieve file size",
     "description": "Getting filesize failed"
+  },
+  "sftpThreadError_reconnected": {
+    "message": "Session reconnected",
+    "description": "Session was disconnected, but reconnected"
   }
 }

@@ -57,9 +57,9 @@
                         onSuccess();
                     }.bind(this));
             }.bind(this),
-            onError: function(reason) {
+            onError: handleResultCode.call(this, sftpClient, requestId, function(reason, resultCode) {
                 onError(reason);
-            }.bind(this)
+            }.bind(this))
         });
     };
 
@@ -141,11 +141,11 @@
                     successCallback(result.metadataList, false);
                     closeCallback();
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -173,15 +173,15 @@
                         successCallback(result.metadata);
                         closeCallback();
                     }.bind(this),
-                    onError: function(reason) {
-                        console.log(reason);
+                    onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                        console.log(reason, resultCode);
                         if (reason === "NOT_FOUND") {
                             errorCallback("NOT_FOUND");
                         } else {
                             errorCallback("FAILED");
                         }
                         closeCallback();
-                    }.bind(this)
+                    }.bind(this))
                 });
             }
         }.bind(this), function(reason) {
@@ -225,11 +225,11 @@
                         closeCallback();
                     }
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -265,11 +265,11 @@
                     successCallback();
                     closeCallback();
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -292,11 +292,11 @@
                     successCallback();
                     closeCallback();
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -321,11 +321,11 @@
                     successCallback();
                     closeCallback();
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -356,11 +356,11 @@
                     successCallback();
                     closeCallback();
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -382,11 +382,11 @@
                     successCallback(false);
                     closeCallback();
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -409,11 +409,11 @@
                     successCallback();
                     closeCallback();
                 }.bind(this),
-                onError: function(reason) {
-                    console.log(reason);
+                onError: handleResultCode.call(this, sftpClient, requestId, options.fileSystemId, function(reason, resultCode) {
+                    console.log(reason, resultCode);
                     errorCallback("FAILED");
                     closeCallback();
-                }
+                }.bind(this))
             });
         }.bind(this), function(reason) {
             console.log(reason);
@@ -475,8 +475,8 @@
             sftpClient.getServerPort(),
             sftpClient.getUsername(),
             function() {
-                successCallback();
                 sftpClient.destroy(requestId);
+                successCallback();
             }.bind(this));
     };
 
@@ -681,6 +681,23 @@
             }.bind(self);
         })(this, sftpClient);
         onSuccess(closeCallback);
+    };
+
+    var handleResultCode = function(sftpClient, requestId, fileSystemId, callback) {
+        return function(reason, resultCode) {
+            if (resultCode === -43) { // LIBSSH2_ERROR_SOCKET_RECV
+                this.resume(fileSystemId, function() {
+                    this.notifier("reconnected", "sftpThreadError_reconnected");
+                    callback(reason, resultCode);
+                }.bind(this), function(reason) {
+                    doUnmount.call(this, sftpClient, requestId, function() {
+                        this.notifier("failed", "sftpThreadError_connectFailed");
+                    }.bind(this));
+                }.bind(this));
+            } else {
+                callback(reason, resultCode);
+            }
+        }.bind(this);
     };
 
     var getTaskQueue = function(fileSystemId) {

@@ -158,7 +158,7 @@
   "algorithm": {
     "message": "Versleutelingsmethode",
     "description": "Titel van sleuteltype, gebruikt in de details van het authenticatie venster."
-  }, 
+  },
   "fingerprint": {
     "message": "Sleutel",
     "description": "Titel van de sleutel, gebruikt in de details van het authenticatie venster."
@@ -168,7 +168,7 @@
   },
   "sftpThreadError_hostentIsNull" : {
     "message": "De server is niet bereikbaar"
-  }, 
+  },
   "sftpThreadError_connectFailed" : {
     "message": "Verbinden is mislukt"
   },
@@ -219,7 +219,7 @@
     "message": "Poging tot het verbreken van de SSH2-sessie is mislukt"
   },
   "sftpThreadError_sshCloseSessionFailedClearResources": {
-    "message": "Vrijmaken van de SSH2-sessie is mislukt" 
+    "message": "Vrijmaken van de SSH2-sessie is mislukt"
   },
   "sftpThreadError_sftpCloseFailed": {
     "message": "Poging tot het verbreken van de SFTP-sessie is mislukt"
@@ -265,5 +265,9 @@
   },
   "sftpThreadError_gettingFileSizeFailed": {
     "message": "Het ophalen van de bestandsgrootte is mislukt"
+  },
+  "sftpThreadError_reconnected": {
+    "message": "Sessie opnieuw verbonden",
+    "description": "Sessie is verbroken, maar opnieuw verbonden"
   }
 }
