@@ -342,12 +342,10 @@
         } else {
             if (onError) {
                 if (event.message === "error") {
-                    for (var i = 0; i < event.values.length; i++) {
-                        showNotification.call(this, event.values[i]);
-                    }
-                    onError(event.values[0]);
+                    showNotification.call(this, event.value.message);
+                    onError(event.value.message, event.value.result_code);
                 } else {
-                    onError("Unexpected message received(expect:" + message + " actual:" + event.message + ")");
+                    onError("Unexpected message received(expect:" + message + " actual:" + event.message + ")", 0);
                 }
             }
             return false;

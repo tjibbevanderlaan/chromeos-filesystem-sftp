@@ -155,10 +155,13 @@ void SftpInstance::OnShutdown(const int request_id)
   }
 }
 
-void SftpInstance::OnErrorOccurred(const int request_id, const std::string &message)
+void SftpInstance::OnErrorOccurred(const int request_id, const int result_code, const std::string &message)
 {
   fprintf(stderr, "SftpInstance::OnErrorOccurred\n");
-  SendResponse(request_id, std::string("error"), std::vector<std::string>{message});
+  pp::VarDictionary obj;
+  obj.Set(pp::Var("message"), pp::Var(message));
+  obj.Set(pp::Var("result_code"), pp::Var(result_code));
+  SendResponse(request_id, std::string("error"), obj);
 }
 
 void SftpInstance::OnMetadataListFetched(const int request_id,

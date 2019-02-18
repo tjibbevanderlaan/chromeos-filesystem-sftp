@@ -41,7 +41,7 @@ void DeleteEntryCommand::Execute()
   } catch(CommunicationException e) {
     std::string msg;
     msg = e.toString();
-    GetListener()->OnErrorOccurred(GetRequestID(), msg);
+    GetListener()->OnErrorOccurred(GetRequestID(), e.getResultCode(), msg);
   }
   if (sftp_handle) {
     CloseSftpHandle(sftp_handle);

@@ -29,7 +29,7 @@ class SftpInstance : public pp::Instance, public SftpEventListener
                                    const std::string &hostkey_method);
   virtual void OnAuthenticationFinished(const int request_id);
   virtual void OnShutdown(const int request_id);
-  virtual void OnErrorOccurred(const int request_id,const std::string &message);
+  virtual void OnErrorOccurred(const int request_id, const int result_code, const std::string &message);
   virtual void OnMetadataListFetched(const int request_id,
                                      const std::vector<pp::Var> &metadataList);
   virtual void OnReadFile(const int request_id,

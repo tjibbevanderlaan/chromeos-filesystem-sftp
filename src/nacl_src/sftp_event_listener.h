@@ -18,6 +18,7 @@ class SftpEventListener
                                    const std::string &fingerprint,
                                    const std::string &hostkey_method) = 0;
   virtual void OnErrorOccurred(const int request_id,
+                               const int result_code,
                                const std::string &message) = 0;
   virtual void OnShutdown(const int request_id) = 0;
   virtual void OnAuthenticationFinished(const int request_id) = 0;
