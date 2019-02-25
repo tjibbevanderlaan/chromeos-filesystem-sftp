@@ -57,7 +57,7 @@
                         onSuccess();
                     }.bind(this));
             }.bind(this),
-            onError: handleResultCode.call(this, sftpClient, requestId, function(reason, resultCode) {
+            onError: handleResultCode.call(this, sftpClient, requestId, fileSystemId, function(reason, resultCode) {
                 onError(reason);
             }.bind(this))
         });
