@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from 'material-ui/IconButton'
-import ClearIcon from 'material-ui-icons/Clear';
-import { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import { withStyles } from 'material-ui/styles';
+import IconButton from '@material-ui/core/IconButton'
+import ClearIcon from '@material-ui/icons/Clear';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   frame: {

@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
-import TextField from 'material-ui/TextField';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import IconButton from 'material-ui/IconButton';
-import ActiveIcon from 'material-ui-icons/CheckBox';
-import InactiveIcon from 'material-ui-icons/CheckBoxOutlineBlank';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import IconButton from '@material-ui/core/IconButton';
+import ActiveIcon from '@material-ui/icons/CheckBox';
+import InactiveIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 const patterns = {
   uriChars: /[^a-z0-9{}|\\^[\]`;/?:@&=+$,%-._~]/i,

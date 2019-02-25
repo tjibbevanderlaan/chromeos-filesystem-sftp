@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
-import { withStyles } from 'material-ui/styles';
-import { CircularProgress } from 'material-ui/Progress';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   wrapper: {

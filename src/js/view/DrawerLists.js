@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
-import Drawer from 'material-ui/Drawer';
-import IconButton from 'material-ui/IconButton'
-import List from 'material-ui/List';
-import ListSubheader from 'material-ui/List/ListSubheader';
+import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import FavoritesItem from './FavoritesItem';
-import ChevronLeftIcon from 'material-ui-icons/ChevronRight';
-import Divider from 'material-ui/Divider';
-import { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import Switch from 'material-ui/Switch';
+import ChevronLeftIcon from '@material-ui/icons/ChevronRight';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Switch from '@material-ui/core/Switch';
 
 const drawerWidth = 240;
 

@@ -1,7 +1,7 @@
 {
   "name": "chromeos-filesystem-sftp",
   "description": "ChromeOS app to access a SFTP server directly from the Files app",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "scripts": {
     "build": "node_modules/.bin/webpack --config webpack.config.js --progress --colors"
   },
@@ -34,8 +34,8 @@
   },
   "license": "BSD-3-Clause",
   "dependencies": {
-    "material-ui": "^1.0.0-beta.34",
-    "material-ui-icons": "^1.0.0-beta.17",
+    "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-mark-ii": "^2.2.0"
