@@ -22,7 +22,7 @@ class SnackbarInformer extends React.Component {
     const {classes, show=false, onClose, undoAction, message=""} = this.props;
     const options = {
         '*': {renderer: 'b'},
-        '`': {renderer: ({children}) => <span>{children}</span>}
+        '`': {renderer: ({children}) => <span className={classes.code}>{children}</span>}
     };
     const actions = [
       <IconButton
