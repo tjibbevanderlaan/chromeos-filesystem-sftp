@@ -278,7 +278,7 @@
         var realPath = createRealPath.call(this, options.path);
         var start = 0;
         var doWriteFileData = function() {
-            var available = Math.min(32 * 1024, length - start);
+            var available = Math.min(512 * 1024, length - start);
             var view = new Uint8Array(data, start, available);
             var buffer = new ArrayBuffer(available);
             var bufferView = new Uint8Array(buffer);
