@@ -42,7 +42,7 @@
 
 
     var doMount = function(request, sendResponse) {
-        sftp_fs_.checkAlreadyMounted(request.serverName, request.serverPort, request.username, function(exists) {
+        sftp_fs_.checkAlreadyMounted(request.serverName, request.serverPort, request.username, request.mountPath, function(exists) {
             if (exists) {
                 sendResponse({
                     type: "error",
@@ -82,6 +82,7 @@
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         switch (request.type) {
             case "mount":
+                console.log("request:", request);
                 doMount(request, sendResponse);
                 break;
             case "accept":

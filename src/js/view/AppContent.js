@@ -199,7 +199,7 @@ class AppContent extends React.Component {
 
     // Update default displayName, if custom is disabled and any name has changed
     if(!this.state.customDisplayName && 
-      (['serverName', 'serverPort', 'username', 'type'].includes(name)) ) {
+      (['serverName', 'serverPort', 'username', 'mountPath', 'type'].includes(name)) ) {
       this.setDefaultDisplayName({[name] : value});
     }
 
@@ -315,17 +315,18 @@ class AppContent extends React.Component {
    * createDefaultDisplayName creates a default display name. The
    * display name is the reference to the SFTP mount, as shown in 
    * ChromeOS Files. The markup of the default display name is
-   * '<servername>:<serverport> (<username>)'
+   * '<servername>:<serverport>/<mountpath> (<username>)'
    * @param  {Object} opts List of (not yet updated) states
    */
   createDefaultDisplayName = opts => {
-    const { serverName, serverPort, username, type  } = opts;
+    console.log(opts);
+    const { serverName, serverPort, username, mountPath, type  } = opts;
     const hasUser = username.length > 0;
 
     const hasPort = (serverPort !== defaultPort) ? (":" + serverPort) : "";
 
     return serverName.replace(/\/$/, "")
-      + hasPort + (hasUser ? " (" + username +  ")" : "");
+      + hasPort + "/" + mountPath + (hasUser ? " (" + username +  ")" : "");
   };
 
 
