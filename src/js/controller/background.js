@@ -82,7 +82,6 @@
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         switch (request.type) {
             case "mount":
-                console.log("request:", request);
                 doMount(request, sendResponse);
                 break;
             case "accept":
