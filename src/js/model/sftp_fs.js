@@ -17,7 +17,7 @@
 
     SftpFS.prototype.mount = function(options) {
         var fileSystemId = createFileSystemID.call(
-            this, options.serverName, options.serverPort, options.username);
+            this, options.serverName, options.serverPort, options.username, options.mountPath);
         var sftpClient = new SftpClient(
             this,
             options.serverName, options.serverPort,
@@ -421,8 +421,8 @@
         }.bind(this));
     };
 
-    SftpFS.prototype.checkAlreadyMounted = function(serverName, serverPort, username, callback) {
-        var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+    SftpFS.prototype.checkAlreadyMounted = function(serverName, serverPort, username, mountPath, callback) {
+        var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username, mountPath);
         chrome.fileSystemProvider.getAll(function(fileSystems) {
             for (var i = 0; i < fileSystems.length; i++) {
                 if (fileSystems[i].fileSystemId === fileSystemId) {
@@ -441,9 +441,9 @@
     // Private functions
 
     var doMount = function(serverName, serverPort, authType, username, password, privateKey, mountPath, displayName, callback) {
-        this.checkAlreadyMounted(serverName, serverPort, username, function(exists) {
+        this.checkAlreadyMounted(serverName, serverPort, username, mountPath, function(exists) {
             if (!exists) {
-                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username, mountPath);
                 if(displayName.length === 0) displayName = serverName;
                 // var displayName = serverName;
                 // if (Number(serverPort) !== 22) {
@@ -474,18 +474,19 @@
             sftpClient.getServerName(),
             sftpClient.getServerPort(),
             sftpClient.getUsername(),
+            sftpClient.getMountPath(),
             function() {
                 sftpClient.destroy(requestId);
                 successCallback();
             }.bind(this));
     };
 
-    var _doUnmount = function(serverName, serverPort, username, successCallback) {
+    var _doUnmount = function(serverName, serverPort, username, mountPath, successCallback) {
         console.log("_doUnmount");
         unregisterMountedCredential.call(
-            this, serverName, serverPort, username,
+            this, serverName, serverPort, username, mountPath,
             function() {
-                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+                var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username, mountPath);
                 console.log(fileSystemId);
                 delete this.sftpClientMap_[fileSystemId];
                 deleteTaskQueue.call(this, fileSystemId);
@@ -501,7 +502,7 @@
 
     var registerMountedCredential = function(
             serverName, serverPort, authType, username, password, privateKey, mountPath, displayName, callback) {
-        var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+        var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username, mountPath);
         chrome.storage.local.get("mountedCredentials", function(items) {
             var mountedCredentials = items.mountedCredentials || {};
             mountedCredentials[fileSystemId] = {
@@ -522,8 +523,8 @@
         }.bind(this));
     };
 
-    var unregisterMountedCredential = function(serverName, serverPort, username, callback) {
-        var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username);
+    var unregisterMountedCredential = function(serverName, serverPort, username, mountPath, callback) {
+        var fileSystemId = createFileSystemID.call(this, serverName, serverPort, username, mountPath);
         chrome.storage.local.get("mountedCredentials", function(items) {
             var mountedCredentials = items.mountedCredentials || {};
             delete mountedCredentials[fileSystemId];
@@ -543,8 +544,14 @@
         }.bind(this));
     };
 
-    var createFileSystemID = function(serverName, serverPort, username) {
-        var id = "sftpfs://" + serverName + ":" + serverPort + "/" + username;
+    var createFileSystemID = function(serverName, serverPort, username, mountPath) {
+        var normalizedMountPath =
+            mountPath ?
+                mountPath.endsWith("/") ?
+                    mountPath.substring(0, mountPath.length - 1)
+                    : mountPath
+                : mountPath;
+        var id = "sftpfs://" + serverName + ":" + serverPort + "/" + username + "/" + normalizedMountPath;
         return id;
     };
 
@@ -567,6 +574,7 @@
                                     credential.serverName,
                                     credential.serverPort,
                                     credential.username,
+                                    credential.mountPath,
                                     function() {
                                         errorCallback("FAILED");
                                     }.bind(this));
@@ -675,8 +683,12 @@
                 if (chrome.runtime.lastError) {
                     console.log(chrome.runtime.lastError);
                 }
-                var fileSystemId = createFileSystemID.call(self,
-                    sftpClient.getServerName(), sftpClient.getServerPort(), sftpClient.getUsername());
+                var fileSystemId = createFileSystemID.call(
+                    self,
+                    sftpClient.getServerName(),
+                    sftpClient.getServerPort(),
+                    sftpClient.getUsername(),
+                    sftpClient.getMountPath());
                 shiftAndConsumeQueue.call(self, fileSystemId);
             }.bind(self);
         })(this, sftpClient);
