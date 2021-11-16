@@ -300,6 +300,7 @@ void SftpThread::ConnectAndHandshakeImpl()
     InitializeLibssh2();
     sock = ConnectToSshServer(server_hostname_, server_port_);
     session = InitializeSession();
+    SetKEXMethodPrefs(session);
     HandshakeSession(session, sock);
     std::string fingerprint;
     fingerprint = GetHostKeyHash(session);
@@ -372,6 +373,20 @@ LIBSSH2_SESSION* SftpThread::InitializeSession() throw(CommunicationException)
   }
   fprintf(stderr, "SftpThread::InitializeSession Initialized session \n");
   return session;
+}
+
+void SftpThread::SetKEXMethodPrefs(LIBSSH2_SESSION *session)
+  throw(CommunicationException)
+{
+  fprintf(stderr, "SftpThread::SetKEXMethodPrefs\n");
+  const char *methods;
+  methods = "curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256";
+  int rc;
+  while ((rc = libssh2_session_method_pref(session, LIBSSH2_METHOD_HOSTKEY, methods)) == LIBSSH2_ERROR_EAGAIN);
+  fprintf(stderr, "SftpThread::SetKEXMethodPrefs rc=%d\n", rc);
+  if (rc) {
+    THROW_COMMUNICATION_EXCEPTION("sftpThreadError_sshKEXMethodPrefsFailed", rc);
+  }
 }
 
 void SftpThread::HandshakeSession(LIBSSH2_SESSION *session, int sock)
