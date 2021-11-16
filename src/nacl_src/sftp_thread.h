@@ -71,6 +71,7 @@ class SftpThread
   void InitializeLibssh2() throw(CommunicationException);
   int ConnectToSshServer(const std::string &hostname, const int port) throw(CommunicationException);
   LIBSSH2_SESSION* InitializeSession() throw(CommunicationException);
+  void SetKEXMethodPrefs(LIBSSH2_SESSION *session) throw(CommunicationException);
   void HandshakeSession(LIBSSH2_SESSION *session,
                         int sock) throw(CommunicationException);
   std::string GetHostKeyHash(LIBSSH2_SESSION *session);

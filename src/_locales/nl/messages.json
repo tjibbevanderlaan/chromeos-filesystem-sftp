@@ -185,6 +185,9 @@
   "sftpThreadError_sshInitSessionFailed" : {
     "message": "Initialiseren van een SSH2-sessie is mislukt"
   },
+  "sftpThreadError_sshKEXMethodPrefsFailed" : {
+    "message": "Kan de voorkeuren voor de sleuteluitwisseling methode niet instellen"
+  },
   "sftpThreaderror_sshSessionHandshakeFailed" : {
     "message": "Voltooien van een SSH2-sessie is mislukt"
   },
