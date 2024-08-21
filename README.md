@@ -1,5 +1,7 @@
 # Shared network folder (SFTP)
 
+*Since Native Client SDK is [deprecated](https://chromeextensionsdocs.appspot.com/docs/native-client/sdk/download/), this tool no longer works*
+
 ### A ChromeOS app which provides the ability to access a SFTP server, directly from the Files app
 
 <img src="https://github.com/tjibbevanderlaan/chromeos-filesystem-sftp/raw/master/docs/screenshot-1.png" title="Shared network folder SFTP app preview" width="600" />
