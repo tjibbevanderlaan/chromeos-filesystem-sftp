@@ -4,7 +4,7 @@
     "description": "Naam van de applicatie."
   },
   "appDescription": {
-    "message": "Maak bestanden vanaf een SFTP server toegankelijk in de Bestanden app.",
+    "message": "Maak bestanden vanaf een SFTP-server toegankelijk in de Bestanden app.",
     "description": "Beschrijving van de applicatie."
   },
   "shortName": {
