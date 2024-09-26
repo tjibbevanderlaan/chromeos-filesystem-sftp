@@ -189,6 +189,10 @@
     "message": "Initialization of SSH2 session failed",
     "description": "libssh2_session_init() failed"
   },
+  "sftpThreadError_sshKEXMethodPrefsFailed" : {
+    "message": "Couldn't set key exchange method preferences",
+    "description": "libssh_session_method_prefs() failed"
+  },
   "sftpThreadError_sshSessionHandshakeFailed" : {
     "message": "Finishing SSH2 session failed",
     "description": "Error when starting up SSH session"
